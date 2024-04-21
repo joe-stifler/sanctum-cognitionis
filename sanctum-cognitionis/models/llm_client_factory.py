@@ -2,7 +2,7 @@ from langchain.llms import OpenAI, Gemini, Llama
 from langchain.llms.mistral import MistralAI
 from typing import Type, Any, Dict
 
-class LLMFactory:
+class LLMClientFactory:
     """
     Factory for creating Language Learning Models (LLMs).
     Supports various LLMs like OpenAI, Gemini, Llama, and MistralAI.
@@ -13,6 +13,12 @@ class LLMFactory:
         "gemini": {"api_key": "default-gemini-key"},
         "llama": {"model_path": "path/to/llama"},
         "mistral": {"model_name": "base-model", "api_key": "default-mistral-key"}
+    }
+    llm_types: Dict[str, Type[Any]] = {
+        "openai": OpenAI,
+        "gemini": Gemini,
+        "llama": Llama,
+        "mistral": MistralAI
     }
 
     @staticmethod
@@ -30,10 +36,9 @@ class LLMFactory:
         Raises:
             ValueError: If the llm_type is not supported.
         """
-        if llm_type in LLMFactory.llm_defaults:
-            # Merge the default parameters with any provided overrides
-            params = {**LLMFactory.llm_defaults[llm_type], **kwargs}
-            llm_class = LLMFactory.llm_types[llm_type]
+        if llm_type in LLMFactoryClient.llm_defaults:
+            params = {**LLMFactoryClient.llm_defaults[llm_type], **kwargs}
+            llm_class = LLMFactoryClient.llm_types[llm_type]
             return llm_class(**params)
         else:
             raise ValueError(f"Unsupported LLM type: {llm_type}")
