@@ -1,0 +1,37 @@
+### **Legenda (S, I, C, T)**
+
+- **S = Situação de produção** dada no enunciado da prova e de acordo com o gênero;
+- **I = Interlocução solicitada** e construção de **máscara** entre os **interlocutores**;
+- **C = Construção composicional**, isto é, **progressão característica do gênero**;
+- **T = Tipologia**(s) **textual**(is) predominante(s) do **gênero**.
+
+### **Motivos para anulação da redação**
+
+- **Motivo 1:** O candidato terá sua redação anulada (zero) se **abordar** **outro** **tema** que **não** o da **prova**;
+- **Motivo 2:** O candidato terá sua redação anulada (zero) se **não** **cumprir** **nem** a **Pt** **nem** a **G**;
+- **Motivo 3:** O candidato terá sua redação anulada (zero) se em seu texto **prevalecer cópias do enunciado e / ou do(s) texto(s) da prova**.
+
+### **Critérios de Correção para o “GÊNERO E LEITURA”:**
+
+- **Gênero (G) [0, 3]**
+    - **Pontuação 3:** "**Desenvolve** **bem** **G**: **explora** **S e I e C** de acordo com o projeto de texto.”
+    - **Pontuação 2:** "**Desenvolve** **G**: **configura S e / ou I e C** de acordo com o projeto de texto.”
+    - **Pontuação 1:** "**Desenvolve** **mal G**: **apresenta C, mas não S nem I Ou apresenta problemas em C, ainda que configure S e / ou I**.”
+    - **Pontuação 0:** "**Não configura o G** solicitado na proposta: **apresenta apenas traços de T, ainda que configure S e / ou I**.”
+- **Proposta temática (Pt) [0, 2]**
+    - **Pontuação 2:** "**Cumpriu** **plenamente**. A ser detalhado com a prova (GRADE ESPECÍFICA)”
+    - **Pontuação 1:** "**Cumpriu** **parcialmente**. A ser detalhado com a prova (GRADE ESPECÍFICA)"
+    - **Pontuação 0:** "**Não** **cumpriu**. A ser detalhado com a prova (GRADE ESPECÍFICA)”
+- **Leitura do(s) texto(s) (Lt) [0, 3]**
+    - **Pontuação 3:** "**Uso produtivo** do(s) **texto**(s): **leitura crítica** que caracteriza uma **apropriação** de acordo com o **projeto de texto OU Compreensão global e inferências E Ausência de erros de leitura**.”
+    - **Pontuação 2:** "**Uso adequado** do(s) **texto**(s): **leitura mediana** que caracteriza um **aproveitamento** de acordo com o **projeto de texto E Compressão global ainda que com erro pontual que não comprometa o projeto de texto**.”
+    - **Pontuação 1:** "**Uso inadequado** do(s) **texto**(s): **leitura superficial E / OU erro (s) de leitura** que compromete(m) o **projeto de texto E / OU uso do(s) texto(s) desvinculado de um projeto de texto**.”
+    - **Pontuação 0:** "**Uso ineficiente** do(s) **texto**(s) **E / OU realiza simples menções OU simples paráfrase (s) OU Não uso do(s) texto(s) da prova**.”
+
+## Critérios de Correção para o “GÊNERO E ESCRITA”
+
+- **Convenções da escrita e Coesão (CeC) [1, 4]**
+    - **Pontuação 4:** "**Escolhas lexicais** E/OU sintáticas **produtivas** E recursos coesivos produtivos para o texto, ainda que com errors eventuais.”
+    - **Pontuação 3:** "**Escolhas lexicais** E/OU sintáticas **adequadas** E recursos coesivos adequados, ainda que com erros.”
+    - **Pontuação 2:** "**Escolhas** **lexicais** E/OU sintáticas **simples** E/OU recursos coesivos simples OU que comprometem pontualmente o texto E/OU errors variados OU recorrentes.”
+    - **Pontuação 1:** "**Escolhas** **lexicais** e E/OU sintáticas **inadequadas** E/OU recursos coesivos inadequados OU que comprometem globalmente o texto E / OU errors variados E recorrentes OU prevalência de simples paráfrase (s) do(s) texto(s) da prova.”
