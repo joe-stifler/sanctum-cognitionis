@@ -1,5 +1,5 @@
 __all__ = [
-    'redacao_unicamp',
+    'redacao_candidato_unicamp',
     'redacao_candidato',
     'redacao_proposta',
 ]

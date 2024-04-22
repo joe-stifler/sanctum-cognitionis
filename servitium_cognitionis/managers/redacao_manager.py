@@ -1,4 +1,4 @@
-from sanctum_cognitionis.models import RedacaoProposta
+from servitium_cognitionis.models import RedacaoProposta
 
 class RedacaoManager:
     def __init__(self, dal, tabela_redacoes_propostas, tabela_redacoes_aluno, tabela_redacoes_candidatos, redacao_class):

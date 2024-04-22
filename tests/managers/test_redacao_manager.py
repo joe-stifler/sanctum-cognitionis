@@ -1,9 +1,9 @@
 import unittest
-from sanctum_cognitionis.models.redacao_proposta import RedacaoProposta
-from sanctum_cognitionis.connectors.csv_connector import CSVConnector
-from sanctum_cognitionis.models.redacao_candidato_unicamp import RedacaoCandidatoUnicamp
-from sanctum_cognitionis.managers.redacao_manager import RedacaoManager
-from sanctum_cognitionis.data_access.data_interface import DataInterface
+from servitium_cognitionis.models.redacao_proposta import RedacaoProposta
+from servitium_cognitionis.connectors.csv_connector import CSVConnector
+from servitium_cognitionis.models.redacao_candidato_unicamp import RedacaoCandidatoUnicamp
+from servitium_cognitionis.managers.redacao_manager import RedacaoManager
+from servitium_cognitionis.data_access.data_interface import DataInterface
 
 class TestRedacaoManager(unittest.TestCase):
     def setUp(self):

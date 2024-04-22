@@ -1,18 +1,13 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="sanctum_cognitionis",
-    version="0.1.0",
+    name="servitium_cognitionis",
+    version="0.2.0",
     author="Joe",
     author_email="joseribeiro1017@gmail.com",
-    packages=find_packages(),
-    install_requires=[],
-    entry_points={
-        "console_scripts": [
-            "sanctum_cognitionis=sanctum_cognitionis:main",
-        ],
-    },
-    description="",
+    packages=find_packages(include=['servitium_cognitionis']),
+    description="A system for managing educational content and assessments in Sanctum Cognitionis.",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
+    url="https://github.com/joe/sanctum_cognitionis",
 )

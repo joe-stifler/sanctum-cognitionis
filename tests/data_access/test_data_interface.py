@@ -1,7 +1,7 @@
 import unittest
 import pandas as pd
-from sanctum_cognitionis.connectors.csv_connector import CSVConnector
-from sanctum_cognitionis.data_access.data_interface import DataInterface
+from servitium_cognitionis.connectors.csv_connector import CSVConnector
+from servitium_cognitionis.data_access.data_interface import DataInterface
 
 class TestDataInterface(unittest.TestCase):
     def setUp(self):

@@ -1,6 +1,6 @@
 import unittest
 import pandas as pd
-from sanctum_cognitionis.connectors.csv_connector import CSVConnector
+from servitium_cognitionis.connectors.csv_connector import CSVConnector
 
 class TestCSVConnector(unittest.TestCase):
     def setUp(self):
