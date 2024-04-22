@@ -8,9 +8,9 @@ from servitium_cognitionis.data_access.data_interface import DataInterface
 class TestRedacaoManager(unittest.TestCase):
     def setUp(self):
         table_mappings = {
-            'redacoes_aluno': 'databases/redacao/unicamp/redacoes_aluno.csv',
-            'redacoes_candidatos': 'databases/redacao/unicamp/redacoes_candidatos.csv',
-            'redacoes_propostas': 'databases/redacao/unicamp/redacoes_propostas.csv'
+            'redacoes_aluno': 'databases/redacao/unicamp/unicamp_redacoes_aluno.csv',
+            'redacoes_candidatos': 'databases/redacao/unicamp/unicamp_redacoes_candidatos.csv',
+            'redacoes_propostas': 'databases/redacao/unicamp/unicamp_redacoes_propostas.csv'
         }
         csv_connector = CSVConnector(table_mappings)
         dal = DataInterface({'csv': csv_connector})

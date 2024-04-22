@@ -7,3 +7,4 @@ coverage===7.4.4
 flake8
 pandas
 black[jupyter]
+plotly

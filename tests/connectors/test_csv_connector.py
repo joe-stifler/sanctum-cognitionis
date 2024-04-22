@@ -6,9 +6,9 @@ class TestCSVConnector(unittest.TestCase):
     def setUp(self):
         self.base_folder = "databases/redacao/unicamp"
         self.table_mappings = {
-            'redacoes_propostas': self.base_folder + "/redacoes_propostas.csv",
-            'redacoes_candidatos': self.base_folder + "/redacoes_candidatos.csv",
-            'redacoes_aluno': self.base_folder + "/redacoes_aluno.csv",
+            'redacoes_propostas': self.base_folder + "/unicamp_redacoes_propostas.csv",
+            'redacoes_candidatos': self.base_folder + "/unicamp_redacoes_candidatos.csv",
+            'redacoes_aluno': self.base_folder + "/unicamp_redacoes_aluno.csv",
         }
         self.connector = CSVConnector(self.table_mappings)
         self.connector.connect()
