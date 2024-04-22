@@ -16,5 +16,6 @@ class RedacaoBuilder:
                 raise ValueError(f"Erro de tipo na linha {index+1}: {e}")
 
             # Criação do objeto RedacaoUnicamp utilizando desempacotamento de dicionário
+            # try to create redacao_object out of redacao_class and data. Raise Key
             redacoes.append(redacao_class(**row.to_dict()))
         return redacoes

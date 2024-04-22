@@ -1,8 +1,8 @@
 from sanctum_cognitionis.models.redacao import Redacao
 
 class RedacaoUnicamp(Redacao):
-    def __init__(self, nota_proposta_tematica_pt, comentarios_proposta_tematica_pt, nota_genero_g, comentarios_genero_g, nota_leitura_lt, comentarios_leitura_lt, nota_coesao_coerencia_cec, comentarios_coesao_coerencia_cec, *args):
-        super().__init__(*args)
+    def __init__(self, nota_proposta_tematica_pt, comentarios_proposta_tematica_pt, nota_genero_g, comentarios_genero_g, nota_leitura_lt, comentarios_leitura_lt, nota_coesao_coerencia_cec, comentarios_coesao_coerencia_cec, **kwargs):
+        super().__init__(**kwargs)
 
         self.nota_proposta_tematica_pt = nota_proposta_tematica_pt
         self.comentarios_proposta_tematica_pt = comentarios_proposta_tematica_pt
