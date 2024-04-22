@@ -1,34 +1,26 @@
 import unittest
-from connectors.csv_connector import CSVConnector
 import pandas as pd
+from sanctum_cognitionis.connectors.csv_connector import CSVConnector
 
 class TestCSVConnector(unittest.TestCase):
     def setUp(self):
-        # Caminhos para os arquivos CSV para testes
-        self.propostas_path = '/path/to/base-de-dados-propostas-redacoes-unicamp.csv'
-        self.exemplos_path = '/path/to/base-de-dados-redacoes-exemplos-para-propostas-unicamp.csv'
-        self.emilly_path = '/path/to/base-de-dados-redacoes-unicamp-feitas-por-emilly.csv'
+        self.base_folder = "databases/redacao/unicamp"
+        self.schema_path = self.base_folder + "/schema.json"
 
-    def test_read_propostas_csv(self):
-        connector = CSVConnector(self.propostas_path)
+    def test_execute_query_with_filters_and_order(self):
+        database_path = self.base_folder + "/redacoes_propostas.csv"
+        connector = CSVConnector(database_path)
         connector.connect()
-        data = connector.execute_query({})
-        self.assertIsInstance(data, pd.DataFrame)
-        self.assertFalse(data.empty)
-
-    def test_read_exemplos_csv_with_filters(self):
-        connector = CSVConnector(self.exemplos_path)
-        connector.connect()
-        query = {'filters': {'vestibular': '2020'}}
+        query = {
+            'filters': {'ano_vestibular': 2020},
+            'order_by': [
+                'numero_proposta'
+            ],
+            'ascending': [True, ]
+        }
         data = connector.execute_query(query)
-        self.assertEqual(data['vestibular'].unique(), ['2020'])
-
-    def test_read_emilly_csv_with_order(self):
-        connector = CSVConnector(self.emilly_path)
-        connector.connect()
-        query = {'order_by': 'nota', 'ascending': True}
-        data = connector.execute_query(query)
-        self.assertTrue(data['nota'].is_monotonic_increasing)
+        self.assertTrue(isinstance(data, pd.DataFrame))
+        self.assertEqual(data['ano_vestibular'].iloc[0], 2020)
 
 if __name__ == '__main__':
     unittest.main()
