@@ -5,22 +5,30 @@ from sanctum_cognitionis.connectors.csv_connector import CSVConnector
 class TestCSVConnector(unittest.TestCase):
     def setUp(self):
         self.base_folder = "databases/redacao/unicamp"
-        self.schema_path = self.base_folder + "/schema.json"
+        self.table_mappings = {
+            'redacoes_propostas': self.base_folder + "/redacoes_propostas.csv",
+            'redacoes_candidatos': self.base_folder + "/redacoes_candidatos.csv",
+            'redacoes_aluno': self.base_folder + "/redacoes_aluno.csv",
+        }
+        self.connector = CSVConnector(self.table_mappings)
+        self.connector.connect()
 
     def test_execute_query_with_filters_and_order(self):
-        database_path = self.base_folder + "/redacoes_propostas.csv"
-        connector = CSVConnector(database_path)
-        connector.connect()
         query = {
             'filters': {'ano_vestibular': 2020},
-            'order_by': [
-                'numero_proposta'
-            ],
-            'ascending': [True, ]
+            'order_by': ['numero_proposta'],
+            'ascending': [True],
         }
-        data = connector.execute_query(query)
+        data = self.connector.execute_query('redacoes_propostas', query)
         self.assertTrue(isinstance(data, pd.DataFrame))
         self.assertEqual(data['ano_vestibular'].iloc[0], 2020)
+    
+    def test_execute_query_without_filters_and_order(self):
+        query = {}
+        data = self.connector.execute_query('redacoes_candidatos', query)
+        self.assertTrue(isinstance(data, pd.DataFrame))
+        self.assertTrue(2020 in data['ano_vestibular'].values)
+
 
 if __name__ == '__main__':
     unittest.main()

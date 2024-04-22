@@ -1,4 +1,4 @@
-from builders import RedacaoBuilder
+from sanctum_cognitionis.builders import RedacaoBuilder
 
 class RedacaoManager:
     def __init__(self, dal, tabela_redacoes_propostas, tabela_redacoes_aluno, tabela_redacoes_candidatos, redacao_class):
@@ -10,6 +10,7 @@ class RedacaoManager:
 
     def obter_redacao_aluno(self, query):
         data = self.dal.get_data(query, source='csv')
+        print("Obtendo redações do aluno: ", data)
         return RedacaoBuilder.build_list(data, self.redacao_class)
 
     def obter_redacao_candidato(self, query):
