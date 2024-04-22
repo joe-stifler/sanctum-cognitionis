@@ -1,4 +1,4 @@
-class DataAbstractionLayer:
+class DataInterface:
     def __init__(self, connectors):
         self.connectors = connectors
 

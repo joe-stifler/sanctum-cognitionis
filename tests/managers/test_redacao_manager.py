@@ -3,7 +3,7 @@ from sanctum_cognitionis.models.redacao_proposta import RedacaoProposta
 from sanctum_cognitionis.connectors.csv_connector import CSVConnector
 from sanctum_cognitionis.models.redacao_candidato_unicamp import RedacaoCandidatoUnicamp
 from sanctum_cognitionis.managers.redacao_manager import RedacaoManager
-from sanctum_cognitionis.dal.data_abstraction_layer import DataAbstractionLayer
+from sanctum_cognitionis.data_access.data_interface import DataInterface
 
 class TestRedacaoManager(unittest.TestCase):
     def setUp(self):
@@ -13,7 +13,7 @@ class TestRedacaoManager(unittest.TestCase):
             'redacoes_propostas': 'databases/redacao/unicamp/redacoes_propostas.csv'
         }
         csv_connector = CSVConnector(table_mappings)
-        dal = DataAbstractionLayer({'csv': csv_connector})
+        dal = DataInterface({'csv': csv_connector})
         
         self.manager = RedacaoManager(
             dal=dal,
