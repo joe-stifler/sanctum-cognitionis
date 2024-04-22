@@ -1,1 +1,0 @@
-# Classe abstrata para conectores

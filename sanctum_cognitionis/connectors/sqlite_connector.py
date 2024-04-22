@@ -1,1 +1,0 @@
-# Conector para SQLite (futuro)

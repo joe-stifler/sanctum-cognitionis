@@ -1,5 +1,4 @@
 import unittest
-import pandas as pd
 from sanctum_cognitionis.models.redacao_proposta import RedacaoProposta
 from sanctum_cognitionis.connectors.csv_connector import CSVConnector
 from sanctum_cognitionis.models.redacao_unicamp import RedacaoUnicamp
