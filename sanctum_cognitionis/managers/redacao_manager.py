@@ -9,14 +9,13 @@ class RedacaoManager:
         self.tabela_redacoes_candidatos = tabela_redacoes_candidatos
 
     def obter_redacao_aluno(self, query):
-        data = self.dal.get_data(query, source='csv')
-        print("Obtendo redações do aluno: ", data)
+        data = self.dal.execute_query(self.tabela_redacoes_aluno, query, source='csv')
         return RedacaoBuilder.build_list(data, self.redacao_class)
 
     def obter_redacao_candidato(self, query):
-        data = self.dal.get_data(query, source='csv')
+        data = self.dal.execute_query(self.tabela_redacoes_candidatos, query, source='csv')
         return RedacaoBuilder.build_list(data, self.redacao_class)
 
-    def obter_propostas_redacao(self, query):
-        data = self.dal.get_data(query, source='csv')
+    def obter_redacao_propostas(self, query):
+        data = self.dal.execute_query(self.tabela_redacoes_propostas, query, source='csv')
         return RedacaoBuilder.build_list(data, self.redacao_class)
