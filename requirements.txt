@@ -8,3 +8,4 @@ flake8
 pandas
 black[jupyter]
 plotly
+replicate
