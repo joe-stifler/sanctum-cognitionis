@@ -2,8 +2,10 @@
 
 __all__ = [
     'redacao_unicamp',
-    'redacao'
+    'redacao',
+    'redacao_proposta',
 ]
 
 from .redacao_unicamp import *
+from .redacao_proposta import *
 from .redacao import *

@@ -1,5 +1,6 @@
 import unittest
 import pandas as pd
+from sanctum_cognitionis.models.redacao_proposta import RedacaoProposta
 from sanctum_cognitionis.connectors.csv_connector import CSVConnector
 from sanctum_cognitionis.models.redacao_unicamp import RedacaoUnicamp
 from sanctum_cognitionis.managers.redacao_manager import RedacaoManager
@@ -24,20 +25,19 @@ class TestRedacaoManager(unittest.TestCase):
         )
 
     def test_obter_redacao_aluno(self):
-        query = {}
-        resultado = self.manager.obter_redacao_aluno(query)
+        resultado = self.manager.obter_redacao_aluno()
         self.assertIsInstance(resultado, list)
         self.assertIsInstance(resultado[0], RedacaoUnicamp)
 
-    # def test_obter_redacao_candidato(self):
-    #     query = {'filters': {'nome': 'Maria'}}
-    #     self.manager.obter_redacao_candidato(query)
-    #     self.dal_mock.get_data.assert_called_once_with(query, source='csv')
+    def test_obter_redacao_candidato(self):
+        resultado = self.manager.obter_redacao_candidato()
+        self.assertIsInstance(resultado, list)
+        self.assertIsInstance(resultado[0], RedacaoUnicamp)
 
-    # def test_obter_propostas_redacao(self):
-    #     query = {}
-    #     self.manager.obter_propostas_redacao(query)
-    #     self.dal_mock.get_data.assert_called_once_with(query, source='csv')
+    def test_obter_propostas_redacao(self):
+        resultado = self.manager.obter_redacao_propostas()
+        self.assertIsInstance(resultado, list)
+        self.assertIsInstance(resultado[0], RedacaoProposta)
 
 if __name__ == '__main__':
     unittest.main()
