@@ -24,8 +24,7 @@ class TestCSVConnector(unittest.TestCase):
         self.assertEqual(data['ano_vestibular'].iloc[0], 2020)
     
     def test_execute_query_without_filters_and_order(self):
-        query = {}
-        data = self.connector.execute_query('redacoes_candidatos', query)
+        data = self.connector.execute_query('redacoes_candidatos')
         self.assertTrue(isinstance(data, pd.DataFrame))
         self.assertTrue(2020 in data['ano_vestibular'].values)
 

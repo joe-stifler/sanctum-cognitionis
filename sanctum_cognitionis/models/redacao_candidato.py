@@ -1,4 +1,4 @@
-class Redacao:
+class RedacaoCandidato:
     def __init__(self, nome, redacao_candidato, qualidade, numero_proposta, ano_vestibular, nota_geral, comentarios_geral, **_kwargs):
         self.nome = nome
         self.redacao_candidato = redacao_candidato

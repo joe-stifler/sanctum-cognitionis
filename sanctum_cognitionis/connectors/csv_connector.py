@@ -9,7 +9,7 @@ class CSVConnector:
             if not pd.io.common.is_url(file_path) and not pd.io.common.file_exists(file_path):
                 raise FileNotFoundError(f"O arquivo CSV '{file_path}' para a tabela '{table_name}' não foi encontrado.")
 
-    def execute_query(self, table_name, query):
+    def execute_query(self, table_name, query={}):
         file_path = self.table_mappings.get(table_name)
         if not file_path:
             raise ValueError(f"Tabela '{table_name}' não encontrada no mapeamento.")

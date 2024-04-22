@@ -2,10 +2,10 @@
 
 __all__ = [
     'redacao_unicamp',
-    'redacao',
+    'redacao_candidato',
     'redacao_proposta',
 ]
 
-from .redacao_unicamp import *
+from .redacao_candidato_unicamp import *
 from .redacao_proposta import *
-from .redacao import *
+from .redacao_candidato import *

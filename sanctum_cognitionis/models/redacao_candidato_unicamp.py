@@ -1,6 +1,6 @@
-from sanctum_cognitionis.models.redacao import Redacao
+from sanctum_cognitionis.models.redacao_candidato import RedacaoCandidato
 
-class RedacaoUnicamp(Redacao):
+class RedacaoCandidatoUnicamp(RedacaoCandidato):
     def __init__(self, nota_proposta_tematica_pt, comentarios_proposta_tematica_pt, nota_genero_g, comentarios_genero_g, nota_leitura_lt, comentarios_leitura_lt, nota_coesao_coerencia_cec, comentarios_coesao_coerencia_cec, **kwargs):
         super().__init__(**kwargs)
 
