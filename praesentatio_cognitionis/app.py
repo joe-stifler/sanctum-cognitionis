@@ -3,6 +3,7 @@ from chat_interface import ChatInterface
 
 # module imports from the servitium_cognitionis package
 from servitium_cognitionis.llms import LLMFamily
+from servitium_cognitionis.llms import LLMGeminiModels
 from servitium_cognitionis.connectors.csv_connector import CSVConnector
 from servitium_cognitionis.managers.redacao_manager import RedacaoManager
 from servitium_cognitionis.data_access.data_interface import DataInterface
@@ -81,6 +82,18 @@ def update_persona_layout():
     ]
     
     if "persona_settings" not in st.session_state:
+        default_file_list = [
+            'personas/professores/redacao/dani-stella/grade_de_correcao_analitica_unicamp.txt',
+            'personas/professores/redacao/dani-stella/informacoes_importantes_sobre_a_redacao_unicamp.md'
+        ]
+        if list(LLMGeminiModels)[0] == LLMGeminiModels.GEMINI_1_5_PRO:
+            default_file_list.extend(
+                [
+                    'databases/redacao/unicamp/unicamp_redacoes_candidatos.csv',
+                    'databases/redacao/unicamp/unicamp_redacoes_propostas.csv',
+                ]
+            )
+
         st.session_state["persona_settings"] = {
             "persona_name": "Dani Stella",
 
@@ -481,39 +494,39 @@ def main():
         if submitted and chat_interface.check_chat_state():
             st.toast('Redação sendo enviada para avaliação...')
 
-            persona_name = st.session_state["persona_settings"]["persona_name"]
-
             context_mensagem = (
-                f"## Nome:\n\n{coletanea_escolhida.nome}\n\n"
+                # f"## Nome:\n\n{coletanea_escolhida.nome}\n\n"
                 f"## Ano do Vestibular:\n\n{coletanea_escolhida.ano_vestibular}\n\n"
                 f"## Proposta Escolhida:\n\n{coletanea_escolhida.numero_proposta}\n\n"
-                f"## Texto da Proposta:\n\n{coletanea_escolhida.texto_proposta}\n\n"
+                # f"## Texto da Proposta:\n\n{coletanea_escolhida.texto_proposta}\n\n"
 
-                f"## Interlocutores:\n\n{coletanea_escolhida.interlocutores_i}\n\n"
-                f"## Situacao do Problema:\n\n{coletanea_escolhida.situacao_problema_s}\n\n"
-                f"## Recorte Tematico:\n\n{coletanea_escolhida.recorte_tematico}\n\n"
-                f"## Tema:\n\n{coletanea_escolhida.tema}\n\n"
-                f"## Genero:\n\n{coletanea_escolhida.genero_g}\n\n"
-                f"## Construcao Composicional:\n\n{coletanea_escolhida.construcao_composicional}\n\n"
+                # f"## Interlocutores:\n\n{coletanea_escolhida.interlocutores_i}\n\n"
+                # f"## Situacao do Problema:\n\n{coletanea_escolhida.situacao_problema_s}\n\n"
+                # f"## Recorte Tematico:\n\n{coletanea_escolhida.recorte_tematico}\n\n"
+                # f"## Tema:\n\n{coletanea_escolhida.tema}\n\n"
+                # f"## Genero:\n\n{coletanea_escolhida.genero_g}\n\n"
+                # f"## Construcao Composicional:\n\n{coletanea_escolhida.construcao_composicional}\n\n"
 
-                f"## Tipologia Textual:\n\n{coletanea_escolhida.tipologia_textual}\n\n"
-                f"## Projeto de Texto:\n\n{coletanea_escolhida.projeto_texto}\n\n"
-                f"## Ler Textos da Coletanea:\n\n{coletanea_escolhida.leitura_textos_coletanea}\n\n"
-                f"## Escolhas Lexicais e Sintaticas:\n\n{coletanea_escolhida.escolhas_lexicais_sintaticas}\n\n"
-                f"## Recursos Coesivos:\n\n{coletanea_escolhida.recursos_coesivos}\n\n"
-                f"## Norma Culta:\n\n{coletanea_escolhida.norma_culta}\n\n"
-                f"## Estilo:\n\n{coletanea_escolhida.estilo}\n\n"
-                f"## Originalidade:\n\n{coletanea_escolhida.originalidade}\n\n"
-                f"## Pertinencia:\n\n{coletanea_escolhida.pertinencia}\n\n"
-                f"## Observacoes:\n\n{coletanea_escolhida.observacoes}\n\n"
-                f"## Expectativa da Banca:\n\n{coletanea_escolhida.expectativa_banca}\n\n"
-                f"---------------------------------------------------------"
-                f"---------------------------------------------------------"
-                f"{persona_name}, utilize o conteudo acima para avaliar a redação do aluno que segue abaixo."
-                f"---------------------------------------------------------"
-                f"---------------------------------------------------------"
+                # f"## Tipologia Textual:\n\n{coletanea_escolhida.tipologia_textual}\n\n"
+                # f"## Projeto de Texto:\n\n{coletanea_escolhida.projeto_texto}\n\n"
+                # f"## Ler Textos da Coletanea:\n\n{coletanea_escolhida.leitura_textos_coletanea}\n\n"
+                # f"## Escolhas Lexicais e Sintaticas:\n\n{coletanea_escolhida.escolhas_lexicais_sintaticas}\n\n"
+                # f"## Recursos Coesivos:\n\n{coletanea_escolhida.recursos_coesivos}\n\n"
+                # f"## Norma Culta:\n\n{coletanea_escolhida.norma_culta}\n\n"
+                # f"## Estilo:\n\n{coletanea_escolhida.estilo}\n\n"
+                # f"## Originalidade:\n\n{coletanea_escolhida.originalidade}\n\n"
+                # f"## Pertinencia:\n\n{coletanea_escolhida.pertinencia}\n\n"
+                # f"## Observacoes:\n\n{coletanea_escolhida.observacoes}\n\n"
+                # f"## Expectativa da Banca:\n\n{coletanea_escolhida.expectativa_banca}\n\n"
+                # f"---------------------------------------------------------\n\n"
+                # f"---------------------------------------------------------\n\n"
+                # f"{persona_name}, utilize o conteudo acima para avaliar a redação do aluno que segue abaixo.\n\n"
+                f"---------------------------------------------------------\n\n"
+                f"---------------------------------------------------------\n\n"
                 f"## Redação do Aluno:\n\n{texto_redacao}\n\n"
             )
+            
+            print(context_mensagem)
             
             chat_interface.send_user_message(texto_redacao, context_mensagem)
 
