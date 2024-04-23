@@ -20,3 +20,4 @@ build/
 output
 *.egg-info
 .env
+secrets.toml

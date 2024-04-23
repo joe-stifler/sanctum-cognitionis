@@ -9,3 +9,4 @@ pandas
 black[jupyter]
 plotly
 replicate
+python-dotenv

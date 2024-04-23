@@ -12,23 +12,24 @@ class ChatInterface:
         self.setup()
 
     def setup(self):
-        # Initialize chat history container
-        self.history = st.container(height=self.chat_height, border=True)
-        self.input_prompt = st.chat_input("O que gostaria de perguntar?")
+        with st.container(border=True):
+            # Initialize chat history container
+            self.history = st.container(height=self.chat_height, border=False)
+            self.input_prompt = st.chat_input("O que gostaria de perguntar?")
 
-        # Initialize session state for messages if not already present
-        if "messages" not in st.session_state:
-            st.session_state.messages = {}
+            # Initialize session state for messages if not already present
+            if "messages" not in st.session_state:
+                st.session_state.messages = {}
 
-        if self.session_id not in st.session_state.messages:
-            st.session_state.messages[self.session_id] = [{
-                "role": self.ai_name,
-                "content": self.ai_first_message,
-                "avatar": self.ai_avatar,
-                "is_user": False
-            }]
-        
-        self.message_history = st.session_state.messages[self.session_id]
+            if self.session_id not in st.session_state.messages:
+                st.session_state.messages[self.session_id] = [{
+                    "role": self.ai_name,
+                    "content": self.ai_first_message,
+                    "avatar": self.ai_avatar,
+                    "is_user": False
+                }]
+            
+            self.message_history = st.session_state.messages[self.session_id]
 
     def add_message(self, role, content, avatar, is_user):
         self.message_history.append(

@@ -1,3 +1,4 @@
+import os
 import time
 import streamlit as st
 
@@ -8,6 +9,10 @@ import zipfile
 
 from header import show_header
 show_header(0)
+
+# API Tokens and endpoints from `.streamlit/secrets.toml` file
+os.environ["REPLICATE_API_TOKEN"] = st.secrets["IMAGE_GENERATION"]["REPLICATE_API_TOKEN"]
+REPLICATE_MODEL_ENDPOINTSTABILITY = st.secrets["IMAGE_GENERATION"]["REPLICATE_MODEL_ENDPOINTSTABILITY"]
 
 import plotly.graph_objects as go
 from chat_interface import ChatInterface
@@ -53,57 +58,43 @@ def display_files_with_checkboxes_and_downloads(file_info):
     :param file_info: A list of tuples containing the filename for the label and the file path for downloading
     """
     default_files_enabled = {}
-    for file_label, file_path, file_enabled in file_info:
-        # Create two columns: one for the checkbox, one for the download button
-        col1, col2 = st.columns([1, 2])
+    # Create two columns: one for the checkbox, one for the download button
+    col1, col2 = st.columns([1, 1])
 
-        # In the first column, display the checkbox
-        with col1:
-            checkbox_label = f"Enable download for {file_label}"
+    for idx, (file_label, file_path, file_enabled) in enumerate(file_info):
+        chosen_col = col1 if idx % 2 == 0 else col2
+
+        with chosen_col:
+            checkbox_label = f"`Usar {file_label}?`"
             is_checked = st.checkbox(checkbox_label, value=file_enabled, key=f"checkbox_{file_label}")
             default_files_enabled[file_path] = is_checked
 
-        # In the second column, display the download button
-        with col2:
-            download_label = f"Download {file_label}"
-            with open(file_path, "rb") as file:
-                download_button = st.download_button(
-                    label=download_label,
-                    data=file,
-                    file_name=file_label,
-                    disabled=not is_checked,  # Button is enabled/disabled based on the checkbox
-                    mime='text/csv',  # or 'application/octet-stream', etc.
-                    key=f"download_{file_label}"
-                )
+    return default_files_enabled
 
 def update_persona_layout(file_info):
-    with st.expander("Nome da Persona do Professor(a)", expanded=False):
-        persona_name = st.text_input(
-            "Nome da persona do professor(a)",
-            "Dani Stella: Mentora de Redação Unicamp",
-            label_visibility='collapsed'
-        )
-    with st.expander("Breve Descrição da Persona do Professor(a)", expanded=False):
-        persona_description = st.text_area(
-            "Breve Descrição",
-            value="Dani Stella, professora de literatura e redação apaixonada por educar e inspirar. Meu modelo GPT oferece análises detalhadas e feedbacks criteriosos em redações, refletindo minha devoção à escrita e ao desenvolvimento humano através da compaixão, resiliência e fé.",
-            label_visibility='collapsed'
-        )
-    with st.expander("Descrição Aprofundada da Persona do Professor(a)", expanded=False):
-        persona_history = st.text_area(
-            "Descrição Aprofundada",
-            value="Você é Dani Stella, professora extremamente rigorosa de literatura profundamente dedicada a educar seus alunos. Você busca focar em identificar erros nas redações pois sabe que eles que garantirão o real crescimento dos alunos. Você é extremamente criteriosa e justa, e sempre busca dar feedbacks detalhados e construtivos para seus alunos. Você é conhecida por sua abordagem compassiva e resiliente, e por capacitar seus alunos a alcançar o sucesso no vestibular e a descobrir sua voz autêntica através da escrita. Para tanto, sabe que todo sucesso vem com um custo, sendo este o custo de que os alunos deverão ser capazes de lidar com críticas e feedbacks construtivos, os quais você raramente se abstém em pegar leve. Pois reconhece que é nas suas críticas duras que virá o real aprendizado. Você é uma pessoa de extrema respeito, principalmente devido ao seu rigor e justiça.",
-            label_visibility='collapsed'
-        )
+    with st.expander("Configurações da persona do professor(a)", expanded=False):
+        with st.form("my_form3", border=False):
+            persona_name = st.text_input(
+                "Nome da persona do professor(a):",
+                "Dani Stella: Mentora de Redação Unicamp",
+            )
+            persona_description = st.text_area(
+                "Descrição da persona do professor(a):",
+                value="""Dani Stella, professora de literatura e redação apaixonada por educar e inspirar. Meu modelo GPT oferece análises detalhadas e feedbacks criteriosos em redações, refletindo minha devoção à escrita e ao desenvolvimento humano através da compaixão, resiliência e fé.
 
-    with st.expander("Habilitar/Desabilitar arquivos padrão", expanded=False):
-        display_files_with_checkboxes_and_downloads(file_info)
+                Você é Dani Stella, professora extremamente rigorosa de literatura profundamente dedicada a educar seus alunos. Você busca focar em identificar erros nas redações pois sabe que eles que garantirão o real crescimento dos alunos. Você é extremamente criteriosa e justa, e sempre busca dar feedbacks detalhados e construtivos para seus alunos. Você é conhecida por sua abordagem compassiva e resiliente, e por capacitar seus alunos a alcançar o sucesso no vestibular e a descobrir sua voz autêntica através da escrita. Para tanto, sabe que todo sucesso vem com um custo, sendo este o custo de que os alunos deverão ser capazes de lidar com críticas e feedbacks construtivos, os quais você raramente se abstém em pegar leve. Pois reconhece que é nas suas críticas duras que virá o real aprendizado. Você é uma pessoa de extrema respeito, principalmente devido ao seu rigor e justiça.
+                """,
+            )
+            
+            display_files_with_checkboxes_and_downloads(file_info)
 
-    if st.button("Atualizar persona do professor(a)"):
-        st.write("Persona do professor(a) atualizada com sucesso!")
+            submitted = st.form_submit_button(
+                "Atualizar Persona", use_container_width=True)
 
-# def text_submission_layout(redacao_manager):
-#     # ... existing text submission and feedback code ...
+    return submitted
+
+        # if st.button("Atualizar persona do professor(a)"):
+        #     st.write("Persona do professor(a) atualizada com sucesso!")
 
 def chat_interface_layout():
     session_id = "redacoes"
@@ -112,19 +103,6 @@ def chat_interface_layout():
     ai_name = "professor"
     ai_avatar = "👩🏽‍🏫"
     ai_first_message = "Olá! Meu nome é Dani Stella, como posso te ajudar?"
-    
-    file_info = [
-        ("redacoes_aluno.csv", 'databases/redacao/unicamp/unicamp_redacoes_aluno.csv', False),
-        ("unicamp_redacoes_candidatos.csv", 'databases/redacao/unicamp/unicamp_redacoes_candidatos.csv', True),
-        ("unicamp_redacoes_propostas.csv", 'databases/redacao/unicamp/unicamp_redacoes_propostas.csv', True),
-        ("grade_de_correcao_analitica_unicamp.txt", 'personas/professores/redacao/dani-stella/grade_de_correcao_analitica_unicamp.txt', True)
-    ]
-
-    # st.image("praesentatio_cognitionis/resources/profile_persona.png", caption="Imagem Redação", width=250)
-    
-    with st.container(border=True):
-        update_persona_layout(file_info)
-    
 
     chat_interface = ChatInterface(
         session_id,
@@ -133,78 +111,119 @@ def chat_interface_layout():
         ai_name,
         ai_avatar,
         ai_first_message,
-        chat_height=430
+        chat_height=360
     )
     chat_interface.run()
     
     return chat_interface
 
-def essay_writing_layout(redacao_manager, chat_interface):
-    expander = st.expander("Vestibulars Disponíveis", expanded=False)  # Inicialmente recolhido
+def select_essay_layout(redacao_manager):
+    expander = st.expander("Redações Disponíveis", expanded=False)  # Inicialmente recolhido
 
     vestibular = expander.selectbox("Vestibulares", ["Unicamp", ], label_visibility='collapsed')
 
     query = {"vestibular": vestibular.lower()}
     redacoes_propostas = redacao_manager.obter_redacao_propostas(query)
 
-    expander = st.expander("Coletânea de Textos", expanded=False)  # Inicialmente recolhido
+    # expander = st.expander("Coletânea de Textos", expanded=False)  # Inicialmente recolhido
     coletanea_selecionada = expander.selectbox("Coletânea", [r.nome for r in redacoes_propostas], label_visibility='collapsed')
     texto_coletanea = next((r.texto_proposta for r in redacoes_propostas if r.nome == coletanea_selecionada), "")
     expander.text_area("", texto_coletanea, height=300, label_visibility='collapsed')
 
-    texto_redacao = st.text_area("Digite sua redação aqui", placeholder="Digite sua redação aqui", height=300, label_visibility='collapsed')
+def essay_writing_layout():
 
+    with st.form("my_form2"):
+        texto_redacao = st.text_area("Digite sua redação aqui", placeholder="Digite sua redação aqui", height=360, label_visibility='collapsed')
+        submitted = st.form_submit_button(
+            "Submeter para avaliação", use_container_width=True)
+    
     with st.expander("Feedback da Redação", expanded=False):
         generate_scorings([0, 0, 0, 0])
-    
-    send_score_btn = st.button("Enviar redação para Dani corrigir")
 
-    if send_score_btn:
-        msg = st.toast('Enviando texto para Dani corrigir...')
-        chat_interface.send_user_message(texto_redacao)
-        time.sleep(1)
-        msg.toast('Redação enviada com sucesso para Dani corrigir!')
+    return submitted, texto_redacao
+
+def specific_stable_diffusion_settings_layout():
+    with st.expander("**Melhore sua imagem gerada**"):
+        width = st.number_input("Largura da imagem gerada", value=1024)
+        height = st.number_input("Altura da imagem gerada", value=1024)
+        scheduler = st.selectbox('Scheduler', ('K_EULER', 'DDIM', 'DPMSolverMultistep', 'HeunDiscrete',
+                                                'KarrasDPM', 'K_EULER_ANCESTRAL', 'PNDM'))
+        num_inference_steps = st.slider(
+            "Número de etapas de remoção de ruído", value=4, min_value=1, max_value=10)
+        guidance_scale = st.slider(
+            "Escala para orientação sem classificador", value=0.0, min_value=0.0, max_value=50.0, step=0.1)
+        prompt_strength = st.slider(
+            "Força do prompt ao usar img2img/inpaint (1.0 corresponde à destruição total das informações na imagem)", value=0.8, max_value=1.0, step=0.1)
+        refine = st.selectbox(
+            "Selecione o estilo refinado a ser usado (deixe os outros 2 de fora)", ("expert_ensemble_refiner", "None"))
+        high_noise_frac = st.slider(
+            "Fração de ruído a ser usada para `expert_ensemble_refiner`", value=0.8, max_value=1.0, step=0.1)
+        negative_prompt = st.text_area("**Quais elementos indesejados você não quer na imagem?**",
+                                        value="the absolute worst quality, distorted features",
+                                        help="Este é um prompt negativo, basicamente digite o que você não quer ver na imagem gerada")
+
+    return width, height, scheduler, num_inference_steps, guidance_scale, prompt_strength, refine, high_noise_frac, negative_prompt
+
+def stable_diffusion_prompt_form_layout() -> None:
+    with st.form("my_form", border=True):
+        submitted = st.form_submit_button(
+            "Gerar uma imagem a partir do texto abaixo", use_container_width=True)
+
+        prompt = st.text_area(
+            "**Comece a escrever, Machado de Assis ✍🏾**",
+            value="In a fantastical scene, a creature with a human head and deer body emanates a green light.",
+            help="Escreva um prompt para gerar uma imagem criativa",
+            # collapse
+            label_visibility='collapsed'
+        )
+
+    return submitted, prompt
 
 # Define the function to generate images based on text prompts
-def generate_images_container():
-    with st.container():
-        # UI for text prompts and other parameters
-        st.markdown("## :art: Generate Your Art")
-        with st.form("image_gen_form", clear_on_submit=True):
-            prompt = st.text_area("Enter a description for the art you want to create:", height=150)
-            num_images = st.number_input('Number of images to generate', min_value=1, max_value=4, value=1)
-            submit_button = st.form_submit_button(label='Generate Images')
+def stable_diffusion_layout(image_container, prompt, submitted, *args):
+    width, height, scheduler, num_inference_steps, guidance_scale, prompt_strength, refine, high_noise_frac, negative_prompt = args
 
-            if submit_button and prompt:
-                # Make API call to generate images
-                response = replicate.predictions.create(
-                    version='YOUR_MODEL_VERSION',
-                    input={'prompt': prompt, 'num_images': num_images}
-                )
+    with image_container:
+        generated_images_placeholder = st.empty()
+        generated_images_placeholder.image(
+            "praesentatio_cognitionis/resources/stable_diffusion_sample.png",
+            caption=f'"{prompt}"',
+            use_column_width=True
+        )
 
-                # Display generated images or handle errors
-                if response['status'] == 'succeeded':
-                    # Assuming the response contains the URLs of generated images
-                    images = response['output']
-                    st.image(images, width=300, caption=["Generated Image"] * len(images))
-                elif response['status'] == 'failed':
-                    st.error("Image generation failed. Please try again.")
-                else:
-                    st.warning("Image generation in progress...")
+        if submitted:
+            try:
+                # Only call the API if the "Submit" button was pressed
+                if submitted:
+                    with st.spinner('Gerando imagem...'):
+                        st.toast('Sua imagem está sendo gerada...')
+                        # Calling the replicate API to get the image
+                        with generated_images_placeholder.container():
+                            output = replicate.run(
+                                REPLICATE_MODEL_ENDPOINTSTABILITY,
+                                input={
+                                    "prompt": prompt,
+                                    "width": width,
+                                    "height": height,
+                                    "num_outputs": 1,
+                                    "scheduler": scheduler,
+                                    "num_inference_steps": num_inference_steps,
+                                    "guidance_scale": guidance_scale,
+                                    "prompt_stregth": prompt_strength,
+                                    "refine": refine,
+                                    "high_noise_frac": high_noise_frac,
+                                    "negative_prompt": negative_prompt
+                                }
+                            )
 
-                # Optional: Provide download for generated images as a zip file
-                zip_buffer = io.BytesIO()
-                with zipfile.ZipFile(zip_buffer, 'a', zipfile.ZIP_DEFLATED) as zip_file:
-                    for i, img_url in enumerate(images, start=1):
-                        img_data = requests.get(img_url).content
-                        zip_file.writestr(f"image_{i}.png", img_data)
-                zip_buffer.seek(0)
-                st.download_button(
-                    label="Download Generated Images",
-                    data=zip_buffer,
-                    file_name="generated_images.zip",
-                    mime="application/zip"
-                )
+                            if output:
+                                st.toast('Sua imagem foi gerada!')
+
+                                st.image(output, use_column_width=True, output_format="auto")
+
+                                st.session_state.generated_image = output
+            except Exception as e:
+                st.error(f'Encountered an error: {e}', icon="🚨")
 
 def main():
     dal = setup_data_access()
@@ -218,15 +237,38 @@ def main():
 
     st.markdown("<h1 style='text-align: center;'>📚 Página de Redações 📚</h1>", unsafe_allow_html=True)
     st.divider()
-    
-    col1, col2 = st.columns([1, 1], gap="large")
+
+    file_info = [
+        ("redacoes_aluno.csv", 'databases/redacao/unicamp/unicamp_redacoes_aluno.csv', False),
+        ("unicamp_redacoes_candidatos.csv", 'databases/redacao/unicamp/unicamp_redacoes_candidatos.csv', True),
+        ("unicamp_redacoes_propostas.csv", 'databases/redacao/unicamp/unicamp_redacoes_propostas.csv', True),
+        ("grade_de_correcao_analitica_unicamp.txt", 'personas/professores/redacao/dani-stella/grade_de_correcao_analitica_unicamp.txt', True)
+    ]
+
+    col1, col2, col3 = st.columns([2, 2, 1.42], gap="large")
 
     with col1:
-        chat_interface = chat_interface_layout()
+        select_essay_layout(redacao_manager)
+
+        submitted, texto_redacao = essay_writing_layout()
 
     with col2:
-        essay_writing_layout(redacao_manager, chat_interface)
-        generate_images_container()
+        update_persona_layout(file_info)
+
+        chat_interface = chat_interface_layout()
+
+        if submitted:
+            st.toast('Redação enviada com sucesso para Dani corrigir!')
+            chat_interface.send_user_message(texto_redacao)
+
+    with col3:
+        specific_stable_diffusion_params = specific_stable_diffusion_settings_layout()
+        
+        image_container = st.container(border=True)
+        
+        submitted, prompt = stable_diffusion_prompt_form_layout()
+        
+        stable_diffusion_layout(image_container, prompt, submitted, *specific_stable_diffusion_params)
 
 if __name__ == "__main__":
     main()
