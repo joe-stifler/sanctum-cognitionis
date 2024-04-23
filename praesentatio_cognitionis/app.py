@@ -10,6 +10,7 @@ from servitium_cognitionis.managers.redacao_manager import RedacaoManager
 
 # module imports from the standard python environment
 import os
+import time
 import vertexai
 import replicate
 import streamlit as st
@@ -72,6 +73,14 @@ def display_files_with_checkboxes_and_downloads(temp_persona_files):
                 temp_persona_files[file_path] = is_checked
 
 def update_persona_layout():
+    available_files = [
+        'databases/redacao/unicamp/unicamp_redacoes_aluno.csv',
+        'databases/redacao/unicamp/unicamp_redacoes_candidatos.csv',
+        'databases/redacao/unicamp/unicamp_redacoes_propostas.csv',
+        'personas/professores/redacao/dani-stella/grade_de_correcao_analitica_unicamp.txt',
+        'personas/professores/redacao/dani-stella/informacoes_importantes_sobre_a_redacao_unicamp.md',
+    ]
+    
     if "persona_settings" not in st.session_state:
         st.session_state["persona_settings"] = {
             "persona_name": "Dani Stella: Mentora de Redação Unicamp",
@@ -80,39 +89,55 @@ def update_persona_layout():
 
                 Você é Dani Stella, professora extremamente rigorosa de literatura profundamente dedicada a educar seus alunos. Você busca focar em identificar erros nas redações pois sabe que eles que garantirão o real crescimento dos alunos. Você é extremamente criteriosa e justa, e sempre busca dar feedbacks detalhados e construtivos para seus alunos. Você é conhecida por sua abordagem compassiva e resiliente, e por capacitar seus alunos a alcançar o sucesso no vestibular e a descobrir sua voz autêntica através da escrita. Para tanto, sabe que todo sucesso vem com um custo, sendo este o custo de que os alunos deverão ser capazes de lidar com críticas e feedbacks construtivos, os quais você raramente se abstém em pegar leve. Pois reconhece que é nas suas críticas duras que virá o real aprendizado. Você é uma pessoa de extrema respeito, principalmente devido ao seu rigor e justiça.
             """,
-            
-            "persona_files": {
-                'databases/redacao/unicamp/unicamp_redacoes_aluno.csv': False,
-                'databases/redacao/unicamp/unicamp_redacoes_candidatos.csv': True,
-                'databases/redacao/unicamp/unicamp_redacoes_propostas.csv': True,
-                'personas/professores/redacao/dani-stella/grade_de_correcao_analitica_unicamp.txt': True,
-                'personas/professores/redacao/dani-stella/informacoes_importantes_sobre_a_redacao_unicamp.md': True
-            }
+
+            "persona_files": [
+                'databases/redacao/unicamp/unicamp_redacoes_candidatos.csv',
+                'databases/redacao/unicamp/unicamp_redacoes_propostas.csv',
+                'personas/professores/redacao/dani-stella/grade_de_correcao_analitica_unicamp.txt',
+            ]
         }
-        
+
         st.session_state["temporary_persona_settings"] = st.session_state["persona_settings"]
 
-    
     with st.expander("Configurações da persona do professor(a)", expanded=False):
-        with st.form("my_form3", border=False):
-            persona_name = st.text_input(
-                "Nome da persona do professor(a):",
-                st.session_state["temporary_persona_settings"]["persona_name"],
-            )
-            st.session_state["temporary_persona_settings"]["persona_name"] = persona_name
+        def on_change_persona_name():
+            st.session_state["temporary_persona_settings"]["persona_name"] = st.session_state.new_persona_name
 
-            persona_description = st.text_area(
-                "Descrição da persona do professor(a):",
-                value=st.session_state["temporary_persona_settings"]["persona_description"],
-            )
-            st.session_state["temporary_persona_settings"]["persona_description"] = persona_description
+        st.text_input(
+            "Nome da persona do professor(a):",
+            st.session_state["temporary_persona_settings"]["persona_name"],
+            on_change=on_change_persona_name,
+            key='new_persona_name'
+        )
+        
+        def on_change_persona_description():
+            st.session_state["temporary_persona_settings"]["persona_description"] = st.session_state.new_persona_description
 
-            display_files_with_checkboxes_and_downloads(st.session_state["temporary_persona_settings"]["persona_files"])
+        st.text_area(
+            "Descrição da persona do professor(a):",
+            value=st.session_state["temporary_persona_settings"]["persona_description"],
+            on_change=on_change_persona_description,
+            key='new_persona_description'
+        )
 
-            submitted = st.form_submit_button(
-                "Atualizar Persona", use_container_width=True)
+        def change_files_state():
+            st.session_state["temporary_persona_settings"]["persona_files"] = list(st.session_state.new_persona_files)
 
-    return submitted
+        st.multiselect(
+            'Arquivos disponíveis na base de conhecimento da persona:',
+            available_files,
+            default=st.session_state["temporary_persona_settings"]["persona_files"],
+            on_change=change_files_state,
+            key="new_persona_files"
+        )
+
+        st.error("Tome cuidado! Atualizar a persona irá excluir o histórico de conversas atual.")
+
+        def on_click_update_persona():
+            st.session_state["temporary_persona_settings"] = st.session_state["persona_settings"]
+            st.toast("Configurações da persona atualizadas com sucesso!")
+
+        st.button("Atualizar Persona", use_container_width=True, on_click=on_click_update_persona)
 
 def chat_interface_layout():
     session_id = "redacoes"
@@ -259,40 +284,54 @@ def llm_family_model_layout():
         st.session_state["chosen_llm_family"] = str(LLMFamily.VERTEXAI_GEMINI)
 
     with st.expander("Provedor de inteligência artificial", expanded=False):
-        llm_family_name = st.selectbox(
+        def on_change_llm_family():
+            st.session_state["chosen_llm_family"] = st.session_state.new_llm_family_name
+        
+        st.selectbox(
             'Escolha seu provedor de inteligência artificial',
             st.session_state["llm_families"].keys(),
+            on_change=on_change_llm_family,
+            key='new_llm_family_name'
         )
         
+        llm_family_name = st.session_state["chosen_llm_family"]
         llm_family = st.session_state["llm_families"][llm_family_name]
+        
+        def on_change_llm_model():
+            llm_family.update_current_model_name(st.session_state.new_llm_model_name)
 
         llm_model_name = st.selectbox(
             'Escolha seu modelo de inteligência artificial',
             llm_family.available_model_names(),
+            on_change=on_change_llm_model,
+            key='new_llm_model_name'
         )
         
         llm_model = llm_family.get_available_model(llm_model_name)
+        
+        def on_change_update_llm_model():
+            llm_model.temperature = st.session_state.new_model_temperature
 
-        # create a slide from 0 to 1 in streamlit
-        temperature = st.slider(
+        st.slider(
             'Temperatura',
             min_value=llm_model.temperature_range[0],
             max_value=llm_model.temperature_range[1],
-            value=llm_model.temperature
+            value=llm_model.temperature,
+            on_change=on_change_update_llm_model,
+            key='new_model_temperature'
         )
+        
+        def on_change_update_llm_max_output_tokens():
+            llm_model.max_output_tokens = st.session_state.new_max_output_tokens
 
-        max_output_tokens = st.slider(
+        st.slider(
             'Número máximo de tokens de saída',
             min_value=llm_model.output_tokens_range[0],
             max_value=llm_model.output_tokens_range[1],
-            value=llm_model.max_output_tokens
+            value=llm_model.max_output_tokens,
+            on_change=on_change_update_llm_max_output_tokens,
+            key='new_max_output_tokens'
         )
-        
-        llm_model.temperature = temperature
-        llm_model.max_output_tokens = max_output_tokens
-
-        llm_family.update_available_model(llm_model)
-        llm_family.update_current_model_name(llm_model_name)
 
 def main():
     GEMINI_CLOUD_LOCATION = st.secrets["VERTEXAI"]["GEMINI_CLOUD_LOCATION"]
