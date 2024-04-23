@@ -1,9 +1,9 @@
-from servitium_cognitionis.models import RedacaoProposta
+from servitium_cognitionis.models import RedacaoPropostaUnicamp
+from servitium_cognitionis.models import RedacaoCandidatoUnicamp
 
 class RedacaoManager:
-    def __init__(self, dal, tabela_redacoes_propostas, tabela_redacoes_aluno, tabela_redacoes_candidatos, redacao_class):
+    def __init__(self, dal, tabela_redacoes_propostas, tabela_redacoes_aluno, tabela_redacoes_candidatos):
         self.data_access = dal
-        self.redacao_class = redacao_class
         self.tabela_redacoes_aluno = tabela_redacoes_aluno
         self.tabela_redacoes_propostas = tabela_redacoes_propostas
         self.tabela_redacoes_candidatos = tabela_redacoes_candidatos
@@ -11,14 +11,14 @@ class RedacaoManager:
     def _build_redacao_object_list(self, data, redacao_class):
         return [redacao_class(**row.to_dict()) for _, row in data.iterrows()]
 
-    def obter_redacao_aluno(self, query={}):
+    def obter_redacao_aluno(self, _vestibular, query={}):
         data = self.data_access.execute_query(self.tabela_redacoes_aluno, query, source='csv')
-        return self._build_redacao_object_list(data, self.redacao_class)
+        return self._build_redacao_object_list(data, RedacaoCandidatoUnicamp)
 
-    def obter_redacao_candidato(self, query={}):
+    def obter_redacao_candidato(self, _vestibular, query={}):
         data = self.data_access.execute_query(self.tabela_redacoes_candidatos, query, source='csv')
-        return self._build_redacao_object_list(data, self.redacao_class)
+        return self._build_redacao_object_list(data, RedacaoCandidatoUnicamp)
 
-    def obter_redacao_propostas(self, query={}):
+    def obter_redacao_propostas(self, _vestibular, query={}):
         data = self.data_access.execute_query(self.tabela_redacoes_propostas, query, source='csv')
-        return self._build_redacao_object_list(data, RedacaoProposta)
+        return self._build_redacao_object_list(data, RedacaoPropostaUnicamp)

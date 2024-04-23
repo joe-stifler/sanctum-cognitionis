@@ -1,4 +1,4 @@
-class RedacaoProposta:
+class RedacaoPropostaUnicamp:
     def __init__(self, **kwargs):
         self.nome = kwargs["nome"]
         self.texto_proposta = kwargs["texto_proposta"]

@@ -4,9 +4,8 @@ from chat_interface import ChatInterface
 # module imports from the servitium_cognitionis package
 from servitium_cognitionis.llms import LLMFamily
 from servitium_cognitionis.connectors.csv_connector import CSVConnector
-from servitium_cognitionis.data_access.data_interface import DataInterface
-from servitium_cognitionis.models.redacao_candidato_unicamp import RedacaoCandidatoUnicamp
 from servitium_cognitionis.managers.redacao_manager import RedacaoManager
+from servitium_cognitionis.data_access.data_interface import DataInterface
 
 # module imports from the standard python environment
 import os
@@ -161,17 +160,31 @@ def chat_interface_layout():
     return chat_interface
 
 def select_essay_layout(redacao_manager):
-    expander = st.expander("Redações Disponíveis", expanded=False)  # Inicialmente recolhido
+    expander = st.expander("Redações Disponíveis", expanded=True)
 
-    vestibular = expander.selectbox("Vestibulares", ["Unicamp", ], label_visibility='collapsed')
+    vestibular = expander.selectbox("Escolha o vestibular", ["Unicamp", ])
+    redacoes_propostas = redacao_manager.obter_redacao_propostas(
+        vestibular,
+        query = {
+            'order_by': ['ano_vestibular', 'numero_proposta'],
+            'ascending': [False, True]
+        }
+    )
 
-    query = {"vestibular": vestibular.lower()}
-    redacoes_propostas = redacao_manager.obter_redacao_propostas(query)
+    coletanea_escolhida = expander.selectbox(
+        "Escolha a proposta e ano do vestibular",
+        redacoes_propostas,
+        format_func=lambda r: f"{r.nome}",
+    )
 
-    # expander = st.expander("Coletânea de Textos", expanded=False)  # Inicialmente recolhido
-    coletanea_selecionada = expander.selectbox("Coletânea", [r.nome for r in redacoes_propostas], label_visibility='collapsed')
-    texto_coletanea = next((r.texto_proposta for r in redacoes_propostas if r.nome == coletanea_selecionada), "")
-    expander.text_area("Coletânea de textos", texto_coletanea, height=300, label_visibility='collapsed')
+    expander.text_area(
+        "Coletânea de textos",
+        coletanea_escolhida.texto_proposta,
+        height=300,
+        label_visibility='collapsed',
+        disabled=True
+    )
+
 
 def essay_writing_layout():
     with st.expander("Feedback da Redação", expanded=False):
@@ -343,8 +356,7 @@ def main():
         dal=dal,
         tabela_redacoes_propostas='redacoes_propostas',
         tabela_redacoes_aluno='redacoes_aluno',
-        tabela_redacoes_candidatos='redacoes_candidatos',
-        redacao_class=RedacaoCandidatoUnicamp
+        tabela_redacoes_candidatos='redacoes_candidatos'
     )
 
     st.markdown("<h1 style='text-align: center;'>📚 Página de Redações 📚</h1>", unsafe_allow_html=True)

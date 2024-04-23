@@ -1,5 +1,5 @@
 import unittest
-from servitium_cognitionis.models.redacao_proposta import RedacaoProposta
+from servitium_cognitionis.models.redacao_proposta_unicamp import RedacaoProposta
 from servitium_cognitionis.connectors.csv_connector import CSVConnector
 from servitium_cognitionis.models.redacao_candidato_unicamp import RedacaoCandidatoUnicamp
 from servitium_cognitionis.managers.redacao_manager import RedacaoManager
