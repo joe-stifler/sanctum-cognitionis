@@ -47,21 +47,18 @@ class ChatInterface:
             for message in self.message_history:
                 with st.chat_message(message["role"], avatar=message["avatar"]):
                     st.markdown(message["content"])
-                    st.divider()
 
     def send_user_message(self, message_content):
         with self.history:
             self.add_message(self.user_name, message_content, self.user_avatar, is_user=True)
             with st.chat_message(self.user_name, avatar=self.user_avatar):
                 st.markdown(message_content)
-                st.divider()
 
     def send_ai_message(self, message_content):
         with self.history:
             self.add_message(self.ai_name, message_content, self.ai_avatar, is_user=False)
             with st.chat_message(self.ai_name, avatar=self.ai_avatar):
                 st.markdown(message_content)
-                st.divider()
 
     def run(self):
         self.display_chat()

@@ -1,26 +1,29 @@
-import os
-import time
-import streamlit as st
+# module imports from the praesentatio_cognitionis package
+from chat_interface import ChatInterface
 
+# module imports from the servitium_cognitionis package
+from servitium_cognitionis.llms import LLMFamily
+from servitium_cognitionis.llms import LLMClientFactory
+from servitium_cognitionis.connectors.csv_connector import CSVConnector
+from servitium_cognitionis.data_access.data_interface import DataInterface
+from servitium_cognitionis.models.redacao_candidato_unicamp import RedacaoCandidatoUnicamp
+from servitium_cognitionis.managers.redacao_manager import RedacaoManager
+
+# module imports from the standard python environment
+import os
+import vertexai
 import replicate
-import requests
-import io
-import zipfile
+import streamlit as st
+import plotly.graph_objects as go
 
 from header import show_header
 show_header(0)
+
 
 # API Tokens and endpoints from `.streamlit/secrets.toml` file
 os.environ["REPLICATE_API_TOKEN"] = st.secrets["IMAGE_GENERATION"]["REPLICATE_API_TOKEN"]
 REPLICATE_MODEL_ENDPOINTSTABILITY = st.secrets["IMAGE_GENERATION"]["REPLICATE_MODEL_ENDPOINTSTABILITY"]
 
-import plotly.graph_objects as go
-from chat_interface import ChatInterface
-
-from servitium_cognitionis.connectors.csv_connector import CSVConnector
-from servitium_cognitionis.data_access.data_interface import DataInterface
-from servitium_cognitionis.models.redacao_candidato_unicamp import RedacaoCandidatoUnicamp
-from servitium_cognitionis.managers.redacao_manager import RedacaoManager
 
 def setup_data_access():
     table_mappings = {
@@ -131,14 +134,13 @@ def select_essay_layout(redacao_manager):
     expander.text_area("", texto_coletanea, height=300, label_visibility='collapsed')
 
 def essay_writing_layout():
+    with st.expander("Feedback da Redação", expanded=False):
+        generate_scorings([0, 0, 0, 0])
 
     with st.form("my_form2"):
         texto_redacao = st.text_area("Digite sua redação aqui", placeholder="Digite sua redação aqui", height=360, label_visibility='collapsed')
         submitted = st.form_submit_button(
             "Submeter para avaliação", use_container_width=True)
-    
-    with st.expander("Feedback da Redação", expanded=False):
-        generate_scorings([0, 0, 0, 0])
 
     return submitted, texto_redacao
 
@@ -182,11 +184,14 @@ def stable_diffusion_prompt_form_layout() -> None:
 # Define the function to generate images based on text prompts
 def stable_diffusion_layout(image_container, prompt, submitted, *args):
     width, height, scheduler, num_inference_steps, guidance_scale, prompt_strength, refine, high_noise_frac, negative_prompt = args
+    
+    if "generated_image" not in st.session_state:
+        st.session_state["generated_image"] = "praesentatio_cognitionis/resources/stable_diffusion_sample.png"
 
     with image_container:
         generated_images_placeholder = st.empty()
         generated_images_placeholder.image(
-            "praesentatio_cognitionis/resources/stable_diffusion_sample.png",
+            st.session_state["generated_image"],
             caption=f'"{prompt}"',
             use_column_width=True
         )
@@ -221,11 +226,46 @@ def stable_diffusion_layout(image_container, prompt, submitted, *args):
 
                                 st.image(output, use_column_width=True, output_format="auto")
 
-                                st.session_state.generated_image = output
+                                st.session_state["generated_image"] = output
             except Exception as e:
                 st.error(f'Encountered an error: {e}', icon="🚨")
 
+def llm_family_model_layout():
+    with st.expander("Provedor de inteligência artificial", expanded=False):
+        available_families = LLMFamily.available_families()
+
+        llm_family = st.selectbox(
+            'Escolha seu provedor de inteligência artificial',
+            [family for family in available_families],
+        )
+
+        llm_model = st.selectbox(
+            'Escolha seu modelo de inteligência artificial',
+            llm_family.available_models(),
+        )
+        
+        # create a slide from 0 to 1 in streamlit
+        temperature = st.slider(
+            'Temperatura',
+            min_value=llm_model.temperature_range[0],
+            max_value=llm_model.temperature_range[1],
+            value=llm_model.temperature
+        )
+
+        max_output_tokens = st.slider(
+            'Número máximo de tokens de saída',
+            min_value=llm_model.output_tokens_range[0],
+            max_value=llm_model.output_tokens_range[1],
+            value=llm_model.max_output_tokens
+        )
+        
+        llm_model
+        
 def main():
+    GEMINI_CLOUD_LOCATION = st.secrets["VERTEXAI"]["GEMINI_CLOUD_LOCATION"]
+    GEMINI_CLOUD_PROJECT_ID = st.secrets["VERTEXAI"]["GEMINI_CLOUD_PROJECT_ID"]
+    vertexai.init(project=GEMINI_CLOUD_PROJECT_ID, location=GEMINI_CLOUD_LOCATION)
+
     dal = setup_data_access()
     redacao_manager = RedacaoManager(
         dal=dal,
@@ -253,6 +293,8 @@ def main():
         submitted, texto_redacao = essay_writing_layout()
 
     with col2:
+        llm_family_model_layout()
+
         update_persona_layout(file_info)
 
         chat_interface = chat_interface_layout()

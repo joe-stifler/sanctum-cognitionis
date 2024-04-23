@@ -10,3 +10,4 @@ black[jupyter]
 plotly
 replicate
 python-dotenv
+vertexai===1.48.0
