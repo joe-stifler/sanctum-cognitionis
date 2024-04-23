@@ -33,8 +33,8 @@ class LLMGeminiModelExperimental(LLMBaseModel):
         )
 
 class LLMGeminiModels(Enum):
-    GEMINI_1_5_PRO = LLMGeminiModel1_5Pro()
     GEMINI_1_0_PRO_002 = LLMGeminiModel1_0Pro002()
+    GEMINI_1_5_PRO = LLMGeminiModel1_5Pro()
     GEMINI_EXPERIMENTAL = LLMGeminiModelExperimental()
 
     def __str__(self):

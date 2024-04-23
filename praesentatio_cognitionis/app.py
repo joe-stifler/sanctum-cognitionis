@@ -295,6 +295,7 @@ def llm_family_model_layout(callback_update_function, force_reset=False):
             'Escolha seu modelo de inteligência artificial',
             llm_family.available_model_names(),
             on_change=on_change_llm_model,
+            index=llm_family.current_model_index(),
             key='new_llm_model_name'
         )
         
@@ -376,7 +377,6 @@ def main():
                 ai_files=st.session_state["persona_settings"]["persona_files"],
                 ai_base_prompt=st.session_state["persona_settings"]["persona_description"],
                 force_reset=force_reset,
-                ai_default_chat_message="Como posso te ajudar?",
             )
 
         llm_family_model_layout(callback_update_persona, force_reset=True)
