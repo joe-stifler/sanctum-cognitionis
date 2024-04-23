@@ -27,11 +27,11 @@ class ChatInterface:
                 "messages": [],
                 "ai_chat": None,
                 "ai_model": None,
-                
+
                 "ai_model_name": None,
                 "ai_model_temperature": None,
                 "ai_model_max_output_tokens": None,
-                
+
                 "ai_name": None,
                 "ai_avatar": None,
                 "ai_files": None,
@@ -119,19 +119,20 @@ class ChatInterface:
 
     def send_ai_message(self, message_content):
         responses = self.ai_chat.send_message(message_content, stream=True)
+        
+        def format_response(response):
+            yield self.ai_name + "\n\n"
+            
+            for response in responses:
+                yield response.text
+                
+        formatted_response = format_response(responses)
 
         with self.history:
             with st.chat_message(self.ai_name, avatar=self.ai_avatar):
-                st.markdown(self.ai_name + "\n\n")
-                st.write_stream(responses)
-        
-        text_response = []
-        for chunk in responses:
-            text_response.append(chunk.text)
+                st.write_stream(formatted_response)
 
-        ai_full_response = self.ai_name + "\n\n" + "".join(text_response)
-
-        self.add_message(self.ai_name, ai_full_response, self.ai_avatar, is_user=False)
+        self.add_message(self.ai_name, formatted_response, self.ai_avatar, is_user=False)
 
     def print_initial_model_settings(self):
         # Format the list into a Markdown table
