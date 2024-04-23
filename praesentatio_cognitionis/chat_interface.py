@@ -7,16 +7,23 @@ class ChatInterface:
         self.chat_height = chat_height
         self.session_id = session_id
         self.message_history = []
-
+        
+        # model objects
         self.ai_chat = None
-        self.ai_name = None
         self.ai_model = None
-        self.ai_files = None
-        self.ai_avatar = None
+        
+        # model settings attributes
         self.ai_model_name = None
         self.ai_max_output_tokens = None
         self.ai_temperature = None
+
+        # persona attributes
+        self.ai_name = None
+        self.ai_files = None
+        self.ai_avatar = None
         self.ai_base_prompt = None
+        
+        self.settings_container = None
 
     def setup_ai(self, ai_model, ai_name, ai_avatar, ai_base_prompt, ai_files, force_reset=False):
         if "messages" not in st.session_state:
@@ -57,11 +64,15 @@ class ChatInterface:
             st.session_state.messages[self.session_id]["ai_model_temperature"] = ai_model.temperature
             st.session_state.messages[self.session_id]["ai_model_max_output_tokens"] = ai_model.max_output_tokens
 
-            ai_model = ai_model.create_model()
+            self.message_history = []
+            self.ai_model = ai_model.create_model()
+            self.ai_chat = self.ai_model.start_chat(response_validation=False)
 
-            st.session_state.messages[self.session_id]["messages"] = []
-            st.session_state.messages[self.session_id]["ai_model"] = ai_model
-            st.session_state.messages[self.session_id]["ai_chat"] = ai_model.start_chat()
+            st.session_state.messages[self.session_id]["ai_chat"] = self.ai_chat
+            st.session_state.messages[self.session_id]["ai_model"] = self.ai_model
+            st.session_state.messages[self.session_id]["messages"] = self.message_history
+            
+            self.send_ai_message([self.ai_base_prompt] + self.ai_files)
 
         self.ai_name = st.session_state.messages[self.session_id]["ai_name"]
         self.ai_avatar = st.session_state.messages[self.session_id]["ai_avatar"]
@@ -79,6 +90,8 @@ class ChatInterface:
         with st.container(border=True):
             self.history = st.container(height=self.chat_height, border=False)
             self.input_prompt = st.chat_input("O que gostaria de perguntar?")
+            
+        self.settings_container = st.expander("Configurações do modelo de IA", expanded=False)
 
     def add_message(self, role, content, avatar, is_user):
         self.message_history.append(
@@ -100,6 +113,7 @@ class ChatInterface:
         if self.ai_chat is None or self.ai_model is None:
             with self.history:
                 st.error("Por favor, inicialize o modelo de IA antes de enviar mensagens.")
+
             return False
         return True
 
@@ -118,21 +132,23 @@ class ChatInterface:
         return self.ai_name + "\n\n" + message_content
 
     def send_ai_message(self, message_content):
-        responses = self.ai_chat.send_message(message_content, stream=True)
-        
-        def format_response(response):
-            yield self.ai_name + "\n\n"
-            
-            for response in responses:
-                yield response.text
-                
-        formatted_response = format_response(responses)
-
         with self.history:
-            with st.chat_message(self.ai_name, avatar=self.ai_avatar):
-                st.write_stream(formatted_response)
+            with st.spinner("A IA está processando a mensagem..."):
+                with st.chat_message(self.ai_name, avatar=self.ai_avatar):
+                    try:
+                        responses = self.ai_chat.send_message(message_content, stream=True)
+                        
+                        def format_response(response):
+                            yield self.ai_name + "\n\n"
+                            
+                            for response in responses:
+                                yield response.text
 
-        self.add_message(self.ai_name, formatted_response, self.ai_avatar, is_user=False)
+                        respones_generator = format_response(responses)
+                        streamed_response = st.write_stream(respones_generator)
+                        self.add_message(self.ai_name, streamed_response, self.ai_avatar, is_user=False)
+                    except Exception as e:
+                        st.error(f"Erro ao processar a mensagem: {e}")
 
     def print_initial_model_settings(self):
         # Format the list into a Markdown table
@@ -162,18 +178,17 @@ class ChatInterface:
         )
         
         # Display the message
-        with self.history:
-            st.info(warning_message)
+        self.settings_container.info(warning_message)
         
 
     def run(self):
         if not self.check_chat_state():
             return
 
+        self.print_initial_model_settings()
+
         self.display_chat()
 
         if self.input_prompt:
             self.send_user_message(self.input_prompt)
             self.send_ai_message(self.input_prompt)
-        elif len(self.message_history) == 0:
-            self.print_initial_model_settings()
