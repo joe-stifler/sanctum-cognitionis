@@ -91,7 +91,7 @@ class ChatInterface:
     def check_chat_state(self):
         if self.ai_chat is None or self.ai_model is None:
             with self.history:
-                st.error("Por favor, inicialize o modelo de IA antes de enviar mensagens.")
+                st.error("Por favor, clique no botão abaixo para inicializar a interação com seu professor.")
 
             return False
         return True
@@ -99,15 +99,15 @@ class ChatInterface:
     def format_user_message(self, message_content):
         return self.user_name + "\n\n" + message_content + "\n"
 
-    def send_user_message(self, message_content):
+    def send_user_message(self, message_content, message_context=""):
         user_message = self.format_user_message(message_content)
 
         with self.history:
             self.add_message(self.user_name, user_message, self.user_avatar, is_user=True)
             with st.chat_message(self.user_name, avatar=self.user_avatar):
                 st.markdown(user_message)
-        
-        self.send_ai_message(self.input_prompt)
+
+        self.send_ai_message(message_context + message_content)
 
     def format_ai_message(self, message_content):
         return self.ai_name + "\n\n" + message_content

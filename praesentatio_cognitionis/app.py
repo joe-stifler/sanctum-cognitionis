@@ -12,6 +12,7 @@ import os
 import csv
 import vertexai
 import replicate
+import pandas as pd
 import streamlit as st
 
 from header import show_header
@@ -70,9 +71,9 @@ def display_files_with_checkboxes_and_downloads(temp_persona_files):
                 is_checked = st.checkbox(checkbox_label, value=file_enabled, key=f"checkbox_{file_label}")
                 temp_persona_files[file_path] = is_checked
 
-def update_persona_layout(callback_update_function):
+def update_persona_layout():
     available_files = [
-        'databases/redacao/unicamp/unicamp_redacoes_aluno.csv',
+        # 'databases/redacao/unicamp/unicamp_redacoes_aluno.csv',
         'databases/redacao/unicamp/unicamp_redacoes_candidatos.csv',
         'databases/redacao/unicamp/unicamp_redacoes_propostas.csv',
         'personas/professores/redacao/dani-stella/grade_de_correcao_analitica_unicamp.txt',
@@ -89,10 +90,10 @@ def update_persona_layout(callback_update_function):
                 'personas/professores/redacao/dani-stella/grade_de_correcao_analitica_unicamp.txt',
                 'personas/professores/redacao/dani-stella/informacoes_importantes_sobre_a_redacao_unicamp.md'
             ],
-            
-            "persona_description": """Dani Stella, professora de literatura e redação apaixonada por educar e inspirar. Meu modelo GPT oferece análises detalhadas e feedbacks criteriosos em redações, refletindo minha devoção à escrita e ao desenvolvimento humano através da compaixão, resiliência e fé.
 
-Dani Stella, professora extremamente rigorosa de literatura profundamente dedicada a educar seus alunos. Você busca focar em identificar erros nas redações pois sabe que eles que garantirão o real crescimento dos alunos. Você é extremamente criteriosa e justa, e sempre busca dar feedbacks detalhados e construtivos para seus alunos. Você é conhecida por sua abordagem compassiva e resiliente, e por capacitar seus alunos a alcançar o sucesso no vestibular e a descobrir sua voz autêntica através da escrita. Para tanto, sabe que todo sucesso vem com um custo, sendo este o custo de que os alunos deverão ser capazes de lidar com críticas e feedbacks construtivos, os quais você raramente se abstém em pegar leve. Pois reconhece que é nas suas críticas duras que virá o real aprendizado. Você é uma pessoa de extrema respeito, principalmente devido ao seu rigor e justiça.
+            "persona_description": """Dani Stella, professora de literatura e redação apaixonada por educar e inspirar.
+
+Dani Stella, professora extremamente rigorosa de literatura profundamente dedicada a educar seus alunos. Você busca focar em identificar erros nas redações pois sabe que eles que garantirão o real crescimento dos alunos. Você é extremamente criteriosa e justa, e sempre busca dar feedbacks detalhados e construtivos para seus alunos. Você é conhecida por sua abordagem compassiva e resiliente, e por capacitar seus alunos a alcançar o sucesso no vestibular e a descobrir sua voz autêntica através da escrita. Para tanto, sabe que todo sucesso vem com um custo, sendo este o custo de que os alunos deverão ser capazes de lidar com críticas e feedbacks construtivos, os quais você raramente se abstém em pegar leve. Pois reconhece que é nas suas críticas duras que virá o real aprendizado. Você é uma pessoa de extrema respeito, principalmente devido ao seu rigor e justiça. Sempre opta por uma nota abaixo do que o aluno merece, pois sabe que é nos erros que o aluno cresce. Na dúvida, sempre escolhe dar uma nota pior pro aluno pois sabe que as consequências de uma nota melhor do que a merecida são muito piores do que o contrário. Você é conhecida por ser uma pessoa extremamente justa e rigorosa, e por sempre priorizar o crescimento do aluno acima de tudo.
 
 Arquivos relevantes na sua base de conhecimento:
 ------------------------------------------------
@@ -213,14 +214,6 @@ Lembre-se: você prioriza o rigor, apontar os erros para o crescimento.
             key="new_persona_files"
         )
 
-        st.error("Tome cuidado! Atualizar a persona irá excluir o histórico de conversas atual.")
-
-        st.button(
-            "Atualizar Persona",
-            use_container_width=True,
-            on_click=callback_update_function,
-        )
-
 def select_essay_layout(redacao_manager):
     expander = st.expander("Redações Disponíveis", expanded=False)
 
@@ -246,12 +239,11 @@ def select_essay_layout(redacao_manager):
         label_visibility='collapsed',
         disabled=True
     )
+    
+    return coletanea_escolhida
 
 
 def essay_writing_layout(height_main_containers):
-    with st.expander("Feedback da Redação", expanded=False):
-        generate_scorings([0, 0, 0, 0])
-
     with st.form("my_form2"):
         texto_redacao = st.text_area("Digite sua redação aqui", placeholder="Digite sua redação aqui", height=height_main_containers, label_visibility='collapsed')
         submitted = st.form_submit_button(
@@ -352,7 +344,7 @@ def stable_diffusion_layout(submitted, *args):
         except Exception as e:
             st.error(f'Encountered an error: {e}', icon="🚨")
 
-def llm_family_model_layout(callback_update_function):
+def llm_family_model_layout():
     if "llm_families" not in st.session_state:
         st.session_state["llm_families"] = {
             str(family.value): family.value for family in LLMFamily
@@ -410,14 +402,6 @@ def llm_family_model_layout(callback_update_function):
             key='new_max_output_tokens'
         )
 
-        st.error("Tome cuidado! Atualizar o modelo irá excluir o histórico de conversas atual.")
-
-        st.button(
-            "Atualizar Modelo",
-            use_container_width=True,
-            on_click=callback_update_function,
-        )
-
 @st.cache_resource
 def get_redacao_manager():
     print("Creating RedacaoManager")
@@ -440,7 +424,6 @@ def get_chat_interface():
     )
     return chat_interface
 
-@st.cache_resource
 def convert_files_to_str(files_path: str):
     files_content = "Arquivos disponíveis na base de conhecimento da persona:\n\n"
     files_content += "--------------------------------------------------------\n\n"
@@ -448,14 +431,30 @@ def convert_files_to_str(files_path: str):
     for file_path in files_path:
         files_content += f"Conteudo para o arquivo {file_path} below:\n\n"
         
-        with open(file_path, "r", encoding="utf-8") as f:
-            if file_path.endswith(".csv"):
-                reader = csv.DictReader(f)
-                files_content += str(list(reader))
-            else:
-                files_content += "\n".join(f.readlines())
+        with open(file_path, "r") as file:
+            files_content += file.read() + "\n\n"
 
     return files_content
+
+def callback_update_persona(chat_interface):
+    ai_persona_name = st.session_state["persona_settings"]["persona_name"]
+    chosen_llm_family_name = st.session_state["chosen_llm_family"]
+    chosen_llm_family = st.session_state["llm_families"][chosen_llm_family_name]
+
+    persona_description = st.session_state["persona_settings"]["persona_description"]
+    persona_files = st.session_state["persona_settings"]["persona_files"]
+
+    persona_files_str = convert_files_to_str(persona_files)
+
+    prompt_with_files_str = f"{persona_description}\n\n{persona_files_str}"
+
+    chat_interface.setup_ai(
+        ai_model=chosen_llm_family.current_model(),
+        ai_avatar="👩🏽‍🏫",
+        ai_name=f':red[{ai_persona_name}]',
+        ai_base_prompt=prompt_with_files_str,
+    )
+
 
 def main():
     GEMINI_CLOUD_LOCATION = st.secrets["VERTEXAI"]["GEMINI_CLOUD_LOCATION"]
@@ -469,51 +468,78 @@ def main():
     st.markdown("<h1 style='text-align: center;'>📚 Página de Redações 📚</h1>", unsafe_allow_html=True)
     st.divider()
 
-    col1, col2, col3 = st.columns([1, 1, 0.6], gap="large")
-
-    with col1:
-        select_essay_layout(redacao_manager)
-
-        submitted, texto_redacao = essay_writing_layout(height_main_containers)
+    col2, col3, col4 = st.columns([3, 3, 2], gap="large")
+        
 
     with col2:
-        def callback_update_persona():
-            ai_persona_name = st.session_state["persona_settings"]["persona_name"]
-            chosen_llm_family_name = st.session_state["chosen_llm_family"]
-            chosen_llm_family = st.session_state["llm_families"][chosen_llm_family_name]
+        submitted, texto_redacao = essay_writing_layout(height_main_containers)
+        coletanea_escolhida = select_essay_layout(redacao_manager)
 
-            persona_description = st.session_state["persona_settings"]["persona_description"]
-            persona_files = st.session_state["persona_settings"]["persona_files"]
-            persona_files_str = convert_files_to_str(persona_files)
+        with st.expander("Feedback da Redação", expanded=False):
+            generate_scorings([0, 0, 0, 0])
 
-            prompt_with_files_str = f"{persona_description}\n\n{persona_files_str}"
-            
-            chat_interface.setup_ai(
-                ai_model=chosen_llm_family.current_model(),
-                ai_avatar="👩🏽‍🏫",
-                ai_name=f':red[{ai_persona_name}]',
-                ai_base_prompt=prompt_with_files_str,
+        if submitted and chat_interface.check_chat_state():
+            st.toast('Redação sendo enviada para avaliação...')
+
+            persona_name = st.session_state["persona_settings"]["persona_name"]
+
+            context_mensagem = (
+                f"## Nome:\n\n{coletanea_escolhida.nome}\n\n"
+                f"## Ano do Vestibular:\n\n{coletanea_escolhida.ano_vestibular}\n\n"
+                f"## Proposta Escolhida:\n\n{coletanea_escolhida.numero_proposta}\n\n"
+                f"## Texto da Proposta:\n\n{coletanea_escolhida.texto_proposta}\n\n"
+
+                f"## Interlocutores:\n\n{coletanea_escolhida.interlocutores_i}\n\n"
+                f"## Situacao do Problema:\n\n{coletanea_escolhida.situacao_problema_s}\n\n"
+                f"## Recorte Tematico:\n\n{coletanea_escolhida.recorte_tematico}\n\n"
+                f"## Tema:\n\n{coletanea_escolhida.tema}\n\n"
+                f"## Genero:\n\n{coletanea_escolhida.genero_g}\n\n"
+                f"## Construcao Composicional:\n\n{coletanea_escolhida.construcao_composicional}\n\n"
+
+                f"## Tipologia Textual:\n\n{coletanea_escolhida.tipologia_textual}\n\n"
+                f"## Projeto de Texto:\n\n{coletanea_escolhida.projeto_texto}\n\n"
+                f"## Ler Textos da Coletanea:\n\n{coletanea_escolhida.leitura_textos_coletanea}\n\n"
+                f"## Escolhas Lexicais e Sintaticas:\n\n{coletanea_escolhida.escolhas_lexicais_sintaticas}\n\n"
+                f"## Recursos Coesivos:\n\n{coletanea_escolhida.recursos_coesivos}\n\n"
+                f"## Norma Culta:\n\n{coletanea_escolhida.norma_culta}\n\n"
+                f"## Estilo:\n\n{coletanea_escolhida.estilo}\n\n"
+                f"## Originalidade:\n\n{coletanea_escolhida.originalidade}\n\n"
+                f"## Pertinencia:\n\n{coletanea_escolhida.pertinencia}\n\n"
+                f"## Observacoes:\n\n{coletanea_escolhida.observacoes}\n\n"
+                f"## Expectativa da Banca:\n\n{coletanea_escolhida.expectativa_banca}\n\n"
+                f"---------------------------------------------------------"
+                f"---------------------------------------------------------"
+                f"{persona_name}, utilize o conteudo acima para avaliar a redação do aluno que segue abaixo."
+                f"---------------------------------------------------------"
+                f"---------------------------------------------------------"
+                f"## Redação do Aluno:\n\n{texto_redacao}\n\n"
             )
+            
+            chat_interface.send_user_message(texto_redacao, context_mensagem)
 
-        llm_family_model_layout(callback_update_persona)
-
-        update_persona_layout(callback_update_persona)
-
-        if submitted:
-            st.toast('Redação enviada com sucesso para Dani corrigir!')
-            chat_interface.send_user_message(texto_redacao)
-
+    with col3:
         chat_interface.setup_layout()
         chat_interface.setup_state()
 
-        chat_interface.run()
+        llm_family_model_layout()
+        update_persona_layout()
 
-    with col3:
+        update_persona = st.button(
+            "Atualizar Persona",
+            use_container_width=True,
+            on_click=callback_update_persona,
+            args=(chat_interface,)
+        )
+        
+        if not update_persona:
+            chat_interface.run()
+
+    with col4:
+        image_container = st.container(border=True, height=int(1.22 * height_main_containers))
+        submitted = stable_diffusion_prompt_form_layout()
         specific_stable_diffusion_params = specific_stable_diffusion_settings_layout()
 
-        submitted = stable_diffusion_prompt_form_layout()
-
-        with st.container(border=True):
+        with image_container:
             stable_diffusion_layout(submitted, *specific_stable_diffusion_params)
 
 if __name__ == "__main__":

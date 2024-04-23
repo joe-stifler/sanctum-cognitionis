@@ -1,4 +1,5 @@
-from vertexai.preview.generative_models import GenerativeModel
+from vertexai import generative_models
+from vertexai.generative_models import GenerativeModel
 
 class LLMBaseModel():
     def __init__(self, model_name, temperature, temperature_range, max_output_tokens, output_tokens_range):
@@ -49,5 +50,11 @@ class LLMBaseModel():
             generation_config={
                 "temperature": self.temperature,
                 "max_output_tokens": self.max_output_tokens
+            },
+            safety_settings = {
+                generative_models.HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: generative_models.HarmBlockThreshold.BLOCK_NONE,
+                generative_models.HarmCategory.HARM_CATEGORY_HARASSMENT: generative_models.HarmBlockThreshold.BLOCK_NONE,
+                generative_models.HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT: generative_models.HarmBlockThreshold.BLOCK_NONE,
+                generative_models.HarmCategory.HARM_CATEGORY_HATE_SPEECH: generative_models.HarmBlockThreshold.BLOCK_NONE,
             }
         )
