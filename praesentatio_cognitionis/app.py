@@ -9,11 +9,9 @@ from servitium_cognitionis.data_access.data_interface import DataInterface
 
 # module imports from the standard python environment
 import os
-import time
 import vertexai
 import replicate
 import streamlit as st
-import plotly.graph_objects as go
 
 from header import show_header
 show_header(0)
@@ -71,7 +69,7 @@ def display_files_with_checkboxes_and_downloads(temp_persona_files):
                 is_checked = st.checkbox(checkbox_label, value=file_enabled, key=f"checkbox_{file_label}")
                 temp_persona_files[file_path] = is_checked
 
-def update_persona_layout():
+def update_persona_layout(callback_update_function, force_reset=False):
     available_files = [
         'databases/redacao/unicamp/unicamp_redacoes_aluno.csv',
         'databases/redacao/unicamp/unicamp_redacoes_candidatos.csv',
@@ -82,7 +80,7 @@ def update_persona_layout():
     
     if "persona_settings" not in st.session_state:
         st.session_state["persona_settings"] = {
-            "persona_name": "Dani Stella: Mentora de Redação Unicamp",
+            "persona_name": "Dani Stella",
             
             "persona_description": """Dani Stella, professora de literatura e redação apaixonada por educar e inspirar. Meu modelo GPT oferece análises detalhadas e feedbacks criteriosos em redações, refletindo minha devoção à escrita e ao desenvolvimento humano através da compaixão, resiliência e fé.
 
@@ -93,71 +91,50 @@ def update_persona_layout():
                 'databases/redacao/unicamp/unicamp_redacoes_candidatos.csv',
                 'databases/redacao/unicamp/unicamp_redacoes_propostas.csv',
                 'personas/professores/redacao/dani-stella/grade_de_correcao_analitica_unicamp.txt',
+                'personas/professores/redacao/dani-stella/informacoes_importantes_sobre_a_redacao_unicamp.md'
             ]
         }
 
-        st.session_state["temporary_persona_settings"] = st.session_state["persona_settings"]
-
     with st.expander("Configurações da persona do professor(a)", expanded=False):
         def on_change_persona_name():
-            st.session_state["temporary_persona_settings"]["persona_name"] = st.session_state.new_persona_name
+            st.session_state["persona_settings"]["persona_name"] = st.session_state.new_persona_name
 
         st.text_input(
             "Nome da persona do professor(a):",
-            st.session_state["temporary_persona_settings"]["persona_name"],
+            st.session_state["persona_settings"]["persona_name"],
             on_change=on_change_persona_name,
             key='new_persona_name'
         )
         
         def on_change_persona_description():
-            st.session_state["temporary_persona_settings"]["persona_description"] = st.session_state.new_persona_description
+            st.session_state["persona_settings"]["persona_description"] = st.session_state.new_persona_description
 
         st.text_area(
             "Descrição da persona do professor(a):",
-            value=st.session_state["temporary_persona_settings"]["persona_description"],
+            value=st.session_state["persona_settings"]["persona_description"],
             on_change=on_change_persona_description,
             key='new_persona_description'
         )
 
         def change_files_state():
-            st.session_state["temporary_persona_settings"]["persona_files"] = list(st.session_state.new_persona_files)
+            st.session_state["persona_settings"]["persona_files"] = list(st.session_state.new_persona_files)
 
         st.multiselect(
             'Arquivos disponíveis na base de conhecimento da persona:',
             available_files,
-            default=st.session_state["temporary_persona_settings"]["persona_files"],
+            default=st.session_state["persona_settings"]["persona_files"],
             on_change=change_files_state,
             key="new_persona_files"
         )
 
         st.error("Tome cuidado! Atualizar a persona irá excluir o histórico de conversas atual.")
 
-        def on_click_update_persona():
-            st.session_state["temporary_persona_settings"] = st.session_state["persona_settings"]
-            st.toast("Configurações da persona atualizadas com sucesso!")
-
-        st.button("Atualizar Persona", use_container_width=True, on_click=on_click_update_persona)
-
-def chat_interface_layout(height_main_containers):
-    session_id = "redacoes"
-    user_name = "estudante"
-    user_avatar = "👩🏾‍🎓"
-    ai_name = "professor"
-    ai_avatar = "👩🏽‍🏫"
-    ai_first_message = "Olá! Meu nome é Dani Stella, como posso te ajudar?"
-
-    chat_interface = ChatInterface(
-        session_id,
-        user_name,
-        user_avatar,
-        ai_name,
-        ai_avatar,
-        ai_first_message,
-        chat_height=height_main_containers
-    )
-    chat_interface.run()
-    
-    return chat_interface
+        st.button(
+            "Atualizar Persona",
+            use_container_width=True,
+            on_click=callback_update_function,
+            args=[force_reset, ]
+        )
 
 def select_essay_layout(redacao_manager):
     expander = st.expander("Redações Disponíveis", expanded=False)
@@ -372,15 +349,39 @@ def main():
         submitted, texto_redacao = essay_writing_layout(height_main_containers)
 
     with col2:
+        chat_interface = ChatInterface(
+            session_id="redacoes",
+            user_name=":blue[estudante]",
+            user_avatar="👩🏾‍🎓",
+            chat_height=height_main_containers
+        )
+
+        def callback_update_persona(force_reset):
+            ai_persona_name = st.session_state["persona_settings"]["persona_name"]
+
+            chat_interface.setup_ai(
+                ai_model=None,
+                ai_avatar="👩🏽‍🏫",
+                ai_name=f':red[{ai_persona_name}]',
+                ai_files=st.session_state["persona_settings"]["persona_files"],
+                ai_base_prompt=st.session_state["persona_settings"]["persona_description"],
+                force_reset=force_reset,
+                ai_default_chat_message="Como posso te ajudar?",
+            )
+
         llm_family_model_layout()
 
-        update_persona_layout()
-
-        chat_interface = chat_interface_layout(height_main_containers)
+        update_persona_layout(callback_update_persona, force_reset=True)
 
         if submitted:
             st.toast('Redação enviada com sucesso para Dani corrigir!')
             chat_interface.send_user_message(texto_redacao)
+
+        chat_interface.setup_layout()
+        
+        callback_update_persona(force_reset=False)
+
+        chat_interface.run()
 
     with col3:
         specific_stable_diffusion_params = specific_stable_diffusion_settings_layout()
