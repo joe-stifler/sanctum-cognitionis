@@ -29,8 +29,8 @@ def setup_data_access():
         'redacoes_propostas': 'databases/redacao/unicamp/unicamp_redacoes_propostas.csv'
     }
     csv_connector = CSVConnector(table_mappings)
-    dal = DataInterface({'csv': csv_connector})
-    return dal
+    data_interface = DataInterface({'csv': csv_connector})
+    return data_interface
 
 def generate_scorings(scores):
     max_score = 4
@@ -267,7 +267,7 @@ def stable_diffusion_layout(height_main_containers, submitted, *args):
         except Exception as e:
             st.error(f'Encountered an error: {e}', icon="🚨")
 
-def llm_family_model_layout():
+def llm_family_model_layout(callback_update_function, force_reset=False):
     if "llm_families" not in st.session_state:
         st.session_state["llm_families"] = {
             str(family.value): family.value for family in LLMFamily
@@ -324,14 +324,22 @@ def llm_family_model_layout():
             key='new_max_output_tokens'
         )
 
+        st.error("Tome cuidado! Atualizar o modelo irá excluir o histórico de conversas atual.")
+
+        st.button(
+            "Atualizar Modelo",
+            use_container_width=True,
+            on_click=callback_update_function,
+            args=[force_reset, ]
+        )
+
 def main():
     GEMINI_CLOUD_LOCATION = st.secrets["VERTEXAI"]["GEMINI_CLOUD_LOCATION"]
     GEMINI_CLOUD_PROJECT_ID = st.secrets["VERTEXAI"]["GEMINI_CLOUD_PROJECT_ID"]
     vertexai.init(project=GEMINI_CLOUD_PROJECT_ID, location=GEMINI_CLOUD_LOCATION)
 
-    dal = setup_data_access()
     redacao_manager = RedacaoManager(
-        dal=dal,
+        dal=setup_data_access(),
         tabela_redacoes_propostas='redacoes_propostas',
         tabela_redacoes_aluno='redacoes_aluno',
         tabela_redacoes_candidatos='redacoes_candidatos'
@@ -358,9 +366,11 @@ def main():
 
         def callback_update_persona(force_reset):
             ai_persona_name = st.session_state["persona_settings"]["persona_name"]
+            chosen_llm_family_name = st.session_state["chosen_llm_family"]
+            chosen_llm_family = st.session_state["llm_families"][chosen_llm_family_name]
 
             chat_interface.setup_ai(
-                ai_model=None,
+                ai_model=chosen_llm_family.current_model(),
                 ai_avatar="👩🏽‍🏫",
                 ai_name=f':red[{ai_persona_name}]',
                 ai_files=st.session_state["persona_settings"]["persona_files"],
@@ -369,7 +379,7 @@ def main():
                 ai_default_chat_message="Como posso te ajudar?",
             )
 
-        llm_family_model_layout()
+        llm_family_model_layout(callback_update_persona, force_reset=True)
 
         update_persona_layout(callback_update_persona, force_reset=True)
 

@@ -8,6 +8,7 @@ class ChatInterface:
         self.session_id = session_id
         self.message_history = []
         self.ai_model = None
+        self.ai_chat = None
 
     def setup_ai(self, ai_model, ai_name, ai_avatar, ai_base_prompt, ai_files, ai_default_chat_message=None, force_reset=False):
         self.ai_name = ai_name
@@ -17,17 +18,21 @@ class ChatInterface:
         if "messages" not in st.session_state:
             st.session_state.messages = {}
 
-        if self.session_id not in st.session_state.messages or force_reset:
+        if self.session_id not in st.session_state.messages:
             st.session_state.messages[self.session_id] = {
+                "messages": [],
+                "ai_chat": None,
                 "ai_model": None,
-                "messages": [{
-                    "role": self.ai_name,
-                    "avatar": self.ai_avatar,
-                    "is_user": False,
-                    "content": self.format_ai_message(ai_default_chat_message),
-                }]
             }
 
+        if force_reset:
+            ai_model = ai_model.create_model()
+            st.session_state.messages[self.session_id]["messages"] = []
+            st.session_state.messages[self.session_id]["ai_model"] = ai_model
+            st.session_state.messages[self.session_id]["ai_chat"] = ai_model.start_chat()
+
+        self.ai_chat = st.session_state.messages[self.session_id]["ai_chat"]
+        self.ai_model = st.session_state.messages[self.session_id]["ai_model"]
         self.message_history = st.session_state.messages[self.session_id]["messages"]
 
     def setup_layout(self):
@@ -47,7 +52,6 @@ class ChatInterface:
 
     def display_chat(self):
         with self.history:
-            # Display chat messages from history            
             for message in self.message_history:
                 with st.chat_message(message["role"], avatar=message["avatar"]):
                     st.markdown(message["content"])
@@ -74,7 +78,21 @@ class ChatInterface:
             with st.chat_message(self.ai_name, avatar=self.ai_avatar):
                 st.markdown(ai_message)
 
+    def check_chat_state(self):
+        if self.ai_chat is None or self.ai_model is None:
+            with self.history:
+                st.error("Por favor, inicialize o modelo de IA antes de enviar mensagens.")
+            return False
+        return True
+
     def run(self):
+        if not self.check_chat_state():
+            return
+        
+        if len(self.message_history) == 0:
+            with self.history:
+                st.info("O modelo está pronto! Por favor, faça uma pergunta para começar.")
+
         self.display_chat()
 
         if self.input_prompt:

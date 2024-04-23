@@ -1,3 +1,5 @@
+from vertexai.preview.generative_models import GenerativeModel
+
 class LLMBaseModel():
     def __init__(self, model_name, temperature, temperature_range, max_output_tokens, output_tokens_range):
         self._model_name = model_name
@@ -40,3 +42,12 @@ class LLMBaseModel():
         if value < self._output_tokens_range[0] or value > self._output_tokens_range[1]:
             raise ValueError(f"Max output tokens must be between {self._output_tokens_range[0]} and {self._output_tokens_range[1]}")
         self._max_output_tokens = value
+
+    def create_model(self):
+        return GenerativeModel(
+            model_name=self.name,
+            generation_config={
+                "temperature": self.temperature,
+                "max_output_tokens": self.max_output_tokens
+            }
+        )

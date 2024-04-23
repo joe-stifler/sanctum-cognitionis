@@ -20,8 +20,11 @@ class LLMGeminiFamily(LLMBaseFamily):
 
     def update_available_model(self, model):
         self._available_models[str(model)] = model
+        
+    def current_model(self) -> LLMBaseModel:
+        return self._available_models[self.current_model_name()]
 
-    def current_model_name(self) -> LLMBaseModel:
+    def current_model_name(self) -> str:
         return self._current_model_name
 
     def update_current_model_name(self, model_name):
