@@ -1,3 +1,4 @@
+import csv
 import streamlit as st
 
 class ChatInterface:
@@ -25,66 +26,86 @@ class ChatInterface:
         
         self.settings_container = None
 
+    def _file_to_dict_list(self, file_path: str):
+        file_content = ""
+
+        with open(file_path, "r", encoding="utf-8") as f:
+            if file_path.endswith(".csv"):
+                reader = csv.DictReader(f)
+                file_content = list(reader)
+            else:
+                file_content = f.readlines()
+
+        return file_content
+
     def setup_ai(self, ai_model, ai_name, ai_avatar, ai_base_prompt, ai_files, force_reset=False):
-        if "messages" not in st.session_state:
-            st.session_state.messages = {}
+        try:
+            if "messages" not in st.session_state:
+                st.session_state.messages = {}
 
-        if self.session_id not in st.session_state.messages:
-            st.session_state.messages[self.session_id] = {
-                "messages": [],
-                "ai_chat": None,
-                "ai_model": None,
+            if self.session_id not in st.session_state.messages:
+                st.session_state.messages[self.session_id] = {
+                    "messages": [],
+                    "ai_chat": None,
+                    "ai_model": None,
 
-                "ai_model_name": None,
-                "ai_model_temperature": None,
-                "ai_model_max_output_tokens": None,
+                    "ai_model_name": None,
+                    "ai_model_temperature": None,
+                    "ai_model_max_output_tokens": None,
 
-                "ai_name": None,
-                "ai_avatar": None,
-                "ai_files": None,
-                "ai_base_prompt": None
-            }
+                    "ai_name": None,
+                    "ai_avatar": None,
+                    "ai_files": None,
+                    "ai_base_prompt": None
+                }
 
-        if force_reset:
-            self.ai_name = ai_name
-            self.ai_avatar = ai_avatar
-            self.ai_files = ai_files
-            self.ai_base_prompt = ai_base_prompt
-            
-            st.session_state.messages[self.session_id]["ai_name"] = ai_name
-            st.session_state.messages[self.session_id]["ai_avatar"] = ai_avatar
-            st.session_state.messages[self.session_id]["ai_files"] = ai_files
-            st.session_state.messages[self.session_id]["ai_base_prompt"] = ai_base_prompt
+            if force_reset:
+                self.ai_name = ai_name
+                self.ai_avatar = ai_avatar
+                self.ai_base_prompt = ai_base_prompt
+                self.ai_files = [
+                    str(self._file_to_dict_list(file)) for file in ai_files
+                ]
+                self.ai_files = "\n".join(self.ai_files)
 
-            self.ai_model_name = ai_model.name
-            self.ai_temperature = ai_model.temperature
-            self.ai_max_output_tokens = ai_model.max_output_tokens
-            
-            st.session_state.messages[self.session_id]["ai_model_name"] = self.ai_model_name
-            st.session_state.messages[self.session_id]["ai_model_temperature"] = ai_model.temperature
-            st.session_state.messages[self.session_id]["ai_model_max_output_tokens"] = ai_model.max_output_tokens
+                st.session_state.messages[self.session_id]["ai_name"] = ai_name
+                st.session_state.messages[self.session_id]["ai_avatar"] = ai_avatar
+                # st.session_state.messages[self.session_id]["ai_files"] = self.ai_files
+                # st.session_state.messages[self.session_id]["ai_base_prompt"] = ai_base_prompt
 
-            self.message_history = []
-            self.ai_model = ai_model.create_model()
-            self.ai_chat = self.ai_model.start_chat(response_validation=False)
+                self.ai_model_name = ai_model.name
+                self.ai_temperature = ai_model.temperature
+                self.ai_max_output_tokens = ai_model.max_output_tokens
+                
+                # st.session_state.messages[self.session_id]["ai_model_name"] = self.ai_model_name
+                # st.session_state.messages[self.session_id]["ai_model_temperature"] = ai_model.temperature
+                # st.session_state.messages[self.session_id]["ai_model_max_output_tokens"] = ai_model.max_output_tokens
 
-            st.session_state.messages[self.session_id]["ai_chat"] = self.ai_chat
-            st.session_state.messages[self.session_id]["ai_model"] = self.ai_model
-            st.session_state.messages[self.session_id]["messages"] = self.message_history
-            
-            self.send_ai_message([self.ai_base_prompt] + self.ai_files)
+                self.message_history = []
+                self.ai_model = ai_model.create_model()
+                self.ai_chat = self.ai_model.start_chat(response_validation=False)
 
-        self.ai_name = st.session_state.messages[self.session_id]["ai_name"]
-        self.ai_avatar = st.session_state.messages[self.session_id]["ai_avatar"]
-        self.ai_files = st.session_state.messages[self.session_id]["ai_files"]
-        self.ai_base_prompt = st.session_state.messages[self.session_id]["ai_base_prompt"]
+                # st.session_state.messages[self.session_id]["ai_chat"] = self.ai_chat
+                # st.session_state.messages[self.session_id]["ai_model"] = self.ai_model
+                st.session_state.messages[self.session_id]["messages"] = self.message_history
 
-        self.ai_model_name = st.session_state.messages[self.session_id]["ai_model_name"]
-        self.ai_temperature = st.session_state.messages[self.session_id]["ai_model_temperature"]
-        self.ai_max_output_tokens = st.session_state.messages[self.session_id]["ai_model_max_output_tokens"]
-        self.ai_chat = st.session_state.messages[self.session_id]["ai_chat"]
-        self.ai_model = st.session_state.messages[self.session_id]["ai_model"]
-        self.message_history = st.session_state.messages[self.session_id]["messages"]
+                self.send_ai_message(self.ai_base_prompt + self.ai_files)
+
+            self.ai_name = st.session_state.messages[self.session_id]["ai_name"]
+            self.ai_avatar = st.session_state.messages[self.session_id]["ai_avatar"]
+            self.message_history = st.session_state.messages[self.session_id]["messages"]
+
+            # self.ai_files = st.session_state.messages[self.session_id]["ai_files"]
+            # self.ai_base_prompt = st.session_state.messages[self.session_id]["ai_base_prompt"]
+
+            # self.ai_model_name = st.session_state.messages[self.session_id]["ai_model_name"]
+            # self.ai_temperature = st.session_state.messages[self.session_id]["ai_model_temperature"]
+            # self.ai_max_output_tokens = st.session_state.messages[self.session_id]["ai_model_max_output_tokens"]
+
+            # self.ai_chat = st.session_state.messages[self.session_id]["ai_chat"]
+            # self.ai_model = st.session_state.messages[self.session_id]["ai_model"]
+        except Exception as e:
+            st.error(f"Erro ao configurar o modelo de IA: {e}")
 
     def setup_layout(self):
         with st.container(border=True):
@@ -127,6 +148,8 @@ class ChatInterface:
             self.add_message(self.user_name, user_message, self.user_avatar, is_user=True)
             with st.chat_message(self.user_name, avatar=self.user_avatar):
                 st.markdown(user_message)
+        
+        self.send_ai_message(self.input_prompt)
 
     def format_ai_message(self, message_content):
         return self.ai_name + "\n\n" + message_content
@@ -148,6 +171,7 @@ class ChatInterface:
                         streamed_response = st.write_stream(respones_generator)
                         self.add_message(self.ai_name, streamed_response, self.ai_avatar, is_user=False)
                     except Exception as e:
+                        print(e, "\n\n")
                         st.error(f"Erro ao processar a mensagem: {e}")
 
     def print_initial_model_settings(self):
@@ -182,13 +206,16 @@ class ChatInterface:
         
 
     def run(self):
-        if not self.check_chat_state():
-            return
+        try:
+            if not self.check_chat_state():
+                return
 
-        self.print_initial_model_settings()
+            # self.print_initial_model_settings()
 
-        self.display_chat()
+            self.display_chat()
 
-        if self.input_prompt:
-            self.send_user_message(self.input_prompt)
-            self.send_ai_message(self.input_prompt)
+            if self.input_prompt:
+                self.send_user_message(self.input_prompt)
+        except Exception as e:
+            st.error(f"Erro ao executar a interface de chat: {e}")
+            pass

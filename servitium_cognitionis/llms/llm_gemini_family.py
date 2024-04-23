@@ -33,7 +33,6 @@ class LLMGeminiFamily(LLMBaseFamily):
             if model == self.current_model_name():
                 return i
         raise ValueError("Invalid model name")
-        
 
     def update_current_model_name(self, model_name):
         self._current_model_name = model_name

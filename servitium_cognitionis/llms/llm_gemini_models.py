@@ -6,7 +6,7 @@ from enum import Enum
 class LLMGeminiModel1_5Pro(LLMBaseModel):
     def __init__(self, temperature=0.86, max_output_tokens=8192):
         super().__init__(
-            "gemini-1.5-pro",
+            "gemini-1.5-pro-preview-0409",
             temperature=temperature,
             temperature_range=(0.0, 2.0),
             max_output_tokens=max_output_tokens,
@@ -33,8 +33,8 @@ class LLMGeminiModelExperimental(LLMBaseModel):
         )
 
 class LLMGeminiModels(Enum):
-    GEMINI_1_0_PRO_002 = LLMGeminiModel1_0Pro002()
     GEMINI_1_5_PRO = LLMGeminiModel1_5Pro()
+    GEMINI_1_0_PRO_002 = LLMGeminiModel1_0Pro002()
     GEMINI_EXPERIMENTAL = LLMGeminiModelExperimental()
 
     def __str__(self):
