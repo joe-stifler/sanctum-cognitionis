@@ -36,7 +36,6 @@ class LLMGeminiModels(Enum):
     GEMINI_1_5_PRO = LLMGeminiModel1_5Pro()
     GEMINI_1_0_PRO_002 = LLMGeminiModel1_0Pro002()
     GEMINI_EXPERIMENTAL = LLMGeminiModelExperimental()
-    
-    @staticmethod
-    def available_models():
-        return [family.value for family in LLMGeminiModels]
+
+    def __str__(self):
+        return self.value.name

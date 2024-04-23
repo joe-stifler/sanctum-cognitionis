@@ -1,19 +1,28 @@
 from servitium_cognitionis.llms import LLMBaseFamily, LLMGeminiModels, LLMBaseModel
 
-from enum import Enum
-from typing import Any, Dict, List
-from abc import ABC, abstractmethod
+from typing import List
 from vertexai import generative_models
 
 class LLMGeminiFamily(LLMBaseFamily):
-    def __init__(self, model=LLMGeminiModels.GEMINI_1_5_PRO):
+    def __init__(self, model_name=str(LLMGeminiModels.GEMINI_1_5_PRO)):
         super().__init__("Vertex AI Gemini")
 
-        self._model = model.value
+        self._available_models = {
+            str(available_model.value): available_model.value for available_model in LLMGeminiModels
+        }
+        self._current_model_name = model_name
 
-    def available_models(self) -> List[str]:
-        return LLMGeminiModels.available_models()
+    def get_available_model(self, model_name: str) -> LLMBaseModel:
+        return self._available_models[model_name]
 
-    @property
-    def model(self) -> LLMBaseModel:
-        return self._model
+    def available_model_names(self) -> List[str]:
+        return self._available_models.keys()
+
+    def update_available_model(self, model):
+        self._available_models[str(model)] = model
+
+    def current_model_name(self) -> LLMBaseModel:
+        return self._current_model_name
+
+    def update_current_model_name(self, model_name):
+        self._current_model_name = model_name

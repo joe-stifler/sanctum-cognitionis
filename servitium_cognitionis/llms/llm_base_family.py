@@ -12,11 +12,3 @@ class LLMBaseFamily(ABC):
     @property
     def family_name(self) -> str:
         return self._family_name
-
-    @abstractmethod
-    def available_models(self):
-        pass
-
-    @abstractmethod
-    def create_model(self) -> Any:
-        pass
