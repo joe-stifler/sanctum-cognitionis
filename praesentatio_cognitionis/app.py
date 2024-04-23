@@ -138,7 +138,7 @@ def update_persona_layout():
 
         st.button("Atualizar Persona", use_container_width=True, on_click=on_click_update_persona)
 
-def chat_interface_layout():
+def chat_interface_layout(height_main_containers):
     session_id = "redacoes"
     user_name = "estudante"
     user_avatar = "👩🏾‍🎓"
@@ -153,14 +153,14 @@ def chat_interface_layout():
         ai_name,
         ai_avatar,
         ai_first_message,
-        chat_height=360
+        chat_height=height_main_containers
     )
     chat_interface.run()
     
     return chat_interface
 
 def select_essay_layout(redacao_manager):
-    expander = st.expander("Redações Disponíveis", expanded=True)
+    expander = st.expander("Redações Disponíveis", expanded=False)
 
     vestibular = expander.selectbox("Escolha o vestibular", ["Unicamp", ])
     redacoes_propostas = redacao_manager.obter_redacao_propostas(
@@ -186,12 +186,12 @@ def select_essay_layout(redacao_manager):
     )
 
 
-def essay_writing_layout():
+def essay_writing_layout(height_main_containers):
     with st.expander("Feedback da Redação", expanded=False):
         generate_scorings([0, 0, 0, 0])
 
     with st.form("my_form2"):
-        texto_redacao = st.text_area("Digite sua redação aqui", placeholder="Digite sua redação aqui", height=360, label_visibility='collapsed')
+        texto_redacao = st.text_area("Digite sua redação aqui", placeholder="Digite sua redação aqui", height=height_main_containers, label_visibility='collapsed')
         submitted = st.form_submit_button(
             "Submeter para avaliação", use_container_width=True)
 
@@ -223,71 +223,72 @@ def stable_diffusion_prompt_form_layout() -> None:
     if "image_prompt" not in st.session_state:
         st.session_state["image_prompt"] = """In a fantastical scene, a creature with a human head and deer body emanates a green light."""
     
-    with st.form("my_form", border=True):
-        submitted = st.form_submit_button(
-            "Gerar uma imagem a partir do texto abaixo", use_container_width=True)
+    with st.expander("Prompt para gerar imagem", expanded=False):
+        def on_change_prompt():
+            st.session_state["image_prompt"] = st.session_state.new_prompt
 
-        prompt = st.text_area(
+        st.text_area(
             "**Comece a escrever, Machado de Assis ✍🏾**",
             value=st.session_state["image_prompt"],
             help="Escreva um prompt para gerar uma imagem criativa",
-            # collapse
-            label_visibility='collapsed'
+            label_visibility='collapsed',
+            on_change=on_change_prompt,
+            key='new_prompt',
         )
 
-    return submitted, prompt
+        submitted = st.button(
+            "Gerar uma imagem a partir do texto abaixo", use_container_width=True)
+
+    return submitted
 
 # Define the function to generate images based on text prompts
-def stable_diffusion_layout(image_container, prompt, submitted, *args):
+def stable_diffusion_layout(height_main_containers, submitted, *args):
     width, height, scheduler, num_inference_steps, guidance_scale, prompt_strength, refine, high_noise_frac, negative_prompt = args
     
     if "image_output" not in st.session_state:
         st.session_state["image_output"] = "praesentatio_cognitionis/resources/stable_diffusion_sample.png"
 
+    generated_images_placeholder = st.empty()
+    generated_images_placeholder.image(
+        st.session_state["image_output"],
+        caption=st.session_state["image_prompt"],
+        use_column_width=True
+    )
 
-    with image_container:
-        generated_images_placeholder = st.empty()
-        generated_images_placeholder.image(
-            st.session_state["image_output"],
-            caption=f'"{prompt}"',
-            use_column_width=True
-        )
+    if submitted:
+        try:
+            # Only call the API if the "Submit" button was pressed
+            if submitted:
+                with st.spinner('Gerando imagem...'):
+                    # Calling the replicate API to get the image
+                    with generated_images_placeholder.container():
+                        output = replicate.run(
+                            REPLICATE_MODEL_ENDPOINTSTABILITY,
+                            input={
+                                "prompt": st.session_state["image_prompt"],
+                                "width": width,
+                                "height": height,
+                                "num_outputs": 1,
+                                "scheduler": scheduler,
+                                "num_inference_steps": num_inference_steps,
+                                "guidance_scale": guidance_scale,
+                                "prompt_stregth": prompt_strength,
+                                "refine": refine,
+                                "high_noise_frac": high_noise_frac,
+                                "negative_prompt": negative_prompt
+                            }
+                        )
 
-        if submitted:
-            try:
-                # Only call the API if the "Submit" button was pressed
-                if submitted:
-                    with st.spinner('Gerando imagem...'):
-                        # Calling the replicate API to get the image
-                        with generated_images_placeholder.container():
-                            output = replicate.run(
-                                REPLICATE_MODEL_ENDPOINTSTABILITY,
-                                input={
-                                    "prompt": prompt,
-                                    "width": width,
-                                    "height": height,
-                                    "num_outputs": 1,
-                                    "scheduler": scheduler,
-                                    "num_inference_steps": num_inference_steps,
-                                    "guidance_scale": guidance_scale,
-                                    "prompt_stregth": prompt_strength,
-                                    "refine": refine,
-                                    "high_noise_frac": high_noise_frac,
-                                    "negative_prompt": negative_prompt
-                                }
+                        if output:
+                            st.image(
+                                output,
+                                use_column_width=True,
+                                caption=st.session_state["image_prompt"],
+                                output_format="auto"
                             )
-
-                            if output:
-                                st.image(
-                                    output,
-                                    use_column_width=True,
-                                    caption=f'"{prompt}"',
-                                    output_format="auto"
-                                )
-                                st.session_state["image_prompt"] = prompt
-                                st.session_state["image_output"] = output
-            except Exception as e:
-                st.error(f'Encountered an error: {e}', icon="🚨")
+                            st.session_state["image_output"] = output
+        except Exception as e:
+            st.error(f'Encountered an error: {e}', icon="🚨")
 
 def llm_family_model_layout():
     if "llm_families" not in st.session_state:
@@ -362,19 +363,20 @@ def main():
     st.markdown("<h1 style='text-align: center;'>📚 Página de Redações 📚</h1>", unsafe_allow_html=True)
     st.divider()
 
-    col1, col2, col3 = st.columns([2, 2, 1.42], gap="large")
+    height_main_containers = 400
+    col1, col2, col3 = st.columns([1, 1, 0.6], gap="large")
 
     with col1:
         select_essay_layout(redacao_manager)
 
-        submitted, texto_redacao = essay_writing_layout()
+        submitted, texto_redacao = essay_writing_layout(height_main_containers)
 
     with col2:
         llm_family_model_layout()
 
         update_persona_layout()
 
-        chat_interface = chat_interface_layout()
+        chat_interface = chat_interface_layout(height_main_containers)
 
         if submitted:
             st.toast('Redação enviada com sucesso para Dani corrigir!')
@@ -382,12 +384,11 @@ def main():
 
     with col3:
         specific_stable_diffusion_params = specific_stable_diffusion_settings_layout()
-        
-        image_container = st.container(border=True)
-        
-        submitted, prompt = stable_diffusion_prompt_form_layout()
-        
-        stable_diffusion_layout(image_container, prompt, submitted, *specific_stable_diffusion_params)
+
+        submitted = stable_diffusion_prompt_form_layout()
+
+        with st.container(border=True):
+            stable_diffusion_layout(int(0.8 * height_main_containers), submitted, *specific_stable_diffusion_params)
 
 if __name__ == "__main__":
     main()
