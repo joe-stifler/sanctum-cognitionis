@@ -259,7 +259,7 @@ def llm_family_model_layout():
             value=llm_model.max_output_tokens
         )
         
-        llm_model
+        # llm_model
         
 def main():
     GEMINI_CLOUD_LOCATION = st.secrets["VERTEXAI"]["GEMINI_CLOUD_LOCATION"]

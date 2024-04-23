@@ -1,5 +1,4 @@
-from servitium_cognitionis.llms import LLMBaseFamily
-from servitium_cognitionis.llms import LLMGeminiModels, LLMGeminiModelBase
+from servitium_cognitionis.llms import LLMBaseFamily, LLMGeminiModels, LLMBaseModel
 
 from enum import Enum
 from typing import Any, Dict, List
@@ -16,9 +15,5 @@ class LLMGeminiFamily(LLMBaseFamily):
         return LLMGeminiModels.available_models()
 
     @property
-    def model(self) -> LLMGeminiModelBase:
+    def model(self) -> LLMBaseModel:
         return self._model
-    
-    def create_model(self) -> Any:
-        # Implement the actual model instantiation logic here
-        pass
