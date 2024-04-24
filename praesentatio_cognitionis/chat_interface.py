@@ -88,14 +88,6 @@ class ChatInterface:
                 with st.chat_message(message["role"], avatar=message["avatar"]):
                     st.markdown(message["content"])
 
-    def check_chat_state(self):
-        if self.ai_chat is None or self.ai_model is None:
-            with self.history:
-                st.error("Por favor, clique no botão abaixo para inicializar a interação com seu professor.")
-
-            return False
-        return True
-
     def format_user_message(self, message_content):
         return self.user_name + "\n\n" + message_content + "\n"
 
@@ -199,13 +191,10 @@ class ChatInterface:
         
         # Display the message
         self.settings_container.info(warning_message)
-        
+
 
     def run(self):
         try:
-            if not self.check_chat_state():
-                return
-
             self.print_initial_model_settings()
 
             self.display_chat()

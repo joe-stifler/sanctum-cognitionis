@@ -480,7 +480,7 @@ def convert_files_to_str(files_path: str):
 
     for file_path in files_path:
         files_content += f"Conteudo para o arquivo {file_path} below:\n\n"
-        
+
         with open(file_path, "r") as file:
             files_content += file.read() + "\n\n"
 
@@ -507,23 +507,20 @@ def callback_update_persona(chat_interface):
 
 
 def main():
-    GEMINI_CLOUD_LOCATION = st.secrets["VERTEXAI"]["GEMINI_CLOUD_LOCATION"]
-    # GEMINI_CLOUD_PROJECT_ID = st.secrets["VERTEXAI"]["GEMINI_CLOUD_PROJECT_ID"]
-    
+    gemini_cloud_location = st.secrets["VERTEXAI"]["GEMINI_CLOUD_LOCATION"]
+
     key_path = ".streamlit/google_secrets.json"
     
-    # create folder .streamlit/ if it does not exist
     if not os.path.exists(".streamlit"):
         os.makedirs(".streamlit")
     
-    # write the json secrets to the file
     with open(key_path, "w") as file:
         file.write(st.secrets["VERTEXAI"]["GOOGLE_JSON_SECRETS"])
 
     os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = key_path
     _credentials, project_id = google.auth.default()
 
-    vertexai.init(project=project_id, location=GEMINI_CLOUD_LOCATION)
+    vertexai.init(project=project_id, location=gemini_cloud_location)
 
     height_main_containers = 400
     chat_interface = get_chat_interface()
@@ -592,9 +589,13 @@ def main():
             on_click=callback_update_persona,
             args=(chat_interface,)
         )
-        
+
         if not update_persona:
             chat_interface.run()
+
+        if "first_run" not in st.session_state:
+            st.session_state["first_run"] = True
+            callback_update_persona(chat_interface)
 
     with col4:
         image_container = st.container(border=True, height=int(1.22 * height_main_containers))
