@@ -22,43 +22,43 @@ import streamlit as st
 os.environ["REPLICATE_API_TOKEN"] = st.secrets["IMAGE_GENERATION"]["REPLICATE_API_TOKEN"]
 REPLICATE_MODEL_ENDPOINTSTABILITY = st.secrets["IMAGE_GENERATION"]["REPLICATE_MODEL_ENDPOINTSTABILITY"]
 
-def check_password():
-    """Returns `True` if the user had a correct password."""
+# def check_password():
+#     """Returns `True` if the user had a correct password."""
 
-    def login_form():
-        """Form with widgets to collect user information"""
-        with st.form("Credentials"):
-            st.text_input("Username", key="username")
-            st.text_input("Password", type="password", key="password")
-            st.form_submit_button("Log in", on_click=password_entered)
+#     def login_form():
+#         """Form with widgets to collect user information"""
+#         with st.form("Credentials"):
+#             st.text_input("Username", key="username")
+#             st.text_input("Password", type="password", key="password")
+#             st.form_submit_button("Log in", on_click=password_entered)
 
-    def password_entered():
-        """Checks whether a password entered by the user is correct."""
-        if st.session_state["username"] in st.secrets[
-            "passwords"
-        ] and hmac.compare_digest(
-            st.session_state["password"],
-            st.secrets.passwords[st.session_state["username"]],
-        ):
-            st.session_state["password_correct"] = True
-            del st.session_state["password"]  # Don't store the username or password.
-            del st.session_state["username"]
-        else:
-            st.session_state["password_correct"] = False
+#     def password_entered():
+#         """Checks whether a password entered by the user is correct."""
+#         if st.session_state["username"] in st.secrets[
+#             "passwords"
+#         ] and hmac.compare_digest(
+#             st.session_state["password"],
+#             st.secrets.passwords[st.session_state["username"]],
+#         ):
+#             st.session_state["password_correct"] = True
+#             del st.session_state["password"]  # Don't store the username or password.
+#             del st.session_state["username"]
+#         else:
+#             st.session_state["password_correct"] = False
 
-    # Return True if the username + password is validated.
-    if st.session_state.get("password_correct", False):
-        return True
+#     # Return True if the username + password is validated.
+#     if st.session_state.get("password_correct", False):
+#         return True
 
-    # Show inputs for username + password.
-    login_form()
-    if "password_correct" in st.session_state:
-        st.error("😕 User not known or password incorrect")
-    return False
+#     # Show inputs for username + password.
+#     login_form()
+#     if "password_correct" in st.session_state:
+#         st.error("😕 User not known or password incorrect")
+#     return False
 
 
-if not check_password():
-    st.stop()
+# if not check_password():
+#     st.stop()
 
 ########################################################################################
 
@@ -92,7 +92,7 @@ def generate_scorings(scores):
     st.caption(f'📝 Somatório Total: {score_sum}/{max_score_overall}')
 
 def display_files_with_checkboxes_and_downloads(temp_persona_files):
-    st.write("Arquivos disponíveis na base de conhecimento da persona:")
+    st.write("Base de conhecimento do professor(a):")
     
     # Create two columns: one for the checkbox, one for the download button
     with st.container(border=True):
@@ -145,7 +145,7 @@ def update_persona_layout():
 
 Dani Stella, professora extremamente rigorosa de literatura profundamente dedicada a educar seus alunos. Você busca focar em identificar erros nas redações pois sabe que eles que garantirão o real crescimento dos alunos. Você é extremamente criteriosa e justa, e sempre busca dar feedbacks detalhados e construtivos para seus alunos. Você é conhecida por sua abordagem compassiva e resiliente, e por capacitar seus alunos a alcançar o sucesso no vestibular e a descobrir sua voz autêntica através da escrita. Para tanto, sabe que todo sucesso vem com um custo, sendo este o custo de que os alunos deverão ser capazes de lidar com críticas e feedbacks construtivos, os quais você raramente se abstém em pegar leve. Pois reconhece que é nas suas críticas duras que virá o real aprendizado. Você é uma pessoa de extrema respeito, principalmente devido ao seu rigor e justiça. Sempre opta por uma nota abaixo do que o aluno merece, pois sabe que é nos erros que o aluno cresce. Na dúvida, sempre escolhe dar uma nota pior pro aluno pois sabe que as consequências de uma nota melhor do que a merecida são muito piores do que o contrário. Você é conhecida por ser uma pessoa extremamente justa e rigorosa, e por sempre priorizar o crescimento do aluno acima de tudo.
 
-Arquivos relevantes na sua base de conhecimento:
+Arquivos relevantes na sua base de conhecimento de Dani Stella:
 ------------------------------------------------
 
 informacoes\_importantes\_sobre\_a\_redacao\_unicamp.md 11701 Tokens grade\_de\_correcao\_analitica\_unicamp.txt 1116 Tokens base\_de\_dados\_redacoes\_candidatos.csv 49977 Tokens base\_de\_dados\_propostas\_de\_redacoes.csv 37571 Tokens
@@ -232,12 +232,12 @@ Lembre-se: você prioriza o rigor, apontar os erros para o crescimento.
             """,
         }
 
-    with st.expander("Configurações da persona do professor(a)", expanded=False):
+    with st.expander("Configure seu professor(a)", expanded=False):
         def on_change_persona_name():
             st.session_state["persona_settings"]["persona_name"] = st.session_state.new_persona_name
 
         st.text_input(
-            "Nome da persona do professor(a):",
+            "Nome do professor(a):",
             st.session_state["persona_settings"]["persona_name"],
             on_change=on_change_persona_name,
             key='new_persona_name'
@@ -247,7 +247,7 @@ Lembre-se: você prioriza o rigor, apontar os erros para o crescimento.
             st.session_state["persona_settings"]["persona_description"] = st.session_state.new_persona_description
 
         st.text_area(
-            "Descrição da persona do professor(a):",
+            "Descrição do professor(a):",
             value=st.session_state["persona_settings"]["persona_description"],
             on_change=on_change_persona_description,
             key='new_persona_description'
@@ -257,7 +257,7 @@ Lembre-se: você prioriza o rigor, apontar os erros para o crescimento.
             st.session_state["persona_settings"]["persona_files"] = list(st.session_state.new_persona_files)
 
         st.multiselect(
-            'Arquivos disponíveis na base de conhecimento da persona:',
+            'Base de conhecimento do professor(a):',
             available_files,
             default=st.session_state["persona_settings"]["persona_files"],
             on_change=change_files_state,
@@ -302,7 +302,7 @@ def essay_writing_layout(height_main_containers):
     return submitted, texto_redacao
 
 def specific_stable_diffusion_settings_layout():
-    with st.expander("**Melhore sua imagem gerada**"):
+    with st.expander("**Configure a geração de imagem**"):
         width = st.number_input("Largura da imagem gerada", value=1024)
         height = st.number_input("Altura da imagem gerada", value=1024)
         scheduler = st.selectbox('Scheduler', ('K_EULER', 'DDIM', 'DPMSolverMultistep', 'HeunDiscrete',
@@ -327,7 +327,7 @@ def stable_diffusion_prompt_form_layout() -> None:
     if "image_prompt" not in st.session_state:
         st.session_state["image_prompt"] = """In a fantastical scene, a creature with a human head and deer body emanates a green light."""
     
-    with st.container(border=True):
+    with st.expander("Gere uma nova imagem", expanded=False):
         def on_change_prompt():
             st.session_state["image_prompt"] = st.session_state.new_prompt
 
@@ -401,7 +401,7 @@ def llm_family_model_layout():
         }
         st.session_state["chosen_llm_family"] = str(LLMFamily.VERTEXAI_GEMINI)
 
-    with st.expander("Provedor de inteligência artificial", expanded=False):
+    with st.expander("Configure o modelo de inteligência artificial", expanded=False):
         def on_change_llm_family():
             st.session_state["chosen_llm_family"] = st.session_state.new_llm_family_name
         
@@ -470,12 +470,12 @@ def get_chat_interface():
         session_id="redacoes",
         user_name=":blue[estudante]",
         user_avatar="👩🏾‍🎓",
-        chat_height=400
+        chat_height=585
     )
     return chat_interface
 
 def convert_files_to_str(files_path: str):
-    files_content = "Arquivos disponíveis na base de conhecimento da persona:\n\n"
+    files_content = "Arquivos disponíveis na base de conhecimento do professor(a):\n\n"
     files_content += "--------------------------------------------------------\n\n"
 
     for file_path in files_path:
@@ -522,88 +522,64 @@ def main():
 
     vertexai.init(project=project_id, location=gemini_cloud_location)
 
-    height_main_containers = 400
+    height_main_containers = 650
     chat_interface = get_chat_interface()
     redacao_manager = get_redacao_manager()
 
     st.markdown("<h1 style='text-align: center;'>📚 Página de Redações 📚</h1>", unsafe_allow_html=True)
     st.divider()
 
-    col2, col3, col4 = st.columns([3, 3, 2], gap="large")
-        
+    col1, col2, col3 = st.columns([2, 3, 1.5], gap="large")
 
-    with col2:
-        submitted, texto_redacao = essay_writing_layout(height_main_containers)
+    with col1:
         coletanea_escolhida = select_essay_layout(redacao_manager)
 
-        with st.expander("Feedback da Redação", expanded=False):
-            generate_scorings([0, 0, 0, 0])
+        submitted, texto_redacao = essay_writing_layout(height_main_containers)
 
-        if submitted and chat_interface.check_chat_state():
+        # with st.expander("Feedback da Redação", expanded=False):
+        #     generate_scorings([0, 0, 0, 0])
+
+        if submitted:
             st.toast('Redação sendo enviada para avaliação...')
 
             context_mensagem = (
-                # f"## Nome:\n\n{coletanea_escolhida.nome}\n\n"
                 f"## Ano do Vestibular:\n\n{coletanea_escolhida.ano_vestibular}\n\n"
                 f"## Proposta Escolhida:\n\n{coletanea_escolhida.numero_proposta}\n\n"
-                # f"## Texto da Proposta:\n\n{coletanea_escolhida.texto_proposta}\n\n"
-
-                # f"## Interlocutores:\n\n{coletanea_escolhida.interlocutores_i}\n\n"
-                # f"## Situacao do Problema:\n\n{coletanea_escolhida.situacao_problema_s}\n\n"
-                # f"## Recorte Tematico:\n\n{coletanea_escolhida.recorte_tematico}\n\n"
-                # f"## Tema:\n\n{coletanea_escolhida.tema}\n\n"
-                # f"## Genero:\n\n{coletanea_escolhida.genero_g}\n\n"
-                # f"## Construcao Composicional:\n\n{coletanea_escolhida.construcao_composicional}\n\n"
-
-                # f"## Tipologia Textual:\n\n{coletanea_escolhida.tipologia_textual}\n\n"
-                # f"## Projeto de Texto:\n\n{coletanea_escolhida.projeto_texto}\n\n"
-                # f"## Ler Textos da Coletanea:\n\n{coletanea_escolhida.leitura_textos_coletanea}\n\n"
-                # f"## Escolhas Lexicais e Sintaticas:\n\n{coletanea_escolhida.escolhas_lexicais_sintaticas}\n\n"
-                # f"## Recursos Coesivos:\n\n{coletanea_escolhida.recursos_coesivos}\n\n"
-                # f"## Norma Culta:\n\n{coletanea_escolhida.norma_culta}\n\n"
-                # f"## Estilo:\n\n{coletanea_escolhida.estilo}\n\n"
-                # f"## Originalidade:\n\n{coletanea_escolhida.originalidade}\n\n"
-                # f"## Pertinencia:\n\n{coletanea_escolhida.pertinencia}\n\n"
-                # f"## Observacoes:\n\n{coletanea_escolhida.observacoes}\n\n"
-                # f"## Expectativa da Banca:\n\n{coletanea_escolhida.expectativa_banca}\n\n"
-                # f"---------------------------------------------------------\n\n"
-                # f"---------------------------------------------------------\n\n"
-                # f"{persona_name}, utilize o conteudo acima para avaliar a redação do aluno que segue abaixo.\n\n"
-                f"---------------------------------------------------------\n\n"
                 f"---------------------------------------------------------\n\n"
                 f"## Redação do Aluno:\n\n{texto_redacao}\n\n"
             )
             
             chat_interface.send_user_message(texto_redacao, context_mensagem)
 
-    with col3:
+    with col2:
         chat_interface.setup_layout()
         chat_interface.setup_state()
 
-        llm_family_model_layout()
-        update_persona_layout()
-
+    with col3:
         update_persona = st.button(
-            "Atualizar Persona",
+            "Atualizar Professor(a)",
             use_container_width=True,
             on_click=callback_update_persona,
             args=(chat_interface,)
         )
 
+        update_persona_layout()
+
+        llm_family_model_layout()
+
         if not update_persona:
             chat_interface.run()
 
-        if "first_run" not in st.session_state:
-            st.session_state["first_run"] = True
-            callback_update_persona(chat_interface)
-
-    with col4:
-        image_container = st.container(border=True, height=int(1.22 * height_main_containers))
+        image_container = st.container(border=True, height=int(0.75 * height_main_containers))
         submitted = stable_diffusion_prompt_form_layout()
         specific_stable_diffusion_params = specific_stable_diffusion_settings_layout()
 
         with image_container:
             stable_diffusion_layout(submitted, *specific_stable_diffusion_params)
+
+    # if "first_run" not in st.session_state:
+    #     st.session_state["first_run"] = True
+    #     callback_update_persona(chat_interface)
 
 if __name__ == "__main__":
     main()

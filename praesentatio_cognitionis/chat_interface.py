@@ -66,11 +66,13 @@ class ChatInterface:
             st.error(f"Erro ao configurar o modelo de IA: {e}")
 
     def setup_layout(self):
+        self.settings_container = st.expander("Configurações atuais do modelo de inteligência artificial", expanded=False)
+
         with st.container(border=True):
             self.history = st.container(height=self.chat_height, border=False)
+            st.markdown("---")
             self.input_prompt = st.chat_input("O que gostaria de perguntar?")
-            
-        self.settings_container = st.expander("Configurações do modelo de IA", expanded=False)
+
 
     def add_message(self, role, content, avatar, is_user):
         self.message_history.append(
