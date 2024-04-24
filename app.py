@@ -1,5 +1,7 @@
 # module imports from the praesentatio_cognitionis package
-from chat_interface import ChatInterface
+from praesentatio_cognitionis.chat_interface import ChatInterface
+from praesentatio_cognitionis.header import show_header
+show_header(0)
 
 # module imports from the servitium_cognitionis package
 from servitium_cognitionis.llms import LLMFamily
@@ -10,20 +12,54 @@ from servitium_cognitionis.data_access.data_interface import DataInterface
 
 # module imports from the standard python environment
 import os
-import csv
+import hmac
 import vertexai
 import replicate
-import pandas as pd
 import streamlit as st
-
-from header import show_header
-show_header(0)
-
 
 # API Tokens and endpoints from `.streamlit/secrets.toml` file
 os.environ["REPLICATE_API_TOKEN"] = st.secrets["IMAGE_GENERATION"]["REPLICATE_API_TOKEN"]
 REPLICATE_MODEL_ENDPOINTSTABILITY = st.secrets["IMAGE_GENERATION"]["REPLICATE_MODEL_ENDPOINTSTABILITY"]
 
+def check_password():
+    """Returns `True` if the user had a correct password."""
+
+    def login_form():
+        """Form with widgets to collect user information"""
+        with st.form("Credentials"):
+            st.text_input("Username", key="username")
+            st.text_input("Password", type="password", key="password")
+            st.form_submit_button("Log in", on_click=password_entered)
+
+    def password_entered():
+        """Checks whether a password entered by the user is correct."""
+        if st.session_state["username"] in st.secrets[
+            "passwords"
+        ] and hmac.compare_digest(
+            st.session_state["password"],
+            st.secrets.passwords[st.session_state["username"]],
+        ):
+            st.session_state["password_correct"] = True
+            del st.session_state["password"]  # Don't store the username or password.
+            del st.session_state["username"]
+        else:
+            st.session_state["password_correct"] = False
+
+    # Return True if the username + password is validated.
+    if st.session_state.get("password_correct", False):
+        return True
+
+    # Show inputs for username + password.
+    login_form()
+    if "password_correct" in st.session_state:
+        st.error("😕 User not known or password incorrect")
+    return False
+
+
+if not check_password():
+    st.stop()
+
+########################################################################################
 
 def setup_data_access():
     table_mappings = {
@@ -290,7 +326,7 @@ def stable_diffusion_prompt_form_layout() -> None:
     if "image_prompt" not in st.session_state:
         st.session_state["image_prompt"] = """In a fantastical scene, a creature with a human head and deer body emanates a green light."""
     
-    with st.expander("Prompt para gerar imagem", expanded=False):
+    with st.container(border=True):
         def on_change_prompt():
             st.session_state["image_prompt"] = st.session_state.new_prompt
 
@@ -525,8 +561,6 @@ def main():
                 f"---------------------------------------------------------\n\n"
                 f"## Redação do Aluno:\n\n{texto_redacao}\n\n"
             )
-            
-            print(context_mensagem)
             
             chat_interface.send_user_message(texto_redacao, context_mensagem)
 
