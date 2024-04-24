@@ -11,11 +11,11 @@ class ChatInterface:
         self.chat_height = chat_height
         self.session_id = session_id
         self.message_history = []
-        
+
         # model objects
         self.ai_chat = None
         self.ai_model = None
-        
+
         # model settings attributes
         self.ai_model_name = None
         self.ai_max_output_tokens = None
@@ -26,9 +26,9 @@ class ChatInterface:
         self.ai_files = None
         self.ai_avatar = None
         self.ai_base_prompt = None
-        
+
         self.settings_container = None
-    
+
     def setup_state(self):
         if "messages" not in st.session_state:
             st.session_state.messages = {}
@@ -118,15 +118,59 @@ class ChatInterface:
                 with st.chat_message(self.ai_name, avatar=self.ai_avatar):
                     try:
                         responses = self.ai_chat.send_message(message_content, stream=True)
-                        
-                        def format_response(response):
-                            yield self.ai_name + "\n\n"
-                            
-                            for response in responses:
-                                yield response.text
 
-                        respones_generator = format_response(responses)
-                        streamed_response = st.write_stream(respones_generator)
+                        def format_response(responses):
+                            yield self.ai_name + "\n\n"
+
+                            for response in responses:
+                                print("\n\nInformação sobre a resposta da IA:")
+                                print("--------------------------------")
+                                print("Resposta da IA:", type(response))
+                                print("Prompt Feedback:", response.prompt_feedback)
+                                print("Usage Metadata:", response.usage_metadata)
+
+                                context_error = "Isto pode ser um problema com o modelo de IA. Tente re-enviar sua mensagem ou mudar elementos de sua pergunta. E lembre-se: estes modelos de IA são muito recentes. Então apesar de não ser o ideal, erros assim acontecerão ocasionamente até que a tecnologia amadureça."
+
+                                if len(response.candidates) == 0:
+                                    print("A resposta está vazia.")
+                                    yield f":red[Erro: a resposta gerado pela está vazia. {context_error}]"
+                                    continue
+
+                                candidate = response.candidates[0]
+
+                                print("\n\nInformation about the candidate:")
+                                print("--------------------------------")
+                                print("Index: `", candidate.index, "`")
+                                print("Content: `", candidate.content, "`")
+                                print("Finish Reason: `", candidate.finish_reason, "`")
+                                print("Safety Ratings: `", candidate.safety_ratings, "`")
+                                print("Function Calls: `", candidate.function_calls, "`")
+                                print("Prompt Feedback: `", candidate.finish_message, "`")
+                                print("Citation Metadata: `", candidate.citation_metadata, "`")
+
+                                if hasattr(candidate, "text"):
+                                    yield candidate.text
+                                    continue
+    
+                                if candidate.finish_reason == "FINISH_REASON_MAX_TOKENS":
+                                    yield candidate.text + "\n\n:yellow[Nota: Resposta truncada devido ao limite de tokens.]\n\n"
+                                elif candidate.finish_reason == "FINISH_REASON_SAFETY":
+                                    print("A resposta foi interrompida por motivos de segurança.")
+                                    yield ":red[Erro: A resposta contém conteúdo inapropriado.]\n\n"
+                                elif candidate.finish_reason == "FINISH_REASON_RECITATION":
+                                    print("A resposta foi interrompida devido a citações não autorizadas.")
+                                    yield ":red[Erro: A resposta contém citações não autorizadas.]\n\n"
+                                elif candidate.finish_reason == "FINISH_REASON_UNSPECIFIED":
+                                    print("A resposta foi interrompida por um motivo não especificado.")
+                                    yield ":red[Erro: Motivo da interrupção não especificado.]\n\n"
+                                else:
+                                    print(f"A resposta foi interrompida por um motivo desconhecido: {candidate.finish_reason}.")
+                                    yield f":red[Erro: Motivo da interrupção desconhecido ({candidate.finish_reason}). {context_error}]\n\n"
+
+                                print("-------------------------------------------------")
+
+                        responses_generator = format_response(responses)
+                        streamed_response = st.write_stream(responses_generator)
                         self.add_message(self.ai_name, streamed_response, self.ai_avatar, is_user=False)
                     except Exception as e:
                         print(f"Erro ao enviar mensagem para a IA: {e}")
