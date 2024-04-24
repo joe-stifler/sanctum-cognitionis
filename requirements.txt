@@ -11,3 +11,4 @@ plotly
 replicate
 python-dotenv
 vertexai===1.48.0
+streamlit
