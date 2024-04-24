@@ -16,6 +16,7 @@ docs-files/
 build/
 *.DS_Store
 *.csv
+*.json
 
 output
 *.egg-info

@@ -15,49 +15,50 @@ import os
 import hmac
 import vertexai
 import replicate
+import google.auth
 import streamlit as st
 
 # API Tokens and endpoints from `.streamlit/secrets.toml` file
 os.environ["REPLICATE_API_TOKEN"] = st.secrets["IMAGE_GENERATION"]["REPLICATE_API_TOKEN"]
 REPLICATE_MODEL_ENDPOINTSTABILITY = st.secrets["IMAGE_GENERATION"]["REPLICATE_MODEL_ENDPOINTSTABILITY"]
 
-def check_password():
-    """Returns `True` if the user had a correct password."""
+# def check_password():
+#     """Returns `True` if the user had a correct password."""
 
-    def login_form():
-        """Form with widgets to collect user information"""
-        with st.form("Credentials"):
-            st.text_input("Username", key="username")
-            st.text_input("Password", type="password", key="password")
-            st.form_submit_button("Log in", on_click=password_entered)
+#     def login_form():
+#         """Form with widgets to collect user information"""
+#         with st.form("Credentials"):
+#             st.text_input("Username", key="username")
+#             st.text_input("Password", type="password", key="password")
+#             st.form_submit_button("Log in", on_click=password_entered)
 
-    def password_entered():
-        """Checks whether a password entered by the user is correct."""
-        if st.session_state["username"] in st.secrets[
-            "passwords"
-        ] and hmac.compare_digest(
-            st.session_state["password"],
-            st.secrets.passwords[st.session_state["username"]],
-        ):
-            st.session_state["password_correct"] = True
-            del st.session_state["password"]  # Don't store the username or password.
-            del st.session_state["username"]
-        else:
-            st.session_state["password_correct"] = False
+#     def password_entered():
+#         """Checks whether a password entered by the user is correct."""
+#         if st.session_state["username"] in st.secrets[
+#             "passwords"
+#         ] and hmac.compare_digest(
+#             st.session_state["password"],
+#             st.secrets.passwords[st.session_state["username"]],
+#         ):
+#             st.session_state["password_correct"] = True
+#             del st.session_state["password"]  # Don't store the username or password.
+#             del st.session_state["username"]
+#         else:
+#             st.session_state["password_correct"] = False
 
-    # Return True if the username + password is validated.
-    if st.session_state.get("password_correct", False):
-        return True
+#     # Return True if the username + password is validated.
+#     if st.session_state.get("password_correct", False):
+#         return True
 
-    # Show inputs for username + password.
-    login_form()
-    if "password_correct" in st.session_state:
-        st.error("😕 User not known or password incorrect")
-    return False
+#     # Show inputs for username + password.
+#     login_form()
+#     if "password_correct" in st.session_state:
+#         st.error("😕 User not known or password incorrect")
+#     return False
 
 
-if not check_password():
-    st.stop()
+# if not check_password():
+#     st.stop()
 
 ########################################################################################
 
@@ -507,8 +508,22 @@ def callback_update_persona(chat_interface):
 
 def main():
     GEMINI_CLOUD_LOCATION = st.secrets["VERTEXAI"]["GEMINI_CLOUD_LOCATION"]
-    GEMINI_CLOUD_PROJECT_ID = st.secrets["VERTEXAI"]["GEMINI_CLOUD_PROJECT_ID"]
-    vertexai.init(project=GEMINI_CLOUD_PROJECT_ID, location=GEMINI_CLOUD_LOCATION)
+    # GEMINI_CLOUD_PROJECT_ID = st.secrets["VERTEXAI"]["GEMINI_CLOUD_PROJECT_ID"]
+    
+    key_path = ".streamlit/google_secrets.json"
+    
+    # create folder .streamlit/ if it does not exist
+    if not os.path.exists(".streamlit"):
+        os.makedirs(".streamlit")
+    
+    # write the json secrets to the file
+    with open(key_path, "w") as file:
+        file.write(st.secrets["VERTEXAI"]["GOOGLE_JSON_SECRETS"])
+
+    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = key_path
+    _credentials, project_id = google.auth.default()
+
+    vertexai.init(project=project_id, location=GEMINI_CLOUD_LOCATION)
 
     height_main_containers = 400
     chat_interface = get_chat_interface()
