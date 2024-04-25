@@ -4,7 +4,7 @@ from enum import Enum
 
 
 class LLMGeminiModel1_5Pro(LLMBaseModel):
-    def __init__(self, temperature=0.5, max_output_tokens=8192):
+    def __init__(self, temperature=0.1, max_output_tokens=8192):
         super().__init__(
             "gemini-1.5-pro-preview-0409",
             temperature=temperature,
@@ -14,7 +14,7 @@ class LLMGeminiModel1_5Pro(LLMBaseModel):
         )
 
 class LLMGeminiModel1_0Pro002(LLMBaseModel):
-    def __init__(self, temperature=0.5, max_output_tokens=8192):
+    def __init__(self, temperature=0.1, max_output_tokens=8192):
         super().__init__(
             "gemini-1.0-pro-002",
             temperature=temperature,
@@ -24,7 +24,7 @@ class LLMGeminiModel1_0Pro002(LLMBaseModel):
         )
 
 class LLMGeminiModelExperimental(LLMBaseModel):
-    def __init__(self, temperature=0.5, max_output_tokens=8192):
+    def __init__(self, temperature=0.1, max_output_tokens=8192):
         super().__init__("gemini-experimental",
             temperature=temperature,
             temperature_range=(0.0, 2.0),
