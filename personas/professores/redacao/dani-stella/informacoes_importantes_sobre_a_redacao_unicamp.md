@@ -622,9 +622,9 @@ lista de gêneros que foram contemplados nesses exames:
 46. **Situação de Produção:**
     - É o contexto social e histórico que dá origem à produção do texto.
     - O agente deve ser capaz de identificar se o candidato compreende a situação de
-        
+
         produção proposta pela prova e se a constrói de forma adequada em seu texto.
-        
+
 47. **Contemplar o Tema:**
     - Refere-se à capacidade do candidato de abordar o tema da prova em seu texto,
         

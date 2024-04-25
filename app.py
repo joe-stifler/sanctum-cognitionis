@@ -111,11 +111,11 @@ def display_files_with_checkboxes_and_downloads(temp_persona_files):
 
 def update_persona_layout():
     available_files = [
-        'databases/redacao/unicamp/unicamp_redacoes_candidatos.csv',
-        'databases/redacao/unicamp/unicamp_redacoes_propostas.csv',
-        'personas/professores/redacao/dani-stella/definicao_de_plagio.md',
-        'personas/professores/redacao/dani-stella/a_redacao_na_unicamp.md',
+        'databases/redacao/unicamp/unicamp_redacoes_candidatos.json',
         'personas/professores/redacao/dani-stella/informacoes_importantes_sobre_a_redacao_unicamp.md',
+        'personas/professores/redacao/dani-stella/definicao_de_plagio.md',
+        'databases/redacao/unicamp/unicamp_redacoes_propostas.json',
+        'personas/professores/redacao/dani-stella/a_redacao_na_unicamp.md',
     ]
 
     with st.expander("Configure seu professor(a)", expanded=False):
@@ -390,11 +390,11 @@ def maybe_st_initialize_state():
         st.session_state["persona_settings"] = {
             "persona_name": "Dani Stella",
             "persona_files": [
-                "databases/redacao/unicamp/unicamp_redacoes_propostas.csv",
-                "databases/redacao/unicamp/unicamp_redacoes_candidatos.csv",
-                "personas/professores/redacao/dani-stella/definicao_de_plagio.md",
+                "databases/redacao/unicamp/unicamp_redacoes_candidatos.json",
+                "personas/professores/redacao/dani-stella/informacoes_importantes_sobre_a_redacao_unicamp.md",
+                #"personas/professores/redacao/dani-stella/definicao_de_plagio.md",
+                "databases/redacao/unicamp/unicamp_redacoes_propostas.json",
                 "personas/professores/redacao/dani-stella/a_redacao_na_unicamp.md",
-                "personas/professores/redacao/dani-stella/informacoes_importantes_sobre_a_redacao_unicamp.md"
             ],
             
             "persona_description": default_persona_description

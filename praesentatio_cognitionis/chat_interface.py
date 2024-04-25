@@ -168,7 +168,7 @@ class ChatInterface:
         persona_avatar="👩🏽‍🏫"
         persona_name=f':red[{persona_name}]'
         persona_files_str = self.convert_files_to_str(persona_files)
-        prompt_with_files_str = f"{persona_description}\n\n{persona_files_str}"
+        prompt_with_files_str = f"{persona_files_str}\n\n---\n\n{persona_description}"
         ai_base_prompt = prompt_with_files_str
 
         try:
