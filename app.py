@@ -418,6 +418,8 @@ def maybe_st_initialize_state():
 
 
 def main():
+    print("Version: 1.0")
+    
     maybe_st_initialize_state()
 
     gemini_cloud_location = st.secrets["VERTEXAI"]["GEMINI_CLOUD_LOCATION"]
