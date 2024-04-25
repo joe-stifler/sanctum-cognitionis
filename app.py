@@ -14,6 +14,7 @@ from servitium_cognitionis.data_access.data_interface import DataInterface
 import os
 import time
 import json
+import hmac
 import vertexai
 import replicate
 import google.auth
