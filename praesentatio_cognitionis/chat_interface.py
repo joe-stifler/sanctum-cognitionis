@@ -54,9 +54,12 @@ class ChatInterface:
 
     def display_chat(self):
         with self.history:
+            if len(self.message_history) == 0:
+                st.markdown("")
+            
             for message in self.message_history:
                 with st.chat_message(message["role"], avatar=message["avatar"]):
-                    st.markdown(message["content"])
+                    st.markdown(message["content"], unsafe_allow_html=True)
 
     def format_user_message(self, message_content):
         return self.user_name + "\n\n" + message_content + "\n"
@@ -67,7 +70,7 @@ class ChatInterface:
         with self.history:
             self.add_message(self.user_name, user_message, self.user_avatar, is_user=True)
             with st.chat_message(self.user_name, avatar=self.user_avatar):
-                st.markdown(user_message)
+                st.markdown(user_message, unsafe_allow_html=True)
 
         self.send_ai_message(prefix_message_context + message_content)
 
@@ -155,6 +158,10 @@ class ChatInterface:
         self.settings_container.info(warning_message)
 
     def reset_ai_chat(self, llm_family, persona_name, persona_description, persona_files, send_initial_message):
+        if send_initial_message:
+            st.session_state.messages[self.session_id]["messages"] = []
+            self.display_chat()
+        
         persona_avatar="👩🏽‍🏫"
         persona_name=f':red[{persona_name}]'
         persona_files_str = self.convert_files_to_str(persona_files)
@@ -174,10 +181,6 @@ class ChatInterface:
                     "ai_name": None,
                     "ai_avatar": None,
                 }
-
-            if send_initial_message:
-                st.session_state.messages[self.session_id]["messages"] = []
-                self.display_chat()
 
             self.ai_name = st.session_state.messages[self.session_id]["ai_name"]
             self.ai_avatar = st.session_state.messages[self.session_id]["ai_avatar"]
