@@ -28,42 +28,7 @@ class ChatInterface:
         self.ai_base_prompt = None
 
         self.settings_container = None
-
-    def setup_state(self):
-        if "messages" not in st.session_state:
-            st.session_state.messages = {}
-
-        if self.session_id not in st.session_state.messages:
-            st.session_state.messages[self.session_id] = {
-                "messages": [],
-                "ai_name": None,
-                "ai_avatar": None,
-            }
-
-        self.ai_name = st.session_state.messages[self.session_id]["ai_name"]
-        self.ai_avatar = st.session_state.messages[self.session_id]["ai_avatar"]
-        self.message_history = st.session_state.messages[self.session_id]["messages"]
-
-    def setup_ai(self, ai_model, ai_name, ai_avatar, ai_base_prompt):
-        try:
-            self.ai_name = ai_name
-            self.ai_avatar = ai_avatar
-            self.ai_base_prompt = ai_base_prompt
-            self.ai_model_name = ai_model.name
-            self.ai_temperature = ai_model.temperature
-            self.ai_max_output_tokens = ai_model.max_output_tokens
-
-            self.message_history = []
-            self.ai_model = ai_model.create_model()
-            self.ai_chat = self.ai_model.start_chat(response_validation=False)
-
-            st.session_state.messages[self.session_id]["ai_name"] = ai_name
-            st.session_state.messages[self.session_id]["ai_avatar"] = ai_avatar
-            st.session_state.messages[self.session_id]["messages"] = self.message_history
-
-            self.send_ai_message(self.ai_base_prompt)
-        except Exception as e:
-            st.error(f"Erro ao configurar o modelo de IA: {e}")
+        self.is_lazy_initial_message_set = False
 
     def setup_layout(self):
         self.settings_container = st.expander("Configurações atuais do modelo de inteligência artificial", expanded=False)
@@ -72,6 +37,8 @@ class ChatInterface:
             self.history = st.container(height=self.chat_height, border=False)
             st.markdown("---")
             self.input_prompt = st.chat_input("O que gostaria de perguntar?")
+
+        self.print_initial_model_settings()
 
 
     def add_message(self, role, content, avatar, is_user):
@@ -93,7 +60,7 @@ class ChatInterface:
     def format_user_message(self, message_content):
         return self.user_name + "\n\n" + message_content + "\n"
 
-    def send_user_message(self, message_content, message_context=""):
+    def send_user_message(self, message_content, prefix_message_context=""):
         user_message = self.format_user_message(message_content)
 
         with self.history:
@@ -101,7 +68,7 @@ class ChatInterface:
             with st.chat_message(self.user_name, avatar=self.user_avatar):
                 st.markdown(user_message)
 
-        self.send_ai_message(message_context + message_content)
+        self.send_ai_message(prefix_message_context + message_content)
 
     def format_ai_message(self, message_content):
         return self.ai_name + "\n\n" + message_content
@@ -169,40 +136,102 @@ class ChatInterface:
                     except Exception as e:
                         print(f"Erro ao enviar mensagem para a IA: {e}")
                         st.error(f"Erro ao processar a mensagem: {e}")
+                        st.error(f"Em caso de quota excedida (429 Quota Exceeded), aguarde dois minutos e tente novamente enviar sua mensagem.")
 
     def print_initial_model_settings(self):
         # Construct the message separately
         warning_message = (
-            "## Bem-vindo! 🤖\n\n"
-            "O modelo de IA foi inicializado corretamente e está pronto para receber mensagens.\n\n"
-            # "## Configurações do modelo:\n"
-            # f"### **Nome do modelo:**\n{self.ai_model_name}\n"
-            # f"### **Máximo de tokens na saída:**\n{self.ai_max_output_tokens}\n"
-            # f"### **Temperatura:**\n{self.ai_temperature}\n\n"
             "## Configurações da Persona:\n"
             f"### **Nome da Persona:**\n{self.ai_name}\n"
             f"### **Avatar da Persona:**\n{self.ai_avatar}\n"
             "### **Prompt Base:**\n\n"
             f"```text\n{self.ai_base_prompt}\n```\n\n"
-            # "### **Arquivos na Base de Conhecimento:**\n\n"
-            # f"{ai_files_table}\n\n"
             "### Instruções:\n\n"
             "1. Digite uma mensagem no campo de entrada e pressione Enter para enviar.\n"
             "2. A IA começará a processar sua mensagem imediatamente e responderá em breve."
         )
-        
-        # Display the message
+
         self.settings_container.info(warning_message)
 
+    def reset_ai_chat(self, llm_family, persona_name, persona_description, persona_files, send_initial_message):
+        persona_avatar="👩🏽‍🏫"
+        persona_name=f':red[{persona_name}]'
+        persona_files_str = self.convert_files_to_str(persona_files)
+        persona_files = st.session_state["persona_settings"]["persona_files"]
+        prompt_with_files_str = f"{persona_description}\n\n{persona_files_str}"
+        persona_description = st.session_state["persona_settings"]["persona_description"]
+        ai_model = llm_family.current_model()
+        ai_base_prompt = prompt_with_files_str
+
+        try:
+            if "messages" not in st.session_state:
+                st.session_state.messages = {}
+
+            if self.session_id not in st.session_state.messages:
+                st.session_state.messages[self.session_id] = {
+                    "messages": [],
+                    "ai_name": None,
+                    "ai_avatar": None,
+                }
+
+            if send_initial_message:
+                st.session_state.messages[self.session_id]["messages"] = []
+
+            self.ai_name = st.session_state.messages[self.session_id]["ai_name"]
+            self.ai_avatar = st.session_state.messages[self.session_id]["ai_avatar"]
+            self.message_history = st.session_state.messages[self.session_id]["messages"]
+
+            self.ai_name = persona_name
+            self.ai_avatar = persona_avatar
+            self.ai_base_prompt = ai_base_prompt
+            self.ai_model_name = ai_model.name
+            self.ai_temperature = ai_model.temperature
+            self.ai_max_output_tokens = ai_model.max_output_tokens
+
+            self.message_history = []
+            self.ai_model = ai_model.create_model()
+            self.ai_chat = self.ai_model.start_chat(response_validation=False)
+
+            if send_initial_message:
+                self.is_lazy_initial_message_set = False
+                self.send_ai_message(self.ai_base_prompt)
+            else:
+                self.is_lazy_initial_message_set = True
+        except Exception as e:
+            st.error(f"Erro ao configurar o modelo de IA: {e}")
+
+    def convert_files_to_str(self, files_path: str):
+        files_content = "## Arquivos disponíveis na base de conhecimento do professor(a):\n\n"
+        files_content += "--------------------------------------------------------\n\n"
+
+        for file_path in files_path:
+            files_content += f"### Conteúdo do arquivo `{file_path}`:\n\n"
+
+            with open(file_path, "r", encoding='utf-8') as file:
+                files_content += file.read() + "\n\n"
+
+        return files_content
 
     def run(self):
         try:
-            self.print_initial_model_settings()
-
             self.display_chat()
 
             if self.input_prompt:
-                self.send_user_message(self.input_prompt)
+                message_context = ""
+
+                if self.is_lazy_initial_message_set:
+                    message_context = f"\n\n{self.ai_base_prompt}\n\n---\n\nAgora segue a mensagem inicial do estudante:\n\n"
+
+                    self.is_lazy_initial_message_set = False
+
+                self.send_user_message(
+                    self.input_prompt,
+                    prefix_message_context=message_context
+                )
+
+            with self.history:
+                if self.is_lazy_initial_message_set:
+                    st.info("O seu professor(a) está pronto para lhe ajudar. Tome a iniciativa e comece a sua interação com ele(a).")
         except Exception as e:
             st.error(f"Erro ao executar a interface de chat: {e}")
             pass
