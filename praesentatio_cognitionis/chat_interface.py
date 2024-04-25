@@ -59,7 +59,7 @@ class ChatInterface:
             
             for message in self.message_history:
                 with st.chat_message(message["role"], avatar=message["avatar"]):
-                    st.markdown(message["content"], unsafe_allow_html=True)
+                    st.markdown(message["content"])
 
     def format_user_message(self, message_content):
         return self.user_name + "\n\n" + message_content + "\n"
@@ -70,7 +70,7 @@ class ChatInterface:
         with self.history:
             self.add_message(self.user_name, user_message, self.user_avatar, is_user=True)
             with st.chat_message(self.user_name, avatar=self.user_avatar):
-                st.markdown(user_message, unsafe_allow_html=True)
+                st.markdown(user_message)
 
         self.send_ai_message(prefix_message_context + message_content)
 
@@ -158,42 +158,26 @@ class ChatInterface:
         self.settings_container.info(warning_message)
 
     def reset_ai_chat(self, llm_family, persona_name, persona_description, persona_files, send_initial_message):
+        self.message_history = []
+
         if send_initial_message:
-            st.session_state.messages[self.session_id]["messages"] = []
             self.display_chat()
-        
+
+        ai_model = llm_family.current_model()
+
         persona_avatar="👩🏽‍🏫"
         persona_name=f':red[{persona_name}]'
         persona_files_str = self.convert_files_to_str(persona_files)
-        persona_files = st.session_state["persona_settings"]["persona_files"]
         prompt_with_files_str = f"{persona_description}\n\n{persona_files_str}"
-        persona_description = st.session_state["persona_settings"]["persona_description"]
-        ai_model = llm_family.current_model()
         ai_base_prompt = prompt_with_files_str
 
         try:
-            if "messages" not in st.session_state:
-                st.session_state.messages = {}
-
-            if self.session_id not in st.session_state.messages:
-                st.session_state.messages[self.session_id] = {
-                    "messages": [],
-                    "ai_name": None,
-                    "ai_avatar": None,
-                }
-
-            self.ai_name = st.session_state.messages[self.session_id]["ai_name"]
-            self.ai_avatar = st.session_state.messages[self.session_id]["ai_avatar"]
-            self.message_history = st.session_state.messages[self.session_id]["messages"]
-
             self.ai_name = persona_name
             self.ai_avatar = persona_avatar
             self.ai_base_prompt = ai_base_prompt
             self.ai_model_name = ai_model.name
             self.ai_temperature = ai_model.temperature
             self.ai_max_output_tokens = ai_model.max_output_tokens
-
-            self.message_history = []
             self.ai_model = ai_model.create_model()
             self.ai_chat = self.ai_model.start_chat(response_validation=False)
 

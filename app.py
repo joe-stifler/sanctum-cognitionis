@@ -65,7 +65,6 @@ REPLICATE_MODEL_ENDPOINTSTABILITY = st.secrets["IMAGE_GENERATION"]["REPLICATE_MO
 
 def setup_data_access():
     table_mappings = {
-        'redacoes_aluno': 'databases/redacao/unicamp/unicamp_redacoes_aluno.csv',
         'redacoes_candidatos': 'databases/redacao/unicamp/unicamp_redacoes_candidatos.csv',
         'redacoes_propostas': 'databases/redacao/unicamp/unicamp_redacoes_propostas.csv'
     }
@@ -115,6 +114,7 @@ def update_persona_layout():
         'databases/redacao/unicamp/unicamp_redacoes_candidatos.csv',
         'databases/redacao/unicamp/unicamp_redacoes_propostas.csv',
         'personas/professores/redacao/dani-stella/definicao_de_plagio.md',
+        'personas/professores/redacao/dani-stella/a_redacao_na_unicamp.md',
         'personas/professores/redacao/dani-stella/informacoes_importantes_sobre_a_redacao_unicamp.md',
     ]
 
@@ -184,7 +184,7 @@ def select_essay_layout(redacao_manager):
 
 def essay_writing_layout(height_main_containers):
     with st.form("my_form2"):
-        texto_redacao = st.text_area("Digite sua redação aqui", placeholder="Digite sua redação aqui", height=height_main_containers, label_visibility='collapsed')
+        texto_redacao = st.text_area("Digite sua redação aqui", placeholder="Digite sua redação aqui", height=int(1.155 * height_main_containers), label_visibility='collapsed')
         submitted = st.form_submit_button(
             "Submeter para avaliação", use_container_width=True)
 
@@ -368,7 +368,7 @@ def get_chat_interface():
         session_id="redacoes",
         user_name=":blue[estudante]",
         user_avatar="👩🏾‍🎓",
-        chat_height=585
+        chat_height=400
     )
     reset_ai_chat(chat_interface, send_initial_message=False)
     return chat_interface
@@ -389,11 +389,11 @@ def maybe_st_initialize_state():
 
         st.session_state["persona_settings"] = {
             "persona_name": "Dani Stella",
-
             "persona_files": [
-                "databases/redacao/unicamp/unicamp_redacoes_candidatos.csv",
                 "databases/redacao/unicamp/unicamp_redacoes_propostas.csv",
+                "databases/redacao/unicamp/unicamp_redacoes_candidatos.csv",
                 "personas/professores/redacao/dani-stella/definicao_de_plagio.md",
+                "personas/professores/redacao/dani-stella/a_redacao_na_unicamp.md",
                 "personas/professores/redacao/dani-stella/informacoes_importantes_sobre_a_redacao_unicamp.md"
             ],
             
@@ -425,7 +425,7 @@ def main():
 
     vertexai.init(project=project_id, location=gemini_cloud_location)
 
-    height_main_containers = 650
+    height_main_containers = 400
     chat_interface = get_chat_interface()
     redacao_manager = get_redacao_manager()
 
@@ -446,7 +446,7 @@ def main():
                 f"## Ano do Vestibular:\n\n{coletanea_escolhida.ano_vestibular}\n\n"
                 f"## Proposta Escolhida:\n\n{coletanea_escolhida.numero_proposta}\n\n"
                 f"---------------------------------------------------------\n\n"
-                f"## Redação do Aluno:\n\n{texto_redacao}\n\n"
+                f"## Redação do Aluno:\n\n"
             )
 
             chat_interface.send_user_message(texto_redacao, prefix_message_context=context_mensagem)
@@ -469,7 +469,7 @@ def main():
         if not update_persona:
             chat_interface.run()
 
-        image_container = st.container(border=True, height=int(0.75 * height_main_containers))
+        image_container = st.container(border=True, height=int(0.76 * height_main_containers))
         submitted = stable_diffusion_prompt_form_layout()
         specific_stable_diffusion_params = specific_stable_diffusion_settings_layout()
 
