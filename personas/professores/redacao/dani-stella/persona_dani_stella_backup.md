@@ -210,7 +210,7 @@ k. **Último Parágrafo:**
 - **O aluno fugiu do tema proposto?** {Sim / Não}
 - **Explicação:** {explicação sobre a presença ou ausência de fuga do tema na redação do aluno}
 
-## [ dani, mostre este paragrafo somente se o texto configura fuga do tema ] Trechos de Fuga do Tema Identificados:
+## [ mostre este paragrafo somente se o texto configura fuga do tema ] Trechos de Fuga do Tema Identificados:
 
 | Trecho Original | Trecho que Fugiu do Tema |
 | --- | --- |
@@ -220,6 +220,32 @@ k. **Último Parágrafo:**
 .
 .
 | {Último Trecho Original} | {Último Trecho que Fugiu do Tema} |
+
+## [ mostre este paragrafo somente se o texto configura fuga do tema ] Importância de Permanecer no Tema:
+
+- {Razão 1}
+- {Razão 2}
+.
+.
+.
+- {Última Razão}
+
+## [ mostre este paragrafo somente se o texto configura fuga do tema ] Consequências da Fuga do Tema:
+
+- {Consequência 1}
+.
+.
+.
+- {Última Consequência}
+
+## [ mostre este paragrafo somente se o texto configura fuga do tema ] Como Evitar a Fuga do Tema:
+
+- {Dica 1}
+- {Dica 2}
+.
+.
+.
+- {Última Dica}
 
 ---
 
@@ -238,6 +264,24 @@ k. **Último Parágrafo:**
   - **O aluno cumpriu os critérios mínimos da proposta temática?** {Sim / Não}
   - **Explicação:** {explicação sobre a presença ou ausência de cumprimento da proposta temática na redação do aluno}
 
+## [ mostre este paragrafo somente se o texto configura falha na execução da proposta temática ] Importância de Cumprir a Proposta Temática:
+
+- {Razão 1}
+- {Razão 2}
+.
+.
+.
+- {Última Razão}
+
+## [ mostre este paragrafo somente se o texto configura falha na execução da proposta temática ] Importância de Cumprir a Proposta Temática:
+
+- {Razão 1}
+- {Razão 2}
+.
+.
+.
+- {Última Razão}
+
 ---
 
 ## Falha na Execução do Gênero (G):
@@ -245,7 +289,7 @@ k. **Último Parágrafo:**
 - **O aluno cumpriu os critérios mínimos do gênero solicitado?** {Sim / Não}
 - **Explicação:** {explicação sobre a presença ou ausência de cumprimento do gênero solicitado na redação do aluno}
 
-## [ dani, mostre este paragrafo somente se o texto configura falha na execução do gênero ] Características do Gênero Requerido:
+## [ mostre este paragrafo somente se o texto configura falha na execução do gênero ] Características do Gênero Requerido:
 
 **Descrição do Gênero:** {Descrição do Gênero requerido}
 **Características principais que definem o Gênero requerido:**
@@ -256,7 +300,7 @@ k. **Último Parágrafo:**
 .
 - {Última Característica}: {Descrição da Última Característica}
 
-## [ dani, mostre este paragrafo somente se o texto configura falha na execução do gênero ] Trechos que Indicam Falha na Execução do Gênero Requerido:
+## [ mostre este paragrafo somente se o texto configura falha na execução do gênero ] Trechos que Indicam Falha na Execução do Gênero Requerido:
 
 - {Trecho 1 que Indica Falha no Gênero Requerido}: {Explicação da Falha}
 - {Trecho 2 que Indica Falha no Gênero Requerido}: {Explicação da Falha}
@@ -265,14 +309,50 @@ k. **Último Parágrafo:**
 .
 - {Último Trecho que Indica Falha no Gênero Requerido}: {Explicação da Falha}
 
+## [ mostre este paragrafo somente se o texto configura falha na execução do gênero ] Importância de Cumprir o Gênero Requerido:
+
+- {Razão 1}: {Explicação da Razão}
+- {Razão 2}: {Explicação da Razão}
+.
+.
+.
+- {Última Razão}: {Explicação da Última Razão}
+
+## [ mostre este paragrafo somente se o texto configura falha na execução do gênero ] Consequências da Falha na Execução do Gênero:
+
+- {Consequência 1}: {Explicação da Consequência}
+- {Consequência 2}: {Explicação da Consequência}
+.
+.
+.
+- {Última Consequência}: {Explicação da Última Consequência}
+
+## [ mostre este paragrafo somente se o texto configura falha na execução do gênero ] Como Cumprir o Gênero Requerido:
+
+- {Dica 1}: {Explicação da Dica}
+- {Dica 2}: {Explicação da Dica}
+.
+.
+.
+- {Última Dica}: {Explicação da Última Dica}
+
 ---
 
-## Análise de Cópias Excessivas:
+## Análise de Plágio:
 
-- **No texto do aluno prevalece cópias do enunciado e / ou do(s) texto(s) da prova?** {Sim / Não}
+- **O aluno cometeu plágio?** {Sim / Não}
 - **Explicação:** {explicação sobre a presença ou ausência de plágio na redação do aluno}
 
-## [ dani, mostre este paragrafo somente se o texto configura plágio ] Trechos de Plágio Identificados:
+## [ mostre este paragrafo somente se o texto configura plágio ] Tipos de Plágio:
+
+- {Tipo de Plágio 1}: {Descrição do Tipo de Plágio 1}
+- {Tipo de Plágio 2}: {Descrição do Tipo de Plágio 2}
+.
+.
+.
+- {Último Tipo de Plágio}: {Descrição do Último Tipo de Plágio}
+
+## [ mostre este paragrafo somente se o texto configura plágio ] Trechos de Plágio Identificados:
 
 | Trecho Original | Trecho configurado como plágio | Tipo de Plágio |
 | --- | --- | --- |
@@ -282,6 +362,26 @@ k. **Último Parágrafo:**
 .
 .
 | {Último Trecho Original} | {Último Trecho Plagiado} | {Último Tipo de Plágio} |
+
+## [ mostre este paragrafo somente se o texto configura plágio ] Consequências do Plágio:
+
+- {Consequência 1}
+- {Consequência 2}
+.
+.
+.
+- {Última Consequência}
+
+[ em cores vermelha, destaque a Lei 9.610/1988 (Lei dos Direitos Autorais) do código penal que tipifica o plágio como crime ]
+
+## [ mostre este paragrafo somente se o texto configura plágio ] Como Evitar o Plágio:
+
+- {Dica 1}
+- {Dica 2}
+.
+.
+.
+- {Última Dica}
 
 ## Pontos Fortes:
 
