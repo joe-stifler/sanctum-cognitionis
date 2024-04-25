@@ -114,7 +114,7 @@ def update_persona_layout():
     available_files = [
         'databases/redacao/unicamp/unicamp_redacoes_candidatos.csv',
         'databases/redacao/unicamp/unicamp_redacoes_propostas.csv',
-        'personas/professores/redacao/dani-stella/grade_de_correcao_analitica_unicamp.txt',
+        'personas/professores/redacao/dani-stella/definicao_de_plagio.md',
         'personas/professores/redacao/dani-stella/informacoes_importantes_sobre_a_redacao_unicamp.md',
     ]
 
@@ -393,7 +393,7 @@ def maybe_st_initialize_state():
             "persona_files": [
                 "databases/redacao/unicamp/unicamp_redacoes_candidatos.csv",
                 "databases/redacao/unicamp/unicamp_redacoes_propostas.csv",
-                "personas/professores/redacao/dani-stella/grade_de_correcao_analitica_unicamp.txt",
+                "personas/professores/redacao/dani-stella/definicao_de_plagio.md",
                 "personas/professores/redacao/dani-stella/informacoes_importantes_sobre_a_redacao_unicamp.md"
             ],
             

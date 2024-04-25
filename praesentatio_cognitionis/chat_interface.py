@@ -28,6 +28,7 @@ class ChatInterface:
         self.ai_base_prompt = None
 
         self.settings_container = None
+        self.layout_initialized = False
         self.is_lazy_initial_message_set = False
 
     def setup_layout(self):
@@ -38,8 +39,8 @@ class ChatInterface:
             st.markdown("---")
             self.input_prompt = st.chat_input("O que gostaria de perguntar?")
 
+        self.layout_initialized = True
         self.print_initial_model_settings()
-
 
     def add_message(self, role, content, avatar, is_user):
         self.message_history.append(
@@ -75,7 +76,7 @@ class ChatInterface:
 
     def send_ai_message(self, message_content):
         with self.history:
-            with st.spinner("A IA está processando a mensagem..."):
+            with st.spinner("Seu professor(a) está processando sua mensagem..."):
                 with st.chat_message(self.ai_name, avatar=self.ai_avatar):
                     try:
                         responses = self.ai_chat.send_message(message_content, stream=True)
@@ -176,6 +177,7 @@ class ChatInterface:
 
             if send_initial_message:
                 st.session_state.messages[self.session_id]["messages"] = []
+                self.display_chat()
 
             self.ai_name = st.session_state.messages[self.session_id]["ai_name"]
             self.ai_avatar = st.session_state.messages[self.session_id]["ai_avatar"]
