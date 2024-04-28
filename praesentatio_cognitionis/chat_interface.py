@@ -1,4 +1,3 @@
-import uuid
 import streamlit as st
 from langsmith import Client
 
@@ -30,7 +29,7 @@ class ChatInterface:
         self.settings_container = None
         self.layout_initialized = False
         self.is_lazy_initial_message_set = False
-        
+
         self.langsmith_client = None
         self.langsmith_dataset = None
 
@@ -75,7 +74,7 @@ class ChatInterface:
             with st.chat_message(self.user_name, avatar=self.user_avatar):
                 st.markdown(user_message)
 
-        self.send_ai_message(prefix_message_context + "\n\nQuestão do usuário:\n\n" + message_content)
+        self.send_ai_message(prefix_message_context + "\n\nQuestão do estudante:\n\n" + message_content)
 
     def format_ai_message(self, message_content):
         return self.ai_name + "\n\n" + message_content
@@ -210,7 +209,12 @@ class ChatInterface:
             self.langsmith_client = Client()
             dataset_name = f"Conversation with '{username}'"
             datasets = self.langsmith_client.list_datasets(dataset_name=dataset_name)
-            self.langsmith_dataset = next(datasets)
+            datasets = [dataset for dataset in datasets]
+
+            if len(datasets) == 0:
+                self.langsmith_dataset = self.langsmith_client.create_dataset(dataset_name)
+            else:
+                self.langsmith_dataset = datasets[0]
 
             if send_initial_message:
                 self.is_lazy_initial_message_set = False

@@ -444,13 +444,17 @@ def main():
     st.markdown("<h1 style='text-align: center;'>📚 Página de Redações 📚</h1>", unsafe_allow_html=True)
     st.divider()
 
-    col1, col2, col3 = st.columns([2, 3, 1.5], gap="large")
+    col2, col1 = st.columns([2, 1], gap="small")
+
+    with col2:
+        chat_interface.setup_layout()
 
     with col1:
         coletanea_escolhida = select_essay_layout(redacao_manager)
 
-        submitted, texto_redacao = essay_writing_layout(height_main_containers)
+        submitted, texto_redacao = essay_writing_layout(height_main_containers // 1.39)
 
+    with col1:
         if submitted:
             st.toast('Redação sendo enviada para avaliação...')
 
@@ -463,10 +467,11 @@ def main():
 
             chat_interface.send_user_message(texto_redacao, prefix_message_context=context_mensagem)
 
-    with col2:
-        chat_interface.setup_layout()
 
-    with col3:
+        update_persona_layout()
+
+        llm_family_model_layout()
+
         update_persona = st.button(
             "Atualizar Professor(a)",
             use_container_width=True,
@@ -474,19 +479,8 @@ def main():
             args=[chat_interface, ]
         )
 
-        update_persona_layout()
-
-        llm_family_model_layout()
-
         if not update_persona:
             chat_interface.run()
-
-        image_container = st.container(border=True, height=int(0.76 * height_main_containers))
-        submitted = stable_diffusion_prompt_form_layout()
-        specific_stable_diffusion_params = specific_stable_diffusion_settings_layout()
-
-        with image_container:
-            stable_diffusion_layout(submitted, *specific_stable_diffusion_params)
 
 if __name__ == "__main__":
     main()
