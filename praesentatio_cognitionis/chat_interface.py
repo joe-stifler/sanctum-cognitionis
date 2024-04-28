@@ -60,9 +60,12 @@ class ChatInterface:
             if len(self.message_history) == 0:
                 st.markdown("")
             
-            for message in self.message_history:
+            for idx, message in enumerate(self.message_history):
                 with st.chat_message(message["role"], avatar=message["avatar"]):
                     st.markdown(message["content"])
+                    
+                    if idx < len(self.message_history) - 1:
+                        st.divider()
 
     def format_user_message(self, message_content):
         return self.user_name + "\n\n" + message_content + "\n"

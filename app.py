@@ -476,6 +476,7 @@ def main():
                 f"## Redação do Estudante:\n\n"
             )
 
+            chat_interface.display_chat()
             chat_interface.send_user_message(context_mensagem + texto_redacao)
         elif update_persona:
             reset_ai_chat(chat_interface)
