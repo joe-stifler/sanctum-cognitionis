@@ -114,8 +114,8 @@ def update_persona_layout():
     available_files = [
         'personas/professores/redacao/dani-stella/informacoes_importantes_sobre_a_redacao_unicamp.md',
         'personas/professores/redacao/dani-stella/definicao_de_plagio.md',
-        'databases/redacao/unicamp/unicamp_redacoes_propostas.json',
-        'databases/redacao/unicamp/unicamp_redacoes_candidatos.json',
+        'databases/redacao/unicamp/unicamp_redacoes_propostas.txt',
+        'databases/redacao/unicamp/unicamp_redacoes_candidatos.txt',
         'personas/professores/redacao/dani-stella/a_redacao_na_unicamp.md',
     ]
 
@@ -369,7 +369,7 @@ def get_chat_interface():
         session_id="redacoes",
         user_name=":blue[estudante]",
         user_avatar="👩🏾‍🎓",
-        chat_height=400
+        chat_height=620
     )
     reset_ai_chat(chat_interface, send_initial_message=False)
     return chat_interface
@@ -391,10 +391,9 @@ def maybe_st_initialize_state():
         st.session_state["persona_settings"] = {
             "persona_name": "Dani Stella",
             "persona_files": [
-                "databases/redacao/unicamp/unicamp_redacoes_candidatos.json",
+                "databases/redacao/unicamp/unicamp_redacoes_candidatos.txt",
                 "personas/professores/redacao/dani-stella/informacoes_importantes_sobre_a_redacao_unicamp.md",
-                #"personas/professores/redacao/dani-stella/definicao_de_plagio.md",
-                "databases/redacao/unicamp/unicamp_redacoes_propostas.json",
+                "databases/redacao/unicamp/unicamp_redacoes_propostas.txt",
                 "personas/professores/redacao/dani-stella/a_redacao_na_unicamp.md",
             ],
             
@@ -428,7 +427,7 @@ def main():
 
     vertexai.init(project=project_id, location=gemini_cloud_location)
 
-    height_main_containers = 400
+    height_main_containers = 600
     chat_interface = get_chat_interface()
     redacao_manager = get_redacao_manager()
 

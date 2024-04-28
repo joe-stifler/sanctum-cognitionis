@@ -1,9 +1,31 @@
-<details open><summary>Contexto da proposta escolhida</summary>
-Interlocutor (I): Leitores da revista semanal.
-Situação-Problema (S): A tomada de consciência do(a) cronista ao ler uma matéria no El País sobre micromachismo, percebendo que já havia considerado normal uma atitude listada na matéria.
-Recorte Temático: Narrar um episódio vivenciado pelo(a) cronista em que ele(a) considerava natural uma atitude micromachista.
-Tema: O micromachismo enraizado em nossa sociedade e a tomada de consciência dele por parte de um(a) cronista.
-Gênero (G): Crônica narrativa e reflexiva.
-Tipologia Textual (T): Predominantemente narrativa, com presença de sequências descritivas e reflexivas.
-Expectativa da Banca: A expectativa da banca destaca a importância de os candidatos relacionarem a narrativa do episódio à atitude micromachista escolhida e exporem seus sentimentos e reflexões a partir da tomada de consciência.
-</details>
+Proposta , Ano 202, .
+
+Redação
+
+========
+
+
+
+Comentarios
+
+============
+
+
+
+Colunas a serem adicionadas na base de dados de propostas:
+
+-----------------------------------------------------------
+
+\========
+
+-   nome:
+-   nota\_geral:
+-   comentarios\_geral:
+-   nota\_proposta\_tematica\_pt:
+-   comentarios\_proposta\_tematica\_pt:
+-   nota\_genero\_g:
+-   comentarios\_genero\_g:
+-   nota\_leitura\_lt:
+-   comentarios\_leitura\_lt:
+-   nota\_coesao\_coerencia\_cec:
+-   comentarios\_coesao\_coerencia\_cec:
