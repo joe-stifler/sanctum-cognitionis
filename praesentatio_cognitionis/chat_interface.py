@@ -72,7 +72,7 @@ class ChatInterface:
             with st.chat_message(self.user_name, avatar=self.user_avatar):
                 st.markdown(user_message)
 
-        self.send_ai_message(prefix_message_context + message_content)
+        self.send_ai_message(prefix_message_context + "\n\nQuestão do usuário:\n\n" + message_content)
 
     def format_ai_message(self, message_content):
         return self.ai_name + "\n\n" + message_content
@@ -196,8 +196,9 @@ class ChatInterface:
         for file_path in files_path:
             files_content += f"### Conteúdo do arquivo `{file_path}`:\n\n"
 
+            extension = file_path.split(".")[-1]
             with open(file_path, "r", encoding='utf-8') as file:
-                files_content += file.read() + "\n\n"
+                files_content += f"```{extension}\n" + file.read() + "\n```\n\n"
 
         return files_content
 
