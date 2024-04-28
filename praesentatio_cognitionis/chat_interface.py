@@ -1,6 +1,6 @@
-import csv
-import functools
+import uuid
 import streamlit as st
+from langsmith import Client
 
 class ChatInterface:
     def __init__(self, session_id, user_name, user_avatar, chat_height=400):
@@ -30,6 +30,9 @@ class ChatInterface:
         self.settings_container = None
         self.layout_initialized = False
         self.is_lazy_initial_message_set = False
+        
+        self.langsmith_client = None
+        self.langsmith_dataset = None
 
     def setup_layout(self):
         self.settings_container = st.expander("Configurações atuais do modelo de inteligência artificial", expanded=False)
@@ -79,6 +82,8 @@ class ChatInterface:
 
     def send_ai_message(self, message_content):
         with self.history:
+            outputs = []
+
             with st.spinner("Seu professor(a) está processando sua mensagem..."):
                 with st.chat_message(self.ai_name, avatar=self.ai_avatar):
                     try:
@@ -87,12 +92,20 @@ class ChatInterface:
                         def format_response(responses):
                             yield self.ai_name + "\n\n"
 
-                            for response in responses:
+                            for index, response in enumerate(responses):
+                                outputs.append(
+                                    {   
+                                        "index": index,
+                                        "usage_metadata": str(response.usage_metadata),
+                                        "candidates": [str(response.candidates) for candidate in response.candidates]
+                                    }
+                                )
+                                
                                 print("\n\nInformação sobre a resposta da IA:")
                                 print("--------------------------------")
                                 print("Resposta da IA:", type(response))
-                                print("Prompt Feedback:", response.prompt_feedback)
-                                print("Usage Metadata:", response.usage_metadata)
+                                print("Prompt Feedback:", str(response.prompt_feedback))
+                                print("Usage Metadata:", str(response.usage_metadata))
 
                                 context_error = "Isto pode ser um problema com o modelo de IA. Tente re-enviar sua mensagem ou mudar elementos de sua pergunta. E lembre-se: estes modelos de IA são muito recentes. Então apesar de não ser o ideal, erros assim acontecerão ocasionamente até que a tecnologia amadureça."
 
@@ -115,9 +128,9 @@ class ChatInterface:
 
                                 if hasattr(candidate, "text"):
                                     yield candidate.text
-                                    continue
-    
-                                if candidate.finish_reason == "FINISH_REASON_MAX_TOKENS":
+                                elif candidate.finish_reason == "FINISH_REASON_STOP":
+                                    yield "\n\n"
+                                elif candidate.finish_reason == "FINISH_REASON_MAX_TOKENS":
                                     yield candidate.text + "\n\n:yellow[Nota: Resposta truncada devido ao limite de tokens.]\n\n"
                                 elif candidate.finish_reason == "FINISH_REASON_SAFETY":
                                     print("A resposta foi interrompida por motivos de segurança.")
@@ -133,14 +146,27 @@ class ChatInterface:
                                     yield f":red[Erro: Motivo da interrupção desconhecido ({candidate.finish_reason}). {context_error}]\n\n"
 
                                 print("-------------------------------------------------")
-
                         responses_generator = format_response(responses)
                         streamed_response = st.write_stream(responses_generator)
                         self.add_message(self.ai_name, streamed_response, self.ai_avatar, is_user=False)
+                        self.langsmith_client.create_example(
+                            inputs={"question": message_content},
+                            outputs={"answer": outputs},
+                            dataset_id=self.langsmith_dataset.id
+                        )
                     except Exception as e:
+                        outputs.append(
+                            {
+                                "error": str(e)
+                            }
+                        )
                         print(f"Erro ao enviar mensagem para a IA: {e}")
                         st.error(f"Erro ao processar a mensagem: {e}")
-                        st.error(f"Em caso de quota excedida (429 Quota Exceeded), aguarde dois minutos e tente novamente enviar sua mensagem.")
+                        self.langsmith_client.create_example(
+                            inputs={"question": message_content},
+                            outputs={"answer": outputs},
+                            dataset_id=self.langsmith_dataset.id
+                        )
 
     def print_initial_model_settings(self):
         # Construct the message separately
@@ -157,7 +183,7 @@ class ChatInterface:
 
         self.settings_container.info(warning_message)
 
-    def reset_ai_chat(self, llm_family, persona_name, persona_description, persona_files, send_initial_message):
+    def reset_ai_chat(self, llm_family, persona_name, persona_description, persona_files, send_initial_message, username):
         self.message_history = []
 
         if send_initial_message:
@@ -180,6 +206,11 @@ class ChatInterface:
             self.ai_max_output_tokens = ai_model.max_output_tokens
             self.ai_model = ai_model.create_model()
             self.ai_chat = self.ai_model.start_chat(response_validation=False)
+
+            self.langsmith_client = Client()
+            dataset_name = f"Conversation with '{username}'"
+            datasets = self.langsmith_client.list_datasets(dataset_name=dataset_name)
+            self.langsmith_dataset = next(datasets)
 
             if send_initial_message:
                 self.is_lazy_initial_message_set = False

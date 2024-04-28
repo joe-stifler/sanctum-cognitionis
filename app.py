@@ -44,7 +44,6 @@ def check_password():
         ):
             st.session_state["password_correct"] = True
             del st.session_state["password"]  # Don't store the username or password.
-            del st.session_state["username"]
         else:
             st.session_state["password_correct"] = False
 
@@ -350,6 +349,7 @@ def reset_ai_chat(chat_interface, send_initial_message=True):
             "persona_files": st.session_state["persona_settings"]["persona_files"],
             "llm_family": st.session_state["llm_families"][st.session_state["chosen_llm_family"]],
             "send_initial_message": send_initial_message,
+            "username": st.session_state["username"]
         }
     )
 
@@ -419,6 +419,11 @@ def maybe_st_initialize_state():
         time.sleep(0.1)
 
     os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = key_path
+    
+    os.environ["LANGCHAIN_TRACING_V2"] = str(st.secrets["LANGCHAIN"]["LANGCHAIN_TRACING_V2"])
+    os.environ["LANGCHAIN_ENDPOINT"] = st.secrets["LANGCHAIN"]["LANGCHAIN_ENDPOINT"]
+    os.environ["LANGCHAIN_API_KEY"] = st.secrets["LANGCHAIN"]["LANGCHAIN_API_KEY"]
+    os.environ["LANGCHAIN_PROJECT"] = st.secrets["LANGCHAIN"]["LANGCHAIN_PROJECT"]
 
 
 def main():

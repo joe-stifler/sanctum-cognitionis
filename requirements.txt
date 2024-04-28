@@ -13,3 +13,5 @@ python-dotenv
 vertexai===1.48.0
 streamlit
 streamlit-feedback
+langchain
+streamlit-chat===0.1.1
