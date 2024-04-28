@@ -112,8 +112,10 @@ def display_files_with_checkboxes_and_downloads(temp_persona_files):
 
 def update_persona_layout():
     available_files = [
+        "personas/professores/redacao/dani-stella/conectivos.md",
+        "personas/professores/redacao/dani-stella/operadores-argumentativos.md",
+        "personas/professores/redacao/dani-stella/generos-do-discurso.md",
         'personas/professores/redacao/dani-stella/informacoes_importantes_sobre_a_redacao_unicamp.md',
-        'personas/professores/redacao/dani-stella/definicao_de_plagio.md',
         'databases/redacao/unicamp/unicamp_redacoes_propostas.json',
         'databases/redacao/unicamp/unicamp_redacoes_candidatos.json',
         'personas/professores/redacao/dani-stella/a_redacao_na_unicamp.md',
@@ -391,10 +393,13 @@ def maybe_st_initialize_state():
         st.session_state["persona_settings"] = {
             "persona_name": "Dani Stella",
             "persona_files": [
+                "personas/professores/redacao/dani-stella/conectivos.md",
+                "personas/professores/redacao/dani-stella/operadores-argumentativos.md",
+                "personas/professores/redacao/dani-stella/generos-do-discurso.md",
                 "databases/redacao/unicamp/unicamp_redacoes_candidatos.json",
-                "personas/professores/redacao/dani-stella/informacoes_importantes_sobre_a_redacao_unicamp.md",
                 "databases/redacao/unicamp/unicamp_redacoes_propostas.json",
                 "personas/professores/redacao/dani-stella/a_redacao_na_unicamp.md",
+                "personas/professores/redacao/dani-stella/informacoes_importantes_sobre_a_redacao_unicamp.md",
             ],
             
             "persona_description": default_persona_description
