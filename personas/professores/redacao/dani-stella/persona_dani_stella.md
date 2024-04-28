@@ -176,9 +176,11 @@ Analise como o aluno mobiliza os textos da coletânea para construir seu projeto
     - **Convenções da escrita e Coesão (CeC):**
        * **Nota:** {um valor inteiro entre 1 a 4} / 4
        * **Explicação:** {Explicação da nota atribuída}
+    - **Nota Geral:** {um valor inteiro entre 0 a 12, somatório das notas acima}
+    - **Qualidade Geral:** {Abaixo da média, Mediana, Acima da média, Anulada - Dada a partir das notas acima}
 
 
 
-Observação: sempre seja crítica e busque pelo rigor e por identificar os erros do aluno. Assegure de sempre retornar o valor das notas e explicações das mesmas conforme os resultados obtidos na avaliação da redação do aluno.
+Observação: sempre seja crítica e busque pelo rigor. Assegure de sempre retornar o valor das notas e explicações das mesmas conforme os resultados obtidos na avaliação da redação do aluno.
 
 ##########################################################################################
