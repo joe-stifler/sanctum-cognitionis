@@ -349,7 +349,6 @@ def reset_ai_chat(chat_interface, send_initial_message=True):
             "persona_files": st.session_state["persona_settings"]["persona_files"],
             "llm_family": st.session_state["llm_families"][st.session_state["chosen_llm_family"]],
             "send_initial_message": send_initial_message,
-            "username": st.session_state["username"]
         }
     )
 
@@ -371,7 +370,8 @@ def get_chat_interface():
         session_id="redacoes",
         user_name=":blue[estudante]",
         user_avatar="👩🏾‍🎓",
-        chat_height=620
+        chat_height=620,
+        username=st.session_state["username"]
     )
     reset_ai_chat(chat_interface, send_initial_message=False)
     return chat_interface
@@ -455,18 +455,6 @@ def main():
         submitted, texto_redacao = essay_writing_layout(height_main_containers // 1.39)
 
     with col1:
-        if submitted:
-            st.toast('Redação sendo enviada para avaliação...')
-
-            context_mensagem = (
-                f"## Ano do Vestibular:\n\n{coletanea_escolhida.ano_vestibular}\n\n"
-                f"## Proposta Escolhida:\n\n{coletanea_escolhida.numero_proposta}\n\n"
-                f"---------------------------------------------------------\n\n"
-                f"## Redação do Aluno:\n\n"
-            )
-
-            chat_interface.send_user_message(texto_redacao, prefix_message_context=context_mensagem)
-
 
         update_persona_layout()
 
@@ -475,11 +463,23 @@ def main():
         update_persona = st.button(
             "Atualizar Professor(a)",
             use_container_width=True,
-            on_click=reset_ai_chat,
-            args=[chat_interface, ]
         )
+        
+        
+        if submitted:
+            st.toast('Redação sendo enviada para avaliação...')
 
-        if not update_persona:
+            context_mensagem = (
+                f"## Ano do Vestibular:\n\n{coletanea_escolhida.ano_vestibular}\n\n"
+                f"## Proposta Escolhida:\n\n{coletanea_escolhida.numero_proposta}\n\n"
+                f"---------------------------------------------------------\n\n"
+                f"## Redação do Estudante:\n\n"
+            )
+
+            chat_interface.send_user_message(context_mensagem + texto_redacao)
+        elif update_persona:
+            reset_ai_chat(chat_interface)
+        else:
             chat_interface.run()
 
 if __name__ == "__main__":

@@ -219,15 +219,4 @@ Observação: sempre seja crítica e busque pelo rigor. Assegure de sempre retor
     - **Qualidade:** abaixo da média <!-- é abaixo da média porque o somatório de Pt + G + Lt + CeC <= 5 -->
 
 ##########################################################################################
-
-
-Tudo acima representa seu prompt padrão. Tome ele como referência através de todas as interações
-com o usuário. Em especial, sempre forneça as notas e explicações de avaliação segundo 
-a grade de correção da Unicamp. Utilize a formatação da saída anterior em suas respostas
-sempre que for avaliar uma redação de um aluno. Sempre seja crítica e rigorosa.
-
-Agora segue abaixo as interações com o estudante.
-
-##########################################################################################
-##########################################################################################
 ##########################################################################################

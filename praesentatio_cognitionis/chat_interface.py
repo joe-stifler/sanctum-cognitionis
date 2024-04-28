@@ -2,7 +2,7 @@ import streamlit as st
 from langsmith import Client
 
 class ChatInterface:
-    def __init__(self, session_id, user_name, user_avatar, chat_height=400):
+    def __init__(self, session_id, user_name, user_avatar, chat_height=400, username=""):
         print("ChatInterface.__init__()")
         
         self.user_name = user_name
@@ -32,6 +32,7 @@ class ChatInterface:
 
         self.langsmith_client = None
         self.langsmith_dataset = None
+        self.username = username
 
     def setup_layout(self):
         self.settings_container = st.expander("Configurações atuais do modelo de inteligência artificial", expanded=False)
@@ -69,12 +70,22 @@ class ChatInterface:
     def send_user_message(self, message_content, prefix_message_context=""):
         user_message = self.format_user_message(message_content)
 
+        message_context = ""
+        if self.is_lazy_initial_message_set:
+            first__message_context = f"\n\n{self.ai_base_prompt}"
+            self.send_ai_message(first__message_context)
+
+            self.is_lazy_initial_message_set = False
+
         with self.history:
             self.add_message(self.user_name, user_message, self.user_avatar, is_user=True)
             with st.chat_message(self.user_name, avatar=self.user_avatar):
                 st.markdown(user_message)
 
-        self.send_ai_message(prefix_message_context + "\n\nQuestão do estudante:\n\n" + message_content)
+        if len(prefix_message_context) > 0:
+            message_context += "---\n\nContexto do input do estudante:\n\n" + prefix_message_context
+
+        self.send_ai_message(message_context + message_content)
 
     def format_ai_message(self, message_content):
         return self.ai_name + "\n\n" + message_content
@@ -182,7 +193,7 @@ class ChatInterface:
 
         self.settings_container.info(warning_message)
 
-    def reset_ai_chat(self, llm_family, persona_name, persona_description, persona_files, send_initial_message, username):
+    def reset_ai_chat(self, llm_family, persona_name, persona_description, persona_files, send_initial_message):
         self.message_history = []
 
         if send_initial_message:
@@ -207,7 +218,7 @@ class ChatInterface:
             self.ai_chat = self.ai_model.start_chat(response_validation=False)
 
             self.langsmith_client = Client()
-            dataset_name = f"Conversation with '{username}'"
+            dataset_name = f"Conversation with '{self.username}'"
             datasets = self.langsmith_client.list_datasets(dataset_name=dataset_name)
             datasets = [dataset for dataset in datasets]
 
@@ -243,14 +254,9 @@ class ChatInterface:
 
             if self.input_prompt:
                 message_context = ""
-
-                if self.is_lazy_initial_message_set:
-                    message_context = f"\n\n{self.ai_base_prompt}\n\n---\n\nAgora segue a mensagem inicial do estudante:\n\n"
-
-                    self.is_lazy_initial_message_set = False
-
+                user_message = "\n\n---\n\nInput do estudante:\n\n" + self.input_prompt
                 self.send_user_message(
-                    self.input_prompt,
+                    user_message,
                     prefix_message_context=message_context
                 )
 
