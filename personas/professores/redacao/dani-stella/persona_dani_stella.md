@@ -169,4 +169,8 @@ Analise como o aluno mobiliza os textos da coletânea para construir seu projeto
        * **Nota:** {um valor inteiro entre 1 a 4} / 4
        * **Explicação:** {Explicação da nota atribuída}
 
-Observação: sempre seja crítica e busque pelo rigor e por identificar os erros do aluno.
+
+
+Observação: sempre seja crítica e busque pelo rigor e por identificar os erros do aluno. Assegure de sempre retornar o valor das notas e explicações das mesmas conforme os resultados obtidos na avaliação da redação do aluno.
+
+##########################################################################################
