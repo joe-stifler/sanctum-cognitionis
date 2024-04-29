@@ -1,381 +1,18 @@
 # module imports from the praesentatio_cognitionis package
-from praesentatio_cognitionis.chat_interface import ChatInterface
 from praesentatio_cognitionis.header import show_header
 show_header(0)
 
 # module imports from the servitium_cognitionis package
 from servitium_cognitionis.llms import LLMFamily
-from servitium_cognitionis.llms import LLMGeminiModels
-from servitium_cognitionis.connectors.csv_connector import CSVConnector
-from servitium_cognitionis.managers.redacao_manager import RedacaoManager
-from servitium_cognitionis.data_access.data_interface import DataInterface
 
 # module imports from the standard python environment
 import os
 import time
-import json
-import hmac
+import uuid
 import vertexai
-import replicate
 import google.auth
 import streamlit as st
-
-# API Tokens and endpoints from `.streamlit/secrets.toml` file
-os.environ["REPLICATE_API_TOKEN"] = st.secrets["IMAGE_GENERATION"]["REPLICATE_API_TOKEN"]
-REPLICATE_MODEL_ENDPOINTSTABILITY = st.secrets["IMAGE_GENERATION"]["REPLICATE_MODEL_ENDPOINTSTABILITY"]
-
-def check_password():
-    """Returns `True` if the user had a correct password."""
-
-    def login_form():
-        """Form with widgets to collect user information"""
-        with st.form("Credentials"):
-            st.text_input("Username", key="username")
-            st.text_input("Password", type="password", key="password")
-            st.form_submit_button("Log in", on_click=password_entered)
-
-    def password_entered():
-        """Checks whether a password entered by the user is correct."""
-        if st.session_state["username"] in st.secrets[
-            "passwords"
-        ] and hmac.compare_digest(
-            st.session_state["password"],
-            st.secrets.passwords[st.session_state["username"]],
-        ):
-            st.session_state["password_correct"] = True
-            del st.session_state["password"]  # Don't store the username or password.
-        else:
-            st.session_state["password_correct"] = False
-
-    # Return True if the username + password is validated.
-    if st.session_state.get("password_correct", False):
-        return True
-
-    # Show inputs for username + password.
-    login_form()
-    if "password_correct" in st.session_state:
-        st.error("😕 User not known or password incorrect")
-    return False
-
-
-if not check_password():
-    st.stop()
-
-########################################################################################
-
-def setup_data_access():
-    table_mappings = {
-        'redacoes_candidatos': 'databases/redacao/unicamp/redacoes_candidatos_sem_nota.csv',
-        'redacoes_propostas': 'databases/redacao/unicamp/unicamp_redacoes_propostas.csv'
-    }
-    csv_connector = CSVConnector(table_mappings)
-    data_interface = DataInterface({'csv': csv_connector})
-    return data_interface
-
-def generate_scorings(scores):
-    max_score = 4
-    criteria = ["Proposta Temática (Pt)", "Gênero (G)", "Leitura (Lt)", "Convenções da Escrita e Coesão (CeC)"]
-    icons = ["🎯", "📚", "🔍", "✍️"]
-
-    for crit, icon, score in zip(criteria, icons, scores):
-        st.progress(score / max_score)
-        st.caption(f'{icon} {crit}: {score}/{max_score}')
-
-    st.divider()
-    score_sum = sum(scores)
-    max_score_overall = 12
-    
-    # generate an icon to represent an overall score
-    icon = "📝"
-    
-    st.progress(score_sum / max_score_overall)
-    st.caption(f'📝 Somatório Total: {score_sum}/{max_score_overall}')
-
-def display_files_with_checkboxes_and_downloads(temp_persona_files):
-    st.write("Base de conhecimento do professor(a):")
-    
-    # Create two columns: one for the checkbox, one for the download button
-    with st.container(border=True):
-        col1, col2 = st.columns([1, 1])
-
-        for idx, persona_file in enumerate(temp_persona_files.items()):
-            chosen_col = col1 if idx % 2 == 0 else col2
-
-            file_path, file_enabled = persona_file
-            file_label = os.path.basename(file_path)
-
-            with chosen_col:
-                checkbox_label = f"`Usar {file_label}?`"
-                is_checked = st.checkbox(checkbox_label, value=file_enabled, key=f"checkbox_{file_label}")
-                temp_persona_files[file_path] = is_checked
-
-def update_persona_layout():
-    available_files = [
-        "personas/professores/redacao/dani-stella/conectivos.md",
-        "personas/professores/redacao/dani-stella/operadores-argumentativos.md",
-        "personas/professores/redacao/dani-stella/generos-do-discurso.md",
-        'personas/professores/redacao/dani-stella/informacoes_importantes_sobre_a_redacao_unicamp.md',
-        'databases/redacao/unicamp/unicamp_redacoes_propostas.json',
-        'databases/redacao/unicamp/unicamp_redacoes_candidatos.json',
-        'personas/professores/redacao/dani-stella/a_redacao_na_unicamp.md',
-    ]
-
-    with st.expander("Configure seu professor(a)", expanded=False):
-        def on_change_persona_name():
-            st.session_state["persona_settings"]["persona_name"] = st.session_state.new_persona_name
-
-        st.text_input(
-            "Nome do professor(a):",
-            st.session_state["persona_settings"]["persona_name"],
-            on_change=on_change_persona_name,
-            key='new_persona_name'
-        )
-        
-        def on_change_persona_description():
-            st.session_state["persona_settings"]["persona_description"] = st.session_state.new_persona_description
-
-        st.text_area(
-            "Descrição do professor(a):",
-            value=st.session_state["persona_settings"]["persona_description"],
-            on_change=on_change_persona_description,
-            key='new_persona_description'
-        )
-
-        def change_files_state():
-            st.session_state["persona_settings"]["persona_files"] = list(st.session_state.new_persona_files)
-
-        st.multiselect(
-            'Base de conhecimento do professor(a):',
-            available_files,
-            default=st.session_state["persona_settings"]["persona_files"],
-            on_change=change_files_state,
-            key="new_persona_files"
-        )
-
-        st.warning("Não se esqueça de clicar no botão 'Atualizar Professor(a)' acima para aplicar quaisquer mudanças.")
-        st.warning("Tome apenas cuidado, pois atualizar o professor(a) levará a uma perca completa do histórico de conversa atual.")
-
-def select_essay_layout(redacao_manager):
-    expander = st.expander("Redações Disponíveis", expanded=False)
-
-    vestibular = expander.selectbox("Escolha o vestibular", ["Unicamp", ])
-    redacoes_propostas = redacao_manager.obter_redacao_propostas(
-        vestibular,
-        query = {
-            'order_by': ['ano_vestibular', 'numero_proposta'],
-            'ascending': [False, True]
-        }
-    )
-
-    coletanea_escolhida = expander.selectbox(
-        "Escolha a proposta e ano do vestibular",
-        redacoes_propostas,
-        format_func=lambda r: f"{r.nome}",
-    )
-
-    expander.text_area(
-        "Coletânea de textos",
-        coletanea_escolhida.texto_proposta,
-        height=300,
-        label_visibility='collapsed',
-        disabled=True
-    )
-    
-    return coletanea_escolhida
-
-
-def essay_writing_layout(height_main_containers):
-    with st.form("my_form2"):
-        texto_redacao = st.text_area("Digite sua redação aqui", placeholder="Digite sua redação aqui", height=int(1.155 * height_main_containers), label_visibility='collapsed')
-        submitted = st.form_submit_button(
-            "Submeter para avaliação", use_container_width=True)
-
-    return submitted, texto_redacao
-
-def specific_stable_diffusion_settings_layout():
-    with st.expander("**Configure a geração de imagem**"):
-        width = st.number_input("Largura da imagem gerada", value=1024)
-        height = st.number_input("Altura da imagem gerada", value=1024)
-        scheduler = st.selectbox('Scheduler', ('K_EULER', 'DDIM', 'DPMSolverMultistep', 'HeunDiscrete',
-                                                'KarrasDPM', 'K_EULER_ANCESTRAL', 'PNDM'))
-        num_inference_steps = st.slider(
-            "Número de etapas de remoção de ruído", value=4, min_value=1, max_value=10)
-        guidance_scale = st.slider(
-            "Escala para orientação sem classificador", value=0.0, min_value=0.0, max_value=50.0, step=0.1)
-        prompt_strength = st.slider(
-            "Força do prompt ao usar img2img/inpaint (1.0 corresponde à destruição total das informações na imagem)", value=0.8, max_value=1.0, step=0.1)
-        refine = st.selectbox(
-            "Selecione o estilo refinado a ser usado (deixe os outros 2 de fora)", ("expert_ensemble_refiner", "None"))
-        high_noise_frac = st.slider(
-            "Fração de ruído a ser usada para `expert_ensemble_refiner`", value=0.8, max_value=1.0, step=0.1)
-        negative_prompt = st.text_area("**Quais elementos indesejados você não quer na imagem?**",
-                                        value="the absolute worst quality, distorted features",
-                                        help="Este é um prompt negativo, basicamente digite o que você não quer ver na imagem gerada")
-
-    return width, height, scheduler, num_inference_steps, guidance_scale, prompt_strength, refine, high_noise_frac, negative_prompt
-
-def stable_diffusion_prompt_form_layout() -> None:
-    if "image_prompt" not in st.session_state:
-        st.session_state["image_prompt"] = """In a fantastical scene, a creature with a human head and deer body emanates a green light."""
-    
-    with st.expander("Gere uma nova imagem", expanded=False):
-        def on_change_prompt():
-            st.session_state["image_prompt"] = st.session_state.new_prompt
-
-        st.text_area(
-            "**Comece a escrever, Machado de Assis ✍🏾**",
-            value=st.session_state["image_prompt"],
-            help="Escreva um prompt para gerar uma imagem criativa",
-            label_visibility='collapsed',
-            on_change=on_change_prompt,
-            key='new_prompt',
-        )
-
-        submitted = st.button(
-            "Gerar uma imagem a partir do texto abaixo", use_container_width=True)
-
-    return submitted
-
-# Define the function to generate images based on text prompts
-def stable_diffusion_layout(submitted, *args):
-    width, height, scheduler, num_inference_steps, guidance_scale, prompt_strength, refine, high_noise_frac, negative_prompt = args
-    
-    if "image_output" not in st.session_state:
-        st.session_state["image_output"] = "praesentatio_cognitionis/resources/stable_diffusion_sample.png"
-
-    generated_images_placeholder = st.empty()
-    generated_images_placeholder.image(
-        st.session_state["image_output"],
-        caption=st.session_state["image_prompt"],
-        use_column_width=True
-    )
-
-    if submitted:
-        try:
-            # Only call the API if the "Submit" button was pressed
-            if submitted:
-                with st.spinner('Gerando imagem...'):
-                    # Calling the replicate API to get the image
-                    with generated_images_placeholder.container():
-                        output = replicate.run(
-                            REPLICATE_MODEL_ENDPOINTSTABILITY,
-                            input={
-                                "prompt": st.session_state["image_prompt"],
-                                "width": width,
-                                "height": height,
-                                "num_outputs": 1,
-                                "scheduler": scheduler,
-                                "num_inference_steps": num_inference_steps,
-                                "guidance_scale": guidance_scale,
-                                "prompt_stregth": prompt_strength,
-                                "refine": refine,
-                                "high_noise_frac": high_noise_frac,
-                                "negative_prompt": negative_prompt
-                            }
-                        )
-
-                        if output:
-                            st.image(
-                                output,
-                                use_column_width=True,
-                                caption=st.session_state["image_prompt"],
-                                output_format="auto"
-                            )
-                            st.session_state["image_output"] = output
-        except Exception as e:
-            st.error(f'Encountered an error: {e}', icon="🚨")
-
-def llm_family_model_layout():
-    with st.expander("Configure o modelo de inteligência artificial", expanded=False):
-        def on_change_llm_family():
-            st.session_state["chosen_llm_family"] = st.session_state.new_llm_family_name
-        
-        st.selectbox(
-            'Escolha seu provedor de inteligência artificial',
-            st.session_state["llm_families"].keys(),
-            on_change=on_change_llm_family,
-            key='new_llm_family_name'
-        )
-        
-        llm_family_name = st.session_state["chosen_llm_family"]
-        llm_family = st.session_state["llm_families"][llm_family_name]
-        
-        def on_change_llm_model():
-            llm_family.update_current_model_name(st.session_state.new_llm_model_name)
-
-        llm_model_name = st.selectbox(
-            'Escolha seu modelo de inteligência artificial',
-            llm_family.available_model_names(),
-            on_change=on_change_llm_model,
-            index=llm_family.current_model_index(),
-            key='new_llm_model_name'
-        )
-        
-        llm_model = llm_family.get_available_model(llm_model_name)
-        
-        def on_change_update_llm_model():
-            llm_model.temperature = st.session_state.new_model_temperature
-
-        st.slider(
-            'Temperatura',
-            min_value=llm_model.temperature_range[0],
-            max_value=llm_model.temperature_range[1],
-            value=llm_model.temperature,
-            on_change=on_change_update_llm_model,
-            key='new_model_temperature'
-        )
-        
-        def on_change_update_llm_max_output_tokens():
-            llm_model.max_output_tokens = st.session_state.new_max_output_tokens
-
-        st.slider(
-            'Número máximo de tokens de saída',
-            min_value=llm_model.output_tokens_range[0],
-            max_value=llm_model.output_tokens_range[1],
-            value=llm_model.max_output_tokens,
-            on_change=on_change_update_llm_max_output_tokens,
-            key='new_max_output_tokens'
-        )
-
-        st.warning("Não se esqueça de clicar no botão 'Atualizar Professor(a)' acima para aplicar quaisquer mudanças.")
-        st.warning("Tome apenas cuidado, pois atualizar o professor(a) levará a uma perca completa do histórico de conversa atual.")
-
-
-def reset_ai_chat(chat_interface, send_initial_message=True):
-    chat_interface.reset_ai_chat(
-        **{
-            "persona_name": st.session_state["persona_settings"]["persona_name"],
-            "persona_description": st.session_state["persona_settings"]["persona_description"],
-            "persona_files": st.session_state["persona_settings"]["persona_files"],
-            "llm_family": st.session_state["llm_families"][st.session_state["chosen_llm_family"]],
-            "send_initial_message": send_initial_message,
-        }
-    )
-
-@st.cache_resource
-def get_redacao_manager():
-    print("Creating RedacaoManager")
-    redacao_manager = RedacaoManager(
-        dal=setup_data_access(),
-        tabela_redacoes_propostas='redacoes_propostas',
-        tabela_redacoes_aluno='redacoes_aluno',
-        tabela_redacoes_candidatos='redacoes_candidatos'
-    )
-    return redacao_manager
-
-@st.cache_resource
-def get_chat_interface():
-    print("Creating ChatInterface")
-    chat_interface = ChatInterface(
-        session_id="redacoes",
-        user_name=":blue[estudante]",
-        user_avatar="👩🏾‍🎓",
-        chat_height=620,
-        username=st.session_state["username"]
-    )
-    reset_ai_chat(chat_interface, send_initial_message=False)
-    return chat_interface
-
+from langchain_core.messages import HumanMessage, AIMessage
 
 def maybe_st_initialize_state():
     if "llm_families" not in st.session_state:
@@ -419,69 +56,160 @@ def maybe_st_initialize_state():
         time.sleep(0.1)
 
     os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = key_path
-    
+
     os.environ["LANGCHAIN_TRACING_V2"] = str(st.secrets["LANGCHAIN"]["LANGCHAIN_TRACING_V2"])
     os.environ["LANGCHAIN_ENDPOINT"] = st.secrets["LANGCHAIN"]["LANGCHAIN_ENDPOINT"]
     os.environ["LANGCHAIN_API_KEY"] = st.secrets["LANGCHAIN"]["LANGCHAIN_API_KEY"]
     os.environ["LANGCHAIN_PROJECT"] = st.secrets["LANGCHAIN"]["LANGCHAIN_PROJECT"]
 
-
-def main():
-    print("Version: 1.0")
-    
-    maybe_st_initialize_state()
-
     gemini_cloud_location = st.secrets["VERTEXAI"]["GEMINI_CLOUD_LOCATION"]
-
     _, project_id = google.auth.default()
-
     vertexai.init(project=project_id, location=gemini_cloud_location)
 
-    height_main_containers = 600
-    chat_interface = get_chat_interface()
-    redacao_manager = get_redacao_manager()
 
-    st.markdown("<h1 style='text-align: center;'>📚 Página de Redações 📚</h1>", unsafe_allow_html=True)
-    st.divider()
+def convert_files_to_str(files_path: str):
+    files_content = "## Arquivos disponíveis na base de conhecimento do professor(a):\n\n"
+    files_content += "--------------------------------------------------------\n\n"
 
-    col2, col1 = st.columns([2, 1], gap="small")
+    for file_path in files_path:
+        files_content += f"### Conteúdo do arquivo `{file_path}`:\n\n"
 
-    with col2:
-        chat_interface.setup_layout()
+        extension = file_path.split(".")[-1]
+        with open(file_path, "r", encoding='utf-8') as file:
+            files_content += f"```{extension}\n" + file.read() + "\n```\n\n"
 
-    with col1:
-        coletanea_escolhida = select_essay_layout(redacao_manager)
+    return files_content
 
-        submitted, texto_redacao = essay_writing_layout(height_main_containers // 1.39)
 
-    with col1:
+def get_ai_chat():
+    llm_family = st.session_state["llm_families"][st.session_state["chosen_llm_family"]]
+    persona_name = st.session_state["persona_settings"]["persona_name"]
+    persona_name=f':red[{persona_name}]'
 
-        update_persona_layout()
+    persona_description = st.session_state["persona_settings"]["persona_description"]
 
-        llm_family_model_layout()
+    persona_files = st.session_state["persona_settings"]["persona_files"]
+    persona_files_str = convert_files_to_str(persona_files)
+    prompt_with_files_str = f"{persona_files_str}\n\n---\n\n{persona_description}"
 
-        update_persona = st.button(
-            "Atualizar Professor(a)",
-            use_container_width=True,
-        )
+    ai_base_prompt = prompt_with_files_str
+
+    return llm_family, ai_base_prompt
+
+class ChatHistory:
+    def __init__(self, session_id, llm_family, ai_base_prompt):
+        self.chat_messages = []
+        self.user_avatar = "👩🏾‍🎓"
+        self.ai_avatar = "👩🏽‍🏫"
+        self.ai_name = ":orange[IA]"
+        self.llm_family = llm_family
+        self.session_id = session_id
+        self.user_name = ":blue[estudante]"
+        self.ai_base_prompt = ai_base_prompt
+        self.ai_chat = None
+        self.ai_model = None
+
+    def initialize_chat(self):
+        self.ai_model = self.llm_family.current_model()
+        self.ai_model.initialize_model()
+        self.ai_chat = self.ai_model.start_chat()
+        return self.send_ai_message(self.ai_base_prompt)
+
+    def add_new_ai_message(self, ai_message, **kwargs):
+        print("Adding new AI message:", ai_message)
+        print("With kwargs:", kwargs, "\n\n")
+        self.chat_messages.append(AIMessage(ai_message, **kwargs))
+
+    def send_ai_message(self, user_message):
+        user_message = f"mensagem do usuário: {user_message}"
+        ai_response_stream = self.ai_chat.send_message(user_message, stream=True)
         
+        for text_message, ai_message_args in self.ai_model.process_ai_response_stream(ai_response_stream):
+            self.add_new_ai_message(text_message, **ai_message_args)
+            yield text_message
+
+    def send_user_message(self, user_message):
+        self.chat_messages.append(HumanMessage(user_message))
+        return self.send_ai_message(user_message)
+
+    def get_chat_messages(self):
+        messages = []
+        message_pos = 0
+
+        while message_pos < len(self.chat_messages):
+            message = self.chat_messages[message_pos]
+            if isinstance(message, HumanMessage):
+                messages.append(("user", self.user_avatar, message.content))
+                message_pos += 1
+            else:
+                message_content = ""
+                while message_pos < len(self.chat_messages) and not isinstance(self.chat_messages[message_pos], HumanMessage):
+                    message_content += self.chat_messages[message_pos].content
+                    message_pos += 1
+                messages.append(("assistant", self.ai_avatar, message_content))
+        return messages
+
+
+class ChatConnector:
+    def __init__(self):
+        self.chats = {}
         
-        if submitted:
-            st.toast('Redação sendo enviada para avaliação...')
+    def create_chat_history(self):
+        session_id = str(uuid.uuid4().hex)
+        print("Length of chats", len(self.chats))
+        print("Creating chat history with session_id", session_id)
+        st.session_state["session_id"] = session_id
 
-            context_mensagem = (
-                f"## Ano do Vestibular:\n\n{coletanea_escolhida.ano_vestibular}\n\n"
-                f"## Proposta Escolhida:\n\n{coletanea_escolhida.numero_proposta}\n\n"
-                f"---------------------------------------------------------\n\n"
-                f"## Redação do Estudante:\n\n"
-            )
+        llm_family, ai_base_prompt = get_ai_chat()
+        self.chats[session_id] = ChatHistory(session_id, llm_family, ai_base_prompt)
 
-            chat_interface.display_chat()
-            chat_interface.send_user_message(context_mensagem + texto_redacao)
-        elif update_persona:
-            reset_ai_chat(chat_interface)
+        return self.chats[session_id]
+
+    def fetch_chat_history(self, session_id):
+        if session_id not in self.chats:
+            assert False, f"Chat with session_id {session_id} not found"
+        return self.chats[session_id]
+
+@st.cache_resource
+def create_chat_connector():
+    return ChatConnector()
+
+
+def main():
+    maybe_st_initialize_state()
+
+    chat_connector = create_chat_connector()
+
+    if user_message := st.chat_input("Digite sua pergunta aqui..."):
+        if "session_id" not in st.session_state:
+            chat_history = chat_connector.create_chat_history()
         else:
-            chat_interface.run()
+            chat_history = chat_connector.fetch_chat_history(st.session_state["session_id"])
+
+        # Display chat history messages
+        for role, avatar, message in chat_history.get_chat_messages():
+            with st.chat_message(role, avatar=avatar):
+                st.markdown(message)
+
+        if len(chat_history.get_chat_messages()) == 0:
+            with st.spinner("Inicializando o modelo..."):
+                ai_response = chat_history.initialize_chat()
+                with st.chat_message("assistant", avatar="👩🏽‍🏫"):
+                    st.write_stream(ai_response)
+
+        # Display user message
+        with st.chat_message("user", avatar="👩🏾‍🎓"):
+            st.write(user_message)
+
+        # Send user message to AI inference
+        ai_response = chat_history.send_user_message(user_message)
+
+        # Display AI response
+        with st.spinner("Processando resposta..."):
+            with st.chat_message("assistant", avatar="👩🏽‍🏫"):
+                st.write_stream(ai_response)
+    else:
+        st.info("Digite uma mensagem para iniciar o chat.")
 
 if __name__ == "__main__":
     main()

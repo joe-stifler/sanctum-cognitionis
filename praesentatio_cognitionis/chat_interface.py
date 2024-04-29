@@ -2,14 +2,13 @@ import streamlit as st
 from langsmith import Client
 
 class ChatInterface:
-    def __init__(self, session_id, user_name, user_avatar, chat_height=400, username=""):
+    def __init__(self, session_id, username=""):
         print("ChatInterface.__init__()")
         
-        self.user_name = user_name
-        self.user_avatar = user_avatar
-        self.chat_height = chat_height
-        self.session_id = session_id
+        self.user_name = None
+        self.user_avatar = None
         self.message_history = []
+        self.session_id = session_id
 
         # model objects
         self.ai_chat = None
@@ -34,16 +33,61 @@ class ChatInterface:
         self.langsmith_dataset = None
         self.username = username
 
-    def setup_layout(self):
-        self.settings_container = st.expander("Configurações atuais do modelo de inteligência artificial", expanded=False)
-
+    def setup_layout(self, chat_height=None):
         with st.container(border=True):
-            self.history = st.container(height=self.chat_height, border=False)
+            self.history = st.container(border=False)
             st.markdown("---")
             self.input_prompt = st.chat_input("O que gostaria de perguntar?")
 
         self.layout_initialized = True
+        self.settings_container = st.expander("Configurações atuais do modelo de inteligência artificial", expanded=False)
         self.print_initial_model_settings()
+
+    def reset_ai_chat(self, llm_family, user_name, user_avatar, persona_name, persona_description, persona_files, send_initial_message):
+        self.message_history = []
+        self.user_name = user_name
+        self.user_avatar = user_avatar
+
+        if send_initial_message:
+            self.display_chat()
+
+        ai_model = llm_family.current_model()
+
+        persona_avatar="👩🏽‍🏫"
+        persona_name=f':red[{persona_name}]'
+        persona_files_str = self.convert_files_to_str(persona_files)
+        prompt_with_files_str = f"{persona_files_str}\n\n---\n\n{persona_description}"
+        ai_base_prompt = prompt_with_files_str
+
+        try:
+            self.ai_name = persona_name
+            self.ai_avatar = persona_avatar
+            self.ai_base_prompt = ai_base_prompt
+            self.ai_model_name = ai_model.name
+            self.ai_temperature = ai_model.temperature
+            self.ai_max_output_tokens = ai_model.max_output_tokens
+            self.ai_model = ai_model.create_model()
+            self.ai_chat = self.ai_model.start_chat(response_validation=False)
+
+            self.langsmith_client = Client()
+            dataset_name = f"Conversation with '{self.username}'"
+            print("The dataset name is:", dataset_name)
+            datasets = self.langsmith_client.list_datasets(dataset_name=dataset_name)
+            datasets = [dataset for dataset in datasets]
+
+            if len(datasets) == 0:
+                self.langsmith_dataset = self.langsmith_client.create_dataset(dataset_name)
+            else:
+                self.langsmith_dataset = datasets[0]
+
+            if send_initial_message:
+                self.is_lazy_initial_message_set = False
+                self.send_ai_message(self.ai_base_prompt)
+            else:
+                self.is_lazy_initial_message_set = True
+        except Exception as e:
+            st.error(f"Erro ao configurar o modelo de IA: {e}")
+
 
     def add_message(self, role, content, avatar, is_user):
         self.message_history.append(
@@ -196,48 +240,6 @@ class ChatInterface:
 
         self.settings_container.info(warning_message)
 
-    def reset_ai_chat(self, llm_family, persona_name, persona_description, persona_files, send_initial_message):
-        self.message_history = []
-
-        if send_initial_message:
-            self.display_chat()
-
-        ai_model = llm_family.current_model()
-
-        persona_avatar="👩🏽‍🏫"
-        persona_name=f':red[{persona_name}]'
-        persona_files_str = self.convert_files_to_str(persona_files)
-        prompt_with_files_str = f"{persona_files_str}\n\n---\n\n{persona_description}"
-        ai_base_prompt = prompt_with_files_str
-
-        try:
-            self.ai_name = persona_name
-            self.ai_avatar = persona_avatar
-            self.ai_base_prompt = ai_base_prompt
-            self.ai_model_name = ai_model.name
-            self.ai_temperature = ai_model.temperature
-            self.ai_max_output_tokens = ai_model.max_output_tokens
-            self.ai_model = ai_model.create_model()
-            self.ai_chat = self.ai_model.start_chat(response_validation=False)
-
-            self.langsmith_client = Client()
-            dataset_name = f"Conversation with '{self.username}'"
-            datasets = self.langsmith_client.list_datasets(dataset_name=dataset_name)
-            datasets = [dataset for dataset in datasets]
-
-            if len(datasets) == 0:
-                self.langsmith_dataset = self.langsmith_client.create_dataset(dataset_name)
-            else:
-                self.langsmith_dataset = datasets[0]
-
-            if send_initial_message:
-                self.is_lazy_initial_message_set = False
-                self.send_ai_message(self.ai_base_prompt)
-            else:
-                self.is_lazy_initial_message_set = True
-        except Exception as e:
-            st.error(f"Erro ao configurar o modelo de IA: {e}")
-
     def convert_files_to_str(self, files_path: str):
         files_content = "## Arquivos disponíveis na base de conhecimento do professor(a):\n\n"
         files_content += "--------------------------------------------------------\n\n"
@@ -258,14 +260,15 @@ class ChatInterface:
             if self.input_prompt:
                 message_context = ""
                 user_message = "\n\n---\n\nInput do estudante:\n\n" + self.input_prompt
+
                 self.send_user_message(
                     user_message,
                     prefix_message_context=message_context
                 )
 
-            with self.history:
-                if self.is_lazy_initial_message_set:
-                    st.info("O seu professor(a) está pronto para lhe ajudar. Tome a iniciativa e comece a sua interação com ele(a).")
+            # with self.history:
+            #     if self.is_lazy_initial_message_set:
+            #         st.info("O seu professor(a) está pronto para lhe ajudar. Tome a iniciativa e comece a sua interação com ele(a).")
         except Exception as e:
             st.error(f"Erro ao executar a interface de chat: {e}")
             pass

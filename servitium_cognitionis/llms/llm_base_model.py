@@ -1,7 +1,5 @@
-from vertexai import generative_models
-from vertexai.generative_models import GenerativeModel
-
-class LLMBaseModel():
+from abc import ABC, abstractmethod
+class LLMBaseModel(ABC):
     def __init__(self, model_name, temperature, temperature_range, max_output_tokens, output_tokens_range):
         self._model_name = model_name
         self._temperature = temperature
@@ -44,17 +42,11 @@ class LLMBaseModel():
             raise ValueError(f"Max output tokens must be between {self._output_tokens_range[0]} and {self._output_tokens_range[1]}")
         self._max_output_tokens = value
 
-    def create_model(self):
-        return GenerativeModel(
-            model_name=self.name,
-            generation_config={
-                "temperature": self.temperature,
-                "max_output_tokens": self.max_output_tokens
-            },
-            safety_settings = {
-                generative_models.HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: generative_models.HarmBlockThreshold.BLOCK_ONLY_HIGH,
-                generative_models.HarmCategory.HARM_CATEGORY_HARASSMENT: generative_models.HarmBlockThreshold.BLOCK_ONLY_HIGH,
-                generative_models.HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT: generative_models.HarmBlockThreshold.BLOCK_ONLY_HIGH,
-                generative_models.HarmCategory.HARM_CATEGORY_HATE_SPEECH: generative_models.HarmBlockThreshold.BLOCK_ONLY_HIGH,
-            }
-        )
+    # make hte following method abstract
+    @abstractmethod
+    def initialize_model(self, system_instruction=[]):
+        pass
+    
+    @abstractmethod
+    def start_chat(self):
+        pass

@@ -1,8 +1,4 @@
-from typing import Any, Dict
-from abc import ABC, abstractmethod
-from vertexai import generative_models
-
-class LLMBaseFamily(ABC):
+class LLMBaseFamily:
     def __init__(self, family_name: str):
         self._family_name = family_name
 
