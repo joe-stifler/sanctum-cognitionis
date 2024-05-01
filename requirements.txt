@@ -18,3 +18,4 @@ streamlit-chat===0.1.1
 streamlit-extras===0.4.2
 streamlit-embedcode
 barfi
+notion-client===2.2.1

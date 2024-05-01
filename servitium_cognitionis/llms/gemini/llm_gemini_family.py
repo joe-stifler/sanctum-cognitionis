@@ -18,7 +18,7 @@ class LLMGeminiFamily(LLMBaseFamily):
         self._available_models = {
             str(available_model): available_model for available_model in available_models
         }
-        self._current_model_name = str(list(self.available_model_names())[1])
+        self._current_model_name = str(list(self.available_model_names())[0])
 
     def get_available_model(self, model_name: str) -> LLMGeminiBaseModel:
         return self._available_models[model_name]

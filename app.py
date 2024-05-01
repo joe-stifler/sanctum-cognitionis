@@ -65,14 +65,12 @@ div[data-testid='stExpander'] {{
     position: fixed;
     top: 2.9rem;
     width: inherit;
-    z-index: 99999;
     background-color: {background_color};
     color: {text_color};
 }}
 .stChatInput {{
     position: fixed;
     bottom: 2rem;
-    z-index:4;
 }}
 div[data-testid='stFileUploaderDropzoneInstructions'] {{
     visibility: hidden;
@@ -80,10 +78,16 @@ div[data-testid='stFileUploaderDropzoneInstructions'] {{
 }}
 button[data-testid='baseButton-secondary'] {{
     visibility: hidden;
+    content: "",
 }}
 div[data-testid='stFileUploaderDropzoneInstructions']::after {{
     visibility: visible;
     position: absolute;
+    content: "📁 Arraste arquivos aqui";
+}}
+div[data-testid='stFileUploaderDropzoneInstructions']:hover {{
+    position: absolute;
+    color: {primary_color};
     content: "📁 Arraste arquivos aqui";
 }}
 section[data-testid='stFileUploaderDropzone'] {{
@@ -99,7 +103,7 @@ div[data-testid='stFileUploader'] {{
     position: fixed;
     bottom: 5rem;
     width: inherit;
-    z-index:3;
+    opacity: 0.5;
     border-radius: 3rem;
     background-color: {background_color};
     color: {text_color};
@@ -109,7 +113,6 @@ div[data-testid='stFileUploader']:hover {{
     opacity: 1;
     rounded: 1rem;
     background-color: {background_color};
-    color: {text_color};
 }}
 
 @media screen and (max-width: 900px) {{
@@ -117,17 +120,18 @@ div[data-testid='stFileUploader']:hover {{
         z-index: 99999;
     }}
     .stChatInput {{
-        z-index: 99998;
+        z-index: 99997;
     }}
     div[data-testid='stFileUploader'] {{
-        z-index: 99997;
+        z-index: 99998;
     }}
 }}
 """
 
 styl = "<style>" + styl.format(
     background_color=sbc,
-    text_color=tc
+    text_color=tc,
+    primary_color=pc
 ) + "</style>"
 
 st.markdown(styl, unsafe_allow_html=True)
@@ -148,25 +152,21 @@ def maybe_st_initialize_state(use_dummy_llm=False):
         st.session_state["chosen_llm_family_idx"] = 0 if use_dummy_llm else 1
 
     if "persona_settings" not in st.session_state:
-        default_persona_description_path = 'personas/professores/redacao/dani-stella/persona_dani_stella.md'
-
-        with open(default_persona_description_path, 'r', encoding='utf-8') as file:
-            default_persona_description = file.read()
-
         st.session_state["persona_settings"] = {
             "persona_name": "Dani Stella",
-            "persona_files": [
-                # "personas/professores/redacao/dani-stella/conectivos.md",
-                # "personas/professores/redacao/dani-stella/operadores-argumentativos.md",
-                # "personas/professores/redacao/dani-stella/generos-do-discurso.md",
-                # "databases/redacao/unicamp/unicamp_redacoes_candidatos.json",
-                # "databases/redacao/unicamp/unicamp_redacoes_propostas.json",
-                # "personas/professores/redacao/dani-stella/a_redacao_na_unicamp.md",
-                # "personas/professores/redacao/dani-stella/informacoes_importantes_sobre_a_redacao_unicamp.md",
+            "persona_file_paths": [
+                "personas/professores/redacao/dani-stella/knowledge/conectivos.md",
+                "personas/professores/redacao/dani-stella/knowledge/operadores-argumentativos.md",
+                "personas/professores/redacao/dani-stella/knowledge/generos-do-discurso.md",
+                "databases/unicamp/redacao/unicamp_redacoes_candidatos.json",
+                "databases/unicamp/redacao/unicamp_redacoes_propostas.json",
+                "personas/professores/redacao/dani-stella/knowledge/a_redacao_na_unicamp.md",
+                "personas/professores/redacao/dani-stella/knowledge/informacoes_importantes_sobre_a_redacao_unicamp.md",
             ],
-            
-            "persona_description": default_persona_description
+            "persona_description_path": 'personas/professores/redacao/dani-stella/persona_description.md'
         }
+
+        print("Session state:", st.session_state)
 
     key_path = ".streamlit/google_secrets.json"
 
@@ -212,15 +212,19 @@ def get_ai_chat():
     persona_name = st.session_state["persona_settings"]["persona_name"]
     persona_name=f':red[{persona_name}]'
 
-    persona_description = st.session_state["persona_settings"]["persona_description"]
+    persona_description_path = st.session_state["persona_settings"]["persona_description_path"]
 
-    persona_files = st.session_state["persona_settings"]["persona_files"]
-    persona_files_str = convert_files_to_str(persona_files)
-    prompt_with_files_str = f"{persona_files_str}\n\n---\n\n{persona_description}"
+    with open(persona_description_path, 'r', encoding='utf-8') as file:
+        persona_description = file.read()
+
+    persona_file_paths = st.session_state["persona_settings"]["persona_file_paths"]
+    persona_file_paths_str = convert_files_to_str(persona_file_paths)
+    prompt_with_files_str = f"{persona_file_paths_str}\n\n---\n\n{persona_description}"
 
     ai_base_prompt = prompt_with_files_str
 
     return llm_family, ai_base_prompt
+
 
 class ChatHistory:
     def __init__(self, session_id, llm_family, ai_base_prompt):
@@ -333,7 +337,7 @@ def chat_messages(chat_connector, user_input_message):
                 st.write_stream(ai_response)
 
 def main():
-    maybe_st_initialize_state(use_dummy_llm=True)
+    maybe_st_initialize_state(use_dummy_llm=False)
 
     chat_connector = create_chat_connector()
 
@@ -353,7 +357,6 @@ def main():
     chat_messages(chat_connector, user_input_message)
 
     st.divider()
-    st.write("")
     st.write("")
 
 

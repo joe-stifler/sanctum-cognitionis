@@ -22,3 +22,4 @@ output
 *.egg-info
 .env
 secrets.toml
+estatisticas/
