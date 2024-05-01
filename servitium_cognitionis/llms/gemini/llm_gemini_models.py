@@ -1,6 +1,4 @@
-from .llm_base_model import LLMBaseModel
-
-from enum import Enum
+from servitium_cognitionis.llms.base import LLMBaseModel
 
 from vertexai import generative_models
 from vertexai.generative_models import GenerativeModel, FinishReason
@@ -9,6 +7,7 @@ class LLMGeminiBaseModel(LLMBaseModel):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self._model_instance = None
+        self._model_chats = {}
 
     def initialize_model(self, system_instruction=[]):
         self._model_instance = GenerativeModel(
@@ -26,10 +25,22 @@ class LLMGeminiBaseModel(LLMBaseModel):
             }
         )
 
-    def start_chat(self):
+    def create_chat(self, session_id):
         if self._model_instance is None:
             raise ValueError("Model has not been initialized. Call initialize_model() first")
-        return self._model_instance.start_chat(response_validation=False)
+
+        if session_id in self._model_chats:
+            raise ValueError("Chat session already exists. Call end_chat() first")
+
+        self._model_chats[session_id] = self._model_instance.start_chat(response_validation=False)
+
+    def send_stream_chat_message(self, session_id, message):
+        if session_id not in self._model_chats:
+            raise ValueError("Chat session does not exist. Call create_chat() first")
+
+        ai_response_stream = self._model_chats[session_id].send_message(message, stream=True)
+
+        return self.process_ai_response_stream(ai_response_stream)
 
     def process_ai_response_stream(self, responses):
         new_ai_message_args = {}
@@ -51,7 +62,7 @@ class LLMGeminiBaseModel(LLMBaseModel):
                     continue
 
                 candidate = response.candidates[0]
-                
+
                 new_ai_message_args.update({
                     "candidate_index": candidate.index,
                     "candidate_content": candidate.content if hasattr(candidate, "content") else None,
@@ -113,11 +124,3 @@ class LLMGeminiModelExperimental(LLMGeminiBaseModel):
             max_output_tokens=max_output_tokens,
             output_tokens_range=(1, 8192)
         )
-
-class LLMGeminiModels(Enum):
-    GEMINI_1_5_PRO = LLMGeminiModel1_5Pro()
-    GEMINI_1_0_PRO_002 = LLMGeminiModel1_0Pro002()
-    GEMINI_EXPERIMENTAL = LLMGeminiModelExperimental()
-
-    def __str__(self):
-        return self.value.name

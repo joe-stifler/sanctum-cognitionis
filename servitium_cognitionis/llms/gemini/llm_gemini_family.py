@@ -1,18 +1,26 @@
-from servitium_cognitionis.llms import LLMBaseFamily, LLMGeminiModels, LLMBaseModel
+from servitium_cognitionis.llms.base import LLMBaseFamily
+from servitium_cognitionis.llms.gemini import (
+    LLMGeminiBaseModel, LLMGeminiModel1_5Pro, LLMGeminiModel1_0Pro002, LLMGeminiModelExperimental
+)
 
 from typing import List
-from vertexai import generative_models
 
 class LLMGeminiFamily(LLMBaseFamily):
     def __init__(self):
-        super().__init__("Vertex AI Gemini")
+        super().__init__("Vertex AI Gemini Family")
+        
+        available_models = [
+            LLMGeminiModel1_5Pro(),
+            LLMGeminiModel1_0Pro002(),
+            LLMGeminiModelExperimental(),
+        ]
 
         self._available_models = {
-            str(available_model.value): available_model.value for available_model in LLMGeminiModels
+            str(available_model): available_model for available_model in available_models
         }
-        self._current_model_name = str(list(self.available_model_names())[0])
+        self._current_model_name = str(list(self.available_model_names())[1])
 
-    def get_available_model(self, model_name: str) -> LLMBaseModel:
+    def get_available_model(self, model_name: str) -> LLMGeminiBaseModel:
         return self._available_models[model_name]
 
     def available_model_names(self) -> List[str]:
@@ -20,8 +28,8 @@ class LLMGeminiFamily(LLMBaseFamily):
 
     def update_available_model(self, model):
         self._available_models[str(model)] = model
-        
-    def current_model(self) -> LLMBaseModel:
+
+    def current_model(self) -> LLMGeminiBaseModel:
         return self._available_models[self.current_model_name()]
 
     def current_model_name(self) -> str:

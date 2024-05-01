@@ -14,6 +14,16 @@ def show_header(page_idx):
         page_icon=pages[page_idx]["icon"],
         layout="wide",
         initial_sidebar_state="collapsed",
+        menu_items={
+            # 'Linkedin': 'https://www.linkedin.com/in/-jose-ribeiro-/',
+            # 'Github Contact': "https://github.com/joe-stifler",
+            'About': """
+- [LinkedIn](https://www.linkedin.com/in/-jose-ribeiro-)
+- [GitHub](https://github.com/joe-stifler)
+
+---
+            """
+        }
     )
 
     # columns = st.columns([1, 1, 1], gap="large")

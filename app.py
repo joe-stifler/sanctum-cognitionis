@@ -3,7 +3,8 @@ from praesentatio_cognitionis.header import show_header
 show_header(0)
 
 # module imports from the servitium_cognitionis package
-from servitium_cognitionis.llms import LLMFamily
+from servitium_cognitionis.llms.mock import LLMMockFamily
+from servitium_cognitionis.llms.gemini import LLMGeminiFamily
 
 # module imports from the standard python environment
 import os
@@ -14,6 +15,8 @@ import vertexai
 import google.auth
 import streamlit as st
 from langchain_core.messages import HumanMessage, AIMessage
+from streamlit_extras.stylable_container import stylable_container
+from praesentatio_cognitionis.fixed_container import st_fixed_container
 
 def check_password():
     """Returns `True` if the user had a correct password."""
@@ -49,17 +52,71 @@ def check_password():
     return False
 
 
-if not check_password():
-    st.stop()
+# if not check_password():
+#     st.stop()
+
+def barfi_demo():
+    from barfi import barfi_schemas, Block, st_barfi
+
+    feed = Block(name='Feed')
+    feed.add_output()
+    def feed_func(self):
+        self.set_interface(name='Output 1', value=4)
+    feed.add_compute(feed_func)
+
+    splitter = Block(name='Splitter')
+    splitter.add_input()
+    splitter.add_output()
+    splitter.add_output()
+    def splitter_func(self):
+        in_1 = self.get_interface(name='Input 1')
+        value = (in_1/2)
+        self.set_interface(name='Output 1', value=value)
+        self.set_interface(name='Output 2', value=value)
+    splitter.add_compute(splitter_func)
+
+    mixer = Block(name='Mixer')
+    mixer.add_input()
+    mixer.add_input()
+    mixer.add_output()
+    def mixer_func(self):
+        in_1 = self.get_interface(name='Input 1')
+        in_2 = self.get_interface(name='Input 2')
+        value = (in_1 + in_2)
+        self.set_interface(name='Output 1', value=value)
+    mixer.add_compute(mixer_func)
+
+    result = Block(name='Result')
+    result.add_input()
+    def result_func(self):
+        in_1 = self.get_interface(name='Input 1')
+    result.add_compute(result_func)
+
+    load_schema = st.selectbox('Select a saved schema:', barfi_schemas())
+
+    compute_engine = st.checkbox('Activate barfi compute engine', value=False)
+
+    barfi_result = st_barfi(base_blocks=[feed, result, mixer, splitter],
+                        compute_engine=compute_engine, load_schema=load_schema)
+
+    if barfi_result:
+        st.write(barfi_result)
+
+
 
 ################################################################################
 
-def maybe_st_initialize_state():
+def maybe_st_initialize_state(use_dummy_llm=False):
     if "llm_families" not in st.session_state:
+        llm_families = [
+            LLMMockFamily(),
+            LLMGeminiFamily()
+        ]
+
         st.session_state["llm_families"] = {
-            str(family.value): family.value for family in LLMFamily
+            llm_family_idx: llm_family for llm_family_idx, llm_family in enumerate(llm_families)
         }
-        st.session_state["chosen_llm_family"] = str(LLMFamily.VERTEXAI_GEMINI)
+        st.session_state["chosen_llm_family_idx"] = 0 if use_dummy_llm else 1
 
     if "persona_settings" not in st.session_state:
         default_persona_description_path = 'personas/professores/redacao/dani-stella/persona_dani_stella.md'
@@ -70,13 +127,13 @@ def maybe_st_initialize_state():
         st.session_state["persona_settings"] = {
             "persona_name": "Dani Stella",
             "persona_files": [
-                "personas/professores/redacao/dani-stella/conectivos.md",
-                "personas/professores/redacao/dani-stella/operadores-argumentativos.md",
-                "personas/professores/redacao/dani-stella/generos-do-discurso.md",
-                "databases/redacao/unicamp/unicamp_redacoes_candidatos.json",
-                "databases/redacao/unicamp/unicamp_redacoes_propostas.json",
-                "personas/professores/redacao/dani-stella/a_redacao_na_unicamp.md",
-                "personas/professores/redacao/dani-stella/informacoes_importantes_sobre_a_redacao_unicamp.md",
+                # "personas/professores/redacao/dani-stella/conectivos.md",
+                # "personas/professores/redacao/dani-stella/operadores-argumentativos.md",
+                # "personas/professores/redacao/dani-stella/generos-do-discurso.md",
+                # "databases/redacao/unicamp/unicamp_redacoes_candidatos.json",
+                # "databases/redacao/unicamp/unicamp_redacoes_propostas.json",
+                # "personas/professores/redacao/dani-stella/a_redacao_na_unicamp.md",
+                # "personas/professores/redacao/dani-stella/informacoes_importantes_sobre_a_redacao_unicamp.md",
             ],
             
             "persona_description": default_persona_description
@@ -122,7 +179,7 @@ def convert_files_to_str(files_path: str):
 
 
 def get_ai_chat():
-    llm_family = st.session_state["llm_families"][st.session_state["chosen_llm_family"]]
+    llm_family = st.session_state["llm_families"][st.session_state["chosen_llm_family_idx"]]
     persona_name = st.session_state["persona_settings"]["persona_name"]
     persona_name=f':red[{persona_name}]'
 
@@ -146,13 +203,12 @@ class ChatHistory:
         self.session_id = session_id
         self.user_name = ":blue[estudante]"
         self.ai_base_prompt = ai_base_prompt
-        self.ai_chat = None
         self.ai_model = None
 
     def initialize_chat(self):
         self.ai_model = self.llm_family.current_model()
         self.ai_model.initialize_model()
-        self.ai_chat = self.ai_model.start_chat()
+        self.ai_model.create_chat(self.session_id)
         return self.send_ai_message(self.ai_base_prompt)
 
     def add_new_ai_message(self, ai_message, **kwargs):
@@ -162,9 +218,9 @@ class ChatHistory:
 
     def send_ai_message(self, user_message):
         user_message = f"mensagem do usuário: {user_message}"
-        ai_response_stream = self.ai_chat.send_message(user_message, stream=True)
-        
-        for text_message, ai_message_args in self.ai_model.process_ai_response_stream(ai_response_stream):
+        ai_response_stream = self.ai_model.send_stream_chat_message(self.session_id, user_message)
+
+        for text_message, ai_message_args in ai_response_stream:
             self.add_new_ai_message(text_message, **ai_message_args)
             yield text_message
 
@@ -193,7 +249,7 @@ class ChatHistory:
 class ChatConnector:
     def __init__(self):
         self.chats = {}
-        
+
     def create_chat_history(self):
         session_id = str(uuid.uuid4().hex)
         print("Length of chats", len(self.chats))
@@ -210,46 +266,104 @@ class ChatConnector:
             assert False, f"Chat with session_id {session_id} not found"
         return self.chats[session_id]
 
+
 @st.cache_resource
 def create_chat_connector():
     return ChatConnector()
 
+@st.experimental_fragment
+def chat_messages(chat_connector, user_input_message):
+    if "session_id" not in st.session_state:
+        chat_history = chat_connector.create_chat_history()
+    else:
+        chat_history = chat_connector.fetch_chat_history(st.session_state["session_id"])
+
+    # Display chat history messages
+    for role, avatar, message in chat_history.get_chat_messages():
+        with st.chat_message(role, avatar=avatar):
+            st.markdown(message)
+
+    if len(chat_history.get_chat_messages()) == 0:
+        with st.spinner("Inicializando o modelo..."):
+            ai_response = chat_history.initialize_chat()
+            with st.chat_message("assistant", avatar="👩🏽‍🏫"):
+                st.write_stream(ai_response)
+
+    # Display user message
+    with st.chat_message("user", avatar="👩🏾‍🎓"):
+        st.write(user_input_message)
+
+    # Send user message to AI inference
+    ai_response = chat_history.send_user_message(user_input_message)
+
+    # Display AI response
+    with st.spinner("Processando resposta..."):
+        with st.chat_message("assistant", avatar="👩🏽‍🏫"):
+            st.write_stream(ai_response)
+
+@st.experimental_fragment
+def file_uploader():
+    with stylable_container(
+        key="file_uploader_container",
+        css_styles="""
+            section[data-testid='stFileUploaderDropzone']:active {
+                width: 100%;
+                pointer-events: none;
+            }
+            section[data-testid='stFileUploaderDropzone']:hover {
+                width: 100%;
+                cursor: grab;
+                opacity: 0.2;
+                content: "Arraste um arquivo aqui";
+            }
+            section[data-testid='stFileUploaderDropzone'] {
+                cursor: unset;
+                height: 2.5rem;
+                opacity: 0;
+            }
+            div[data-testid='stFileUploaderDropzoneInstructions'] {
+                visibility: hidden;
+            }
+            button[data-testid='baseButton-secondary'] {
+                visibility: hidden;
+            }
+        """,
+    ):
+        st.file_uploader("Upload de arquivos", accept_multiple_files=True, label_visibility="collapsed")
 
 def main():
-    maybe_st_initialize_state()
+    maybe_st_initialize_state(use_dummy_llm=False)
 
     chat_connector = create_chat_connector()
 
-    if user_message := st.chat_input("Digite sua pergunta aqui..."):
-        if "session_id" not in st.session_state:
-            chat_history = chat_connector.create_chat_history()
-        else:
-            chat_history = chat_connector.fetch_chat_history(st.session_state["session_id"])
+    with st_fixed_container(id="file_uploader", mode="fixed", position="bottom", border=False, margin="6.2rem"):
+        file_uploader()
 
-        # Display chat history messages
-        for role, avatar, message in chat_history.get_chat_messages():
-            with st.chat_message(role, avatar=avatar):
-                st.markdown(message)
+    user_input_message = st.chat_input("Digite sua mensagem ou arraste arquivos acima")
 
-        if len(chat_history.get_chat_messages()) == 0:
-            with st.spinner("Inicializando o modelo..."):
-                ai_response = chat_history.initialize_chat()
-                with st.chat_message("assistant", avatar="👩🏽‍🏫"):
-                    st.write_stream(ai_response)
+    with st_fixed_container(mode="fixed", position="top", border=False, margin="2.9rem"):
+            config = st.expander("Configurações do chat", expanded=False)
+            width = 50
+            width = max(width, 0.01)
+            side = max((100 - width) / 2, 0.01)
+            
+            with config:
+                _, container, _ = st.columns([side, width, side])
+                
+                with container:
+                    # embed streamlit docs in a streamlit app
+                    st.video("https://www.youtube.com/watch?v=Gcm-tOGiva0")
 
-        # Display user message
-        with st.chat_message("user", avatar="👩🏾‍🎓"):
-            st.write(user_message)
+    if user_input_message:
+        with stylable_container(
+            key="chat_container2",
+            css_styles="""
+                {   
+                    margin-top: 5px;
+                    margin-bottom: 40px;
+                }
+                """,
+        ):
+            chat_messages(chat_connector, user_input_message)
 
-        # Send user message to AI inference
-        ai_response = chat_history.send_user_message(user_message)
-
-        # Display AI response
-        with st.spinner("Processando resposta..."):
-            with st.chat_message("assistant", avatar="👩🏽‍🏫"):
-                st.write_stream(ai_response)
-    else:
-        st.info("Digite uma mensagem para iniciar o chat.")
-
-if __name__ == "__main__":
-    main()
+main()

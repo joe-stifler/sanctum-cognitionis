@@ -48,5 +48,9 @@ class LLMBaseModel(ABC):
         pass
     
     @abstractmethod
-    def start_chat(self):
+    def create_chat(self, session_id):
+        pass
+
+    @abstractmethod
+    def send_stream_chat_message(self, session_id, message):
         pass
