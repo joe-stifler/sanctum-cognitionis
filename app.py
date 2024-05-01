@@ -55,53 +55,84 @@ def check_password():
 # if not check_password():
 #     st.stop()
 
-def barfi_demo():
-    from barfi import barfi_schemas, Block, st_barfi
 
-    feed = Block(name='Feed')
-    feed.add_output()
-    def feed_func(self):
-        self.set_interface(name='Output 1', value=4)
-    feed.add_compute(feed_func)
 
-    splitter = Block(name='Splitter')
-    splitter.add_input()
-    splitter.add_output()
-    splitter.add_output()
-    def splitter_func(self):
-        in_1 = self.get_interface(name='Input 1')
-        value = (in_1/2)
-        self.set_interface(name='Output 1', value=value)
-        self.set_interface(name='Output 2', value=value)
-    splitter.add_compute(splitter_func)
+pc = st.get_option('theme.primaryColor')
+bc = st.get_option('theme.backgroundColor')
+sbc = st.get_option('theme.secondaryBackgroundColor')
+tc = st.get_option('theme.textColor')
 
-    mixer = Block(name='Mixer')
-    mixer.add_input()
-    mixer.add_input()
-    mixer.add_output()
-    def mixer_func(self):
-        in_1 = self.get_interface(name='Input 1')
-        in_2 = self.get_interface(name='Input 2')
-        value = (in_1 + in_2)
-        self.set_interface(name='Output 1', value=value)
-    mixer.add_compute(mixer_func)
+styl = """
+div[data-testid='stExpander'] {{
+    position: fixed;
+    top: 2.9rem;
+    width: inherit;
+    z-index: 99999;
+    background-color: {background_color};
+    color: {text_color};
+}}
+.stChatInput {{
+    position: fixed;
+    bottom: 2rem;
+    z-index:4;
+}}
+div[data-testid='stFileUploaderDropzoneInstructions'] {{
+    visibility: hidden;
+    position: fixed;
+}}
+button[data-testid='baseButton-secondary'] {{
+    visibility: hidden;
+}}
+div[data-testid='stFileUploaderDropzoneInstructions']::after {{
+    visibility: visible;
+    position: absolute;
+    content: "📁 Arraste arquivos aqui";
+}}
+section[data-testid='stFileUploaderDropzone'] {{
+    cursor: unset;
+    height: 3rem;
+    align-content: center;
+}}
+section[data-testid='stFileUploaderDropzone']:active {{
+    align-content: center;
+    color: {text_color};
+}}
+div[data-testid='stFileUploader'] {{
+    position: fixed;
+    bottom: 5rem;
+    width: inherit;
+    z-index:3;
+    border-radius: 3rem;
+    background-color: {background_color};
+    color: {text_color};
+}}
+div[data-testid='stFileUploader']:hover {{
+    cursor: pointer;
+    opacity: 1;
+    rounded: 1rem;
+    background-color: {background_color};
+    color: {text_color};
+}}
 
-    result = Block(name='Result')
-    result.add_input()
-    def result_func(self):
-        in_1 = self.get_interface(name='Input 1')
-    result.add_compute(result_func)
+@media screen and (max-width: 900px) {{
+    div[data-testid='stExpander'] {{
+        z-index: 99999;
+    }}
+    .stChatInput {{
+        z-index: 99998;
+    }}
+    div[data-testid='stFileUploader'] {{
+        z-index: 99997;
+    }}
+}}
+"""
 
-    load_schema = st.selectbox('Select a saved schema:', barfi_schemas())
+styl = "<style>" + styl.format(
+    background_color=sbc,
+    text_color=tc
+) + "</style>"
 
-    compute_engine = st.checkbox('Activate barfi compute engine', value=False)
-
-    barfi_result = st_barfi(base_blocks=[feed, result, mixer, splitter],
-                        compute_engine=compute_engine, load_schema=load_schema)
-
-    if barfi_result:
-        st.write(barfi_result)
-
+st.markdown(styl, unsafe_allow_html=True)
 
 
 ################################################################################
@@ -273,97 +304,59 @@ def create_chat_connector():
 
 @st.experimental_fragment
 def chat_messages(chat_connector, user_input_message):
-    if "session_id" not in st.session_state:
-        chat_history = chat_connector.create_chat_history()
-    else:
+    if "session_id" in st.session_state:
         chat_history = chat_connector.fetch_chat_history(st.session_state["session_id"])
 
-    # Display chat history messages
-    for role, avatar, message in chat_history.get_chat_messages():
-        with st.chat_message(role, avatar=avatar):
-            st.markdown(message)
+        # Display chat history messages
+        for role, avatar, message in chat_history.get_chat_messages():
+            with st.chat_message(role, avatar=avatar):
+                st.markdown(message)
 
-    if len(chat_history.get_chat_messages()) == 0:
-        with st.spinner("Inicializando o modelo..."):
-            ai_response = chat_history.initialize_chat()
+    if user_input_message:
+        if "session_id" not in st.session_state:
+            chat_history = chat_connector.create_chat_history()
+
+        if len(chat_history.get_chat_messages()) == 0:
+            with st.spinner("Inicializando o modelo..."):
+                ai_response = chat_history.initialize_chat()
+                with st.chat_message("assistant", avatar="👩🏽‍🏫"):
+                    st.write_stream(ai_response)
+
+        # Display user message
+        with st.chat_message("user", avatar="👩🏾‍🎓"):
+            st.write(user_input_message)
+
+        # Send user message to AI inference
+        ai_response = chat_history.send_user_message(user_input_message)
+
+        # Display AI response
+        with st.spinner("Processando resposta..."):
             with st.chat_message("assistant", avatar="👩🏽‍🏫"):
                 st.write_stream(ai_response)
 
-    # Display user message
-    with st.chat_message("user", avatar="👩🏾‍🎓"):
-        st.write(user_input_message)
-
-    # Send user message to AI inference
-    ai_response = chat_history.send_user_message(user_input_message)
-
-    # Display AI response
-    with st.spinner("Processando resposta..."):
-        with st.chat_message("assistant", avatar="👩🏽‍🏫"):
-            st.write_stream(ai_response)
-
-@st.experimental_fragment
-def file_uploader():
-    with stylable_container(
-        key="file_uploader_container",
-        css_styles="""
-            section[data-testid='stFileUploaderDropzone']:active {
-                width: 100%;
-                pointer-events: none;
-            }
-            section[data-testid='stFileUploaderDropzone']:hover {
-                width: 100%;
-                cursor: grab;
-                opacity: 0.2;
-                content: "Arraste um arquivo aqui";
-            }
-            section[data-testid='stFileUploaderDropzone'] {
-                cursor: unset;
-                height: 2.5rem;
-                opacity: 0;
-            }
-            div[data-testid='stFileUploaderDropzoneInstructions'] {
-                visibility: hidden;
-            }
-            button[data-testid='baseButton-secondary'] {
-                visibility: hidden;
-            }
-        """,
-    ):
-        st.file_uploader("Upload de arquivos", accept_multiple_files=True, label_visibility="collapsed")
-
 def main():
-    maybe_st_initialize_state(use_dummy_llm=False)
+    maybe_st_initialize_state(use_dummy_llm=True)
 
     chat_connector = create_chat_connector()
 
-    with st_fixed_container(id="file_uploader", mode="fixed", position="bottom", border=False, margin="6.2rem"):
-        file_uploader()
+    with st.container():
+        st.file_uploader("Upload de arquivos", accept_multiple_files=True, label_visibility="collapsed")
 
-    user_input_message = st.chat_input("Digite sua mensagem ou arraste arquivos acima")
+    user_input_message = st.chat_input("Digite sua mensagem aqui")
 
-    with st_fixed_container(mode="fixed", position="top", border=False, margin="2.9rem"):
-            config = st.expander("Configurações do chat", expanded=False)
-            width = 50
-            width = max(width, 0.01)
-            side = max((100 - width) / 2, 0.01)
-            
-            with config:
-                _, container, _ = st.columns([side, width, side])
-                
-                with container:
-                    # embed streamlit docs in a streamlit app
-                    st.video("https://www.youtube.com/watch?v=Gcm-tOGiva0")
+    # width = 50
+    # width = max(width, 0.01)
+    # side = max((100 - width) / 2, 0.01)
+    # _, container, _ = st.columns([side, width, side])
 
-    if user_input_message:
-        with stylable_container(
-            key="chat_container2",
-            css_styles="""
-                {   
-                    margin-top: 5px;
-                    margin-bottom: 40px;
-                }
-                """,
-        ):
-            chat_messages(chat_connector, user_input_message)
+    with st.expander("Configurações do chat", expanded=False):
+        st.write("Configurações do chat")
+
+    chat_messages(chat_connector, user_input_message)
+
+    st.divider()
+    st.write("")
+    st.write("")
+
 
 main()
