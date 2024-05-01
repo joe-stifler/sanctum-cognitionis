@@ -19,3 +19,6 @@ streamlit-extras===0.4.2
 streamlit-embedcode
 barfi
 notion-client===2.2.1
+opencv-python===4.9.0.80
+pytesseract===0.3.10
+deskew===1.5.1

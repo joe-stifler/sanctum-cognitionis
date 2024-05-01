@@ -9,12 +9,12 @@ class LLMGeminiBaseModel(LLMBaseModel):
         self._model_instance = None
         self._model_chats = {}
 
-    def initialize_model(self, system_instruction=[]):
+    def initialize_model(self, system_instruction=[], temperature=None, max_output_tokens=None):
         self._model_instance = GenerativeModel(
             model_name=self.name,
             generation_config={
-                "temperature": self.temperature,
-                "max_output_tokens": self.max_output_tokens
+                "temperature": temperature if temperature else self.temperature,
+                "max_output_tokens": max_output_tokens if max_output_tokens else self.max_output_tokens,
             },
             system_instruction=system_instruction,
             safety_settings = {
@@ -74,7 +74,6 @@ class LLMGeminiBaseModel(LLMBaseModel):
                 })
 
                 text_message = candidate.text if hasattr(candidate, "text") else ""
-                print("Ai finish reason:", candidate.finish_reason)
 
                 if not hasattr(candidate, "finish_reason") or candidate.finish_reason is None:
                     pass
@@ -89,11 +88,9 @@ class LLMGeminiBaseModel(LLMBaseModel):
                     text_message += "\n\n:red[Erro: A resposta contém citações não autorizadas.]\n\n"
                     text_message += ":yellow[Tente reformular a mensagem e enviar novamente]"
                 yield text_message, new_ai_message_args
-                print("\n\n-----------\n\n")
         except Exception as e:
             text_message = f":red[Erro ao processar a mensagem: {e}]"
             yield text_message, new_ai_message_args
-            print(f"Erro ao enviar mensagem para a IA: {e}")
 
 class LLMGeminiModel1_5Pro(LLMGeminiBaseModel):
     def __init__(self, temperature=0.1, max_output_tokens=8192):

@@ -5,16 +5,43 @@ show_header(0)
 # module imports from the servitium_cognitionis package
 from servitium_cognitionis.llms.mock import LLMMockFamily
 from servitium_cognitionis.llms.gemini import LLMGeminiFamily
+from servitium_cognitionis.personas.persona_base import Persona
 
 # module imports from the standard python environment
 import os
 import hmac
 import time
 import uuid
+import logging
 import vertexai
 import google.auth
 import streamlit as st
 from langchain_core.messages import HumanMessage, AIMessage
+
+def setup_logger():
+    # Create a custom logger
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.DEBUG)  # Set the minimum level of messages to log
+
+    # Create handlers for stdout and file
+    c_handler = logging.StreamHandler()  # Console handler
+    f_handler = logging.FileHandler('app.log', mode='a')  # File handler
+    c_handler.setLevel(logging.INFO)  # Level for console handler
+    f_handler.setLevel(logging.DEBUG)  # Level for file handler
+
+    # Create formatters and add them to handlers
+    c_format = logging.Formatter('%(name)s - %(levelname)s - %(message)s')
+    f_format = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+    c_handler.setFormatter(c_format)
+    f_handler.setFormatter(f_format)
+
+    # Add handlers to the logger
+    logger.addHandler(c_handler)
+    logger.addHandler(f_handler)
+
+    return logger
+
+logger = setup_logger()
 
 def check_password():
     """Returns `True` if the user had a correct password."""
@@ -139,34 +166,11 @@ st.markdown(styl, unsafe_allow_html=True)
 
 ################################################################################
 
-def maybe_st_initialize_state(use_dummy_llm=False):
-    if "llm_families" not in st.session_state:
-        llm_families = [
-            LLMMockFamily(),
-            LLMGeminiFamily()
-        ]
-
-        st.session_state["llm_families"] = {
-            llm_family_idx: llm_family for llm_family_idx, llm_family in enumerate(llm_families)
-        }
-        st.session_state["chosen_llm_family_idx"] = 0 if use_dummy_llm else 1
-
+def maybe_st_initialize_state():
     if "persona_settings" not in st.session_state:
-        st.session_state["persona_settings"] = {
-            "persona_name": "Dani Stella",
-            "persona_file_paths": [
-                "personas/professores/redacao/dani-stella/knowledge/conectivos.md",
-                "personas/professores/redacao/dani-stella/knowledge/operadores-argumentativos.md",
-                "personas/professores/redacao/dani-stella/knowledge/generos-do-discurso.md",
-                "databases/unicamp/redacao/unicamp_redacoes_candidatos.json",
-                "databases/unicamp/redacao/unicamp_redacoes_propostas.json",
-                "personas/professores/redacao/dani-stella/knowledge/a_redacao_na_unicamp.md",
-                "personas/professores/redacao/dani-stella/knowledge/informacoes_importantes_sobre_a_redacao_unicamp.md",
-            ],
-            "persona_description_path": 'personas/professores/redacao/dani-stella/persona_description.md'
-        }
-
-        print("Session state:", st.session_state)
+        st.session_state["persona_settings_path"] = "dados/personas/professores/redacao/dani-stella/persona_config.json"
+        
+        logger.info("Setting persona settings path to: %s", st.session_state["persona_settings_path"])
 
     key_path = ".streamlit/google_secrets.json"
 
@@ -193,65 +197,50 @@ def maybe_st_initialize_state(use_dummy_llm=False):
     vertexai.init(project=project_id, location=gemini_cloud_location)
 
 
-def convert_files_to_str(files_path: str):
-    files_content = "## Arquivos disponíveis na base de conhecimento do professor(a):\n\n"
-    files_content += "--------------------------------------------------------\n\n"
-
-    for file_path in files_path:
-        files_content += f"### Conteúdo do arquivo `{file_path}`:\n\n"
-
-        extension = file_path.split(".")[-1]
-        with open(file_path, "r", encoding='utf-8') as file:
-            files_content += f"```{extension}\n" + file.read() + "\n```\n\n"
-
-    return files_content
-
-
 def get_ai_chat():
-    llm_family = st.session_state["llm_families"][st.session_state["chosen_llm_family_idx"]]
-    persona_name = st.session_state["persona_settings"]["persona_name"]
-    persona_name=f':red[{persona_name}]'
+    persona_settings_path = st.session_state["persona_settings_path"]
+    persona = Persona.from_json(persona_settings_path)
 
-    persona_description_path = st.session_state["persona_settings"]["persona_description_path"]
+    llm_family = None
+    if persona.thinking_style == "LLMGeminiFamily":
+        llm_family = LLMGeminiFamily()
+        logger.info("Using LLMGeminiFamily")
+    elif persona.thinking_style == "LLMMockFamily":
+        llm_family = LLMMockFamily()
+        logger.info("Using LLMMockFamily")
 
-    with open(persona_description_path, 'r', encoding='utf-8') as file:
-        persona_description = file.read()
+    llm_model = llm_family.get_model(persona.thought_process)
 
-    persona_file_paths = st.session_state["persona_settings"]["persona_file_paths"]
-    persona_file_paths_str = convert_files_to_str(persona_file_paths)
-    prompt_with_files_str = f"{persona_file_paths_str}\n\n---\n\n{persona_description}"
-
-    ai_base_prompt = prompt_with_files_str
-
-    return llm_family, ai_base_prompt
+    return llm_model, persona
 
 
 class ChatHistory:
-    def __init__(self, session_id, llm_family, ai_base_prompt):
+    def __init__(self, session_id, llm_model, persona):
+        self.persona = persona
         self.chat_messages = []
         self.user_avatar = "👩🏾‍🎓"
-        self.ai_avatar = "👩🏽‍🏫"
-        self.ai_name = ":orange[IA]"
-        self.llm_family = llm_family
+        self.llm_model = llm_model
         self.session_id = session_id
-        self.user_name = ":blue[estudante]"
-        self.ai_base_prompt = ai_base_prompt
-        self.ai_model = None
 
     def initialize_chat(self):
-        self.ai_model = self.llm_family.current_model()
-        self.ai_model.initialize_model()
-        self.ai_model.create_chat(self.session_id)
-        return self.send_ai_message(self.ai_base_prompt)
+        self.llm_model.initialize_model(
+            temperature=self.persona.creativity_level,
+            max_output_tokens=self.persona.speech_conciseness,
+        )
+        self.llm_model.create_chat(self.session_id)
+        persona_initial_state = self.persona.present_initial_state()
+        return self.send_ai_message(persona_initial_state)
 
     def add_new_ai_message(self, ai_message, **kwargs):
-        print("Adding new AI message:", ai_message)
-        print("With kwargs:", kwargs, "\n\n")
+        logger.debug("Adding new AI message: %s", ai_message)
+        logger.debug("With kwargs: %s", kwargs)
+        logger.debug("\n\n")
         self.chat_messages.append(AIMessage(ai_message, **kwargs))
 
     def send_ai_message(self, user_message):
+        logger.debug("Sending user message to ai: %s", user_message)
         user_message = f"mensagem do usuário: {user_message}"
-        ai_response_stream = self.ai_model.send_stream_chat_message(self.session_id, user_message)
+        ai_response_stream = self.llm_model.send_stream_chat_message(self.session_id, user_message)
 
         for text_message, ai_message_args in ai_response_stream:
             self.add_new_ai_message(text_message, **ai_message_args)
@@ -275,7 +264,7 @@ class ChatHistory:
                 while message_pos < len(self.chat_messages) and not isinstance(self.chat_messages[message_pos], HumanMessage):
                     message_content += self.chat_messages[message_pos].content
                     message_pos += 1
-                messages.append(("assistant", self.ai_avatar, message_content))
+                messages.append(("assistant", self.persona.avatar, message_content))
         return messages
 
 
@@ -285,12 +274,14 @@ class ChatConnector:
 
     def create_chat_history(self):
         session_id = str(uuid.uuid4().hex)
-        print("Length of chats", len(self.chats))
-        print("Creating chat history with session_id", session_id)
-        st.session_state["session_id"] = session_id
+        llm_model, persona = get_ai_chat()
+        logger.info("Chosen Persona: %s", persona)
+        logger.info("Chosen LLM Model: %s", llm_model)
 
-        llm_family, ai_base_prompt = get_ai_chat()
-        self.chats[session_id] = ChatHistory(session_id, llm_family, ai_base_prompt)
+        logger.info("Length of chats: %s", len(self.chats))
+        logger.info("Creating chat history with session_id: %s", session_id)
+        st.session_state["session_id"] = session_id
+        self.chats[session_id] = ChatHistory(session_id, llm_model, persona)
 
         return self.chats[session_id]
 
@@ -302,6 +293,7 @@ class ChatConnector:
 
 @st.cache_resource
 def create_chat_connector():
+    logger.info("Creating chat connector")
     return ChatConnector()
 
 @st.experimental_fragment
@@ -315,8 +307,6 @@ def chat_messages(chat_connector, user_input_message):
                 st.markdown(message)
 
     if user_input_message:
-        print("User input message:", user_input_message)
-
         if "session_id" not in st.session_state:
             chat_history = chat_connector.create_chat_history()
 
@@ -339,8 +329,7 @@ def chat_messages(chat_connector, user_input_message):
                 st.write_stream(ai_response)
 
 def main():
-    maybe_st_initialize_state(use_dummy_llm=False)
-
+    maybe_st_initialize_state()
     chat_connector = create_chat_connector()
 
     with st.container():
