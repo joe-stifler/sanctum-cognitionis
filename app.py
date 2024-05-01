@@ -15,8 +15,6 @@ import vertexai
 import google.auth
 import streamlit as st
 from langchain_core.messages import HumanMessage, AIMessage
-from streamlit_extras.stylable_container import stylable_container
-from praesentatio_cognitionis.fixed_container import st_fixed_container
 
 def check_password():
     """Returns `True` if the user had a correct password."""
