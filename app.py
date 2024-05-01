@@ -315,6 +315,8 @@ def chat_messages(chat_connector, user_input_message):
                 st.markdown(message)
 
     if user_input_message:
+        print("User input message:", user_input_message)
+
         if "session_id" not in st.session_state:
             chat_history = chat_connector.create_chat_history()
 

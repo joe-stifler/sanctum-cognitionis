@@ -23,3 +23,11 @@ output
 .env
 secrets.toml
 estatisticas/
+
+!databases/**/*.csv
+!databases/**/*.json
+
+!personas/**/*.csv
+!personas/**/*.json
+!personas/**/*.md
+!personas/**/*.txt
