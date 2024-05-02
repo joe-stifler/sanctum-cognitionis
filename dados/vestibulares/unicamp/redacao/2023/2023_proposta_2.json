@@ -1,0 +1,102 @@
+{
+    "propostas": {
+      "id": 4,
+      "numero": 2,
+      "ano": 2023,
+      "interlocutores": {
+        "enunciador_i": "Estudante do terceiro ano do ensino médio",
+        "interlocutor_i": "Direção da escola",
+        "mascara_discursiva_i": "Estudante engajado na construção de uma escola antirracista"
+      },
+      "situacao_problema_s": "Projeto de educação antirracista da escola e a necessidade de ouvir os depoimentos da comunidade escolar sobre a discriminação racial",
+      "tema": "Educação antirracista e o combate ao racismo no ambiente escolar",
+      "recorte_tematico": "O racismo no ambiente escolar e as possibilidades de uma educação antirracista que promova a igualdade racial e o respeito à diversidade",
+      "genero_g": "Depoimento",
+      "construcao_composicional": "Introdução com apresentação pessoal e contextualização, desenvolvimento com relato de experiências pessoais ou observações sobre o racismo na escola, conclusão com sugestões para o projeto de educação antirracista",
+      "tipologia_textual": "Predominantemente narrativa, com elementos argumentativos e expositivos",
+      "projeto_texto": "Compartilhar a experiência pessoal do enunciador sobre o racismo na escola e contribuir para a construção de um projeto de educação antirracista",
+      "leitura_textos_coletanea": "O candidato deve utilizar os textos da coletânea para compreender o conceito de racismo, suas manifestações no ambiente escolar e as possibilidades de uma educação antirracista",
+      "escolhas_lexicais_sintaticas": "Adequação ao registro formal de um depoimento, com vocabulário preciso e que demonstre conhecimento sobre o tema",
+      "recursos_coesivos": "Uso de conectivos e recursos de sequenciação para narrar as experiências e articular as reflexões",
+      "norma_culta": "Domínio da norma culta contemporânea",
+      "estilo": "Pessoal, reflexivo e crítico",
+      "originalidade": "O candidato deve narrar experiências pessoais ou observações originais sobre o racismo na escola",
+      "pertinencia": "As experiências e reflexões devem ser pertinentes ao tema do racismo e à proposta de educação antirracista",
+      "observacoes": "O candidato deve demonstrar empatia, senso crítico e capacidade de propor soluções para o problema do racismo na escola",
+      "data_criacao": "2023-11-07", 
+      "data_ultima_edicao": "2023-11-07",
+      "enunciado": {
+        "situacao_inicial": "O colégio em que você estuda decidiu lançar um projeto de educação antirracista. Antes de elaborar tal projeto, a direção resolveu escutar estudantes, familiares, professoras/es e funcionárias/os sobre a questão da discriminação racial no espaço escolar. Solicitou, então, que cada um desses membros da comunidade escolar enviasse um depoimento, a ser mantido em sigilo.",
+        "tarefa": {
+          "texto": "Decidida/o a contribuir com esse projeto e compartilhar a sua experiência como estudante do terceiro ano do ensino médio, você enviará o seu depoimento, no qual deve",
+          "itens": [
+            {
+                "item": "**a**",
+                "texto": "declarar como se identifica racialmente;"
+            },
+            {
+                "item": "**b**",
+                "texto": "relatar se já presenciou, cometeu ou sofreu algum ato de racismo dentro do colégio e"
+            },
+            {
+                "item": "**c**",
+                "texto": "explicar como a diversidade étnico-racial é tratada nesse espaço escolar: no currículo, ou nos conflitos cotidianos, ou na contratação de professoras/es, ou na presença de alunas/os negras/os."
+            }
+          ],
+          "instrucoes_adicionais": "O seu texto deve, obrigatoriamente, levar em conta a coletânea a seguir." 
+        }
+      },
+      "coletanea": [
+        {
+          "numero": 1,
+          "genero": "Verbete de dicionário",
+          "autor": "Dicionário Caldas Aulete",
+          "data_acesso": "01/09/2022",
+          "disponibilidade": "https://www.aulete.com.br/antirracismo",
+          "conteudo_textual": "Antirracismo: postura, sentimento, movimento, conceito de oposição ao racismo.",
+          "tipo_texto": "Expositivo",
+          "palavras_chave": ["antirracismo", "racismo", "oposição", "movimento"]
+        },
+        {
+          "numero": 2,
+          "genero": "Entrevista",
+          "autor": "Ednéia Gonçalves",
+          "data_acesso": "Não informado",
+          "disponibilidade": "Centro de Referências em Educação Integral",
+          "conteudo_textual": "“As escolas trazem o racismo como uma questão entre duas pessoas, confundindo-o com bullying. Não o enxergam como um sistema que se retroalimenta e se reinventa”, explica Ednéia Gonçalves, diretora-executiva adjunta da Ação Educativa. Pensar uma educação antirracista envolve tratar da relação entre duas pessoas, mas também de permitir que todos tenham sua identidade e história acolhidas no espaço escolar. E o processo de acolhimento e de reconhecimento das identidades requer que a escola repense todas as suas dimensões: curricular, formativa, de atendimento, avaliação, material didático, arquitetura e rotina. Se a escola não tiver um trabalho constante, sério e intencional de autoestima, autocuidado, de valorização da cultura negra, vai ser muito difícil as pessoas se identificarem como negras. As escolas estão avançando, mas o racismo aparece muito nas dobras. Quando você esgarça, ele pula”, alerta Ednéia.",
+          "tipo_texto": "Expositivo e argumentativo",
+          "palavras_chave": ["educação antirracista", "racismo", "bullying", "identidade", "cultura negra"]
+        },
+        {
+          "numero": 3,
+          "genero": "História em Quadrinhos (tirinha)",
+          "autor": "Não informado",
+          "data_acesso": "Não informado",
+          "disponibilidade": "Não informado",
+          "conteudo_textual": "* Primeiro Quadrinho:\nUma personagem com boné vermelho, cabelo verde e blusa listrada está sentada a uma mesa e levanta a mão direita.\nEla parece estar em uma sala de aula ou ambiente semelhante, pois há uma lousa atrás dela.\nA personagem parece estar pedindo um lápis cor de pelo pois está escrito no quadrinho: 'ALGUÉM ME EMPRESTA O LÁPIS COR DE PELE?'.\n\n* Segundo Quadrinho:\nA mesma personagem está agora com uma expressão surpresa e levemente assustada.\nVárias mãos com diferentes tons de pele surgem ao redor dela, cada uma segurando um lápis de cor diferente.\nAs cores dos lápis variam de tons claros a escuros, representando a diversidade de tons de pele existentes.\nA imagem sugere que a personagem percebeu que não existe uma única 'cor de pele' e que a diversidade é a realidade.",
+          "tipo_texto": "Narrativo",
+          "palavras_chave": ["história em quadrinhos", "diversidade", "cor de pele", "racismo"]
+        },
+        {
+          "numero": 4,
+          "genero": "Lei",
+          "autor": "Governo Federal do Brasil",
+          "data_acesso": "10/03/2008",
+          "disponibilidade": "Palácio do Planalto",
+          "conteudo_textual": "Art. 26-A. Nos estabelecimentos de ensino fundamental e de ensino médio, públicos e privados, torna-se obrigatório o ensino da história e cultura afro-brasileira e indígena. § 1o O conteúdo programático a que se refere este artigo incluirá diversos aspectos da história e da cultura que caracterizam a formação da população brasileira, a partir desses dois grupos étnicos, tais como o estudo da história da África e dos africanos, a luta dos negros e dos povos indígenas no Brasil, a cultura negra e indígena brasileira e o negro e o índio na formação da sociedade nacional, resgatando as suas contribuições nas áreas social, econômica e política, pertinentes à história do Brasil. § 2o Os conteúdos referentes à história e cultura afro-brasileira e dos povos indígenas brasileiros serão ministrados no âmbito de todo o currículo escolar, em especial nas áreas de educação artística e de literatura e história brasileiras.",
+          "tipo_texto": "Expositivo",
+          "palavras_chave": ["lei", "educação", "história", "cultura afro-brasileira", "cultura indígena"]
+        },
+        {
+          "numero": 5,
+          "genero": "Notícia",
+          "autor": "Portal Geledés",
+          "data_acesso": "18/09/2020",
+          "disponibilidade": "Portal Geledés",
+          "conteudo_textual": "“Há quase uma ausência do debate racial no campo da Educação. E esse silêncio nos leva a acreditar no mito da democracia racial. Mas os números revelam que não é assim”, explicou Iara Pires Viana, geógrafa e gestora da Secretaria Estadual de Educação de Minas Gerais. Segundo ela, há uma relação intrínseca entre as desigualdades raciais e o direito de aprender. Iara defende que o papel da Educação para não reproduzir o racismo é o de denunciar a pedagogia das ausências, isto é, o racismo epistêmico, marcado em todo o processo de formação. Promover uma educação antirracista vai muito além de simplesmente combater as manifestações materiais do racismo cotidiano, como ofensas e xingamentos. Apesar de positivas, essas medidas não bastam para a construção de uma educação efetivamente inclusiva e equânime. A educação antirracista implica necessariamente a revisão do currículo, garantindo sua pluriversalidade, bem como a composição de um corpo docente etnicamente diverso.",
+          "tipo_texto": "Expositivo e argumentativo",
+          "palavras_chave": ["educação antirracista", "racismo", "democracia racial", "desigualdade racial", "currículo", "diversidade"]
+        }
+      ]
+   }
+}

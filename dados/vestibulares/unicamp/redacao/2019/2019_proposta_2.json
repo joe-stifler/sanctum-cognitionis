@@ -1,0 +1,115 @@
+{
+    "propostas": {
+      "id": 12,
+      "numero": 2,
+      "ano": 2019,
+      "interlocutores": {
+        "enunciador_i": "Estudante do Ensino Médio",
+        "interlocutor_i": "Professora de Geografia e colegas de classe",
+        "mascara_discursiva_i": "Estudante que analisa indicadores de desenvolvimento e se posiciona sobre as prioridades do desenvolvimento social"
+      },
+      "situacao_problema_s": "Discussão sobre o IDH e o crescimento do PIB como indicadores de desenvolvimento e a escolha de prioridades para o desenvolvimento social do Brasil",
+      "tema": "IDH e crescimento do PIB como indicadores de desenvolvimento: qualidade de vida versus consumo",
+      "genero_g": "Postagem em fórum acadêmico virtual",
+      "construcao_composicional": "Introdução que apresente o tema e o posicionamento do estudante, desenvolvimento com análise dos indicadores e argumentos que defendam a priorização da qualidade de vida e da igualdade, conclusão que reforce o ponto de vista e as consequências da escolha de prioridades",
+      "tipologia_textual": "Predominantemente argumentativa, com elementos expositivos",
+      "projeto_texto": "Analisar o IDH e o crescimento do PIB como indicadores de desenvolvimento, apontar em qual ranking o Brasil subiria se priorizasse a qualidade de vida e a igualdade, apresentar as consequências de priorizar o consumo e argumentar em favor da priorização da qualidade de vida e da igualdade",
+      "leitura_textos_coletanea": "O candidato deve utilizar os textos da coletânea para compreender os conceitos de IDH e PIB, analisar os rankings apresentados nos gráficos e identificar as consequências do consumo e da desigualdade para o desenvolvimento social",
+      "escolhas_lexicais_sintaticas": "Adequação ao registro formal de um fórum acadêmico, com vocabulário preciso e que demonstre conhecimento sobre o tema",
+      "recursos_coesivos": "Uso de conectivos e recursos de sequenciação para articular os argumentos e organizar o texto",
+      "norma_culta": "Domínio da norma culta contemporânea",
+      "estilo": "Formal, claro, objetivo e persuasivo",
+      "originalidade": "O candidato deve apresentar argumentos originais e bem fundamentados",
+      "pertinencia": "Os argumentos devem ser pertinentes ao tema do desenvolvimento social e à comparação entre o IDH e o crescimento do PIB",
+      "observacoes": "O candidato deve demonstrar senso crítico, capacidade de argumentação, conhecimento sobre indicadores de desenvolvimento e habilidade para analisar dados e gráficos",
+      "data_criacao": "2023-11-07", 
+      "data_ultima_edicao": "2023-11-07",
+      "recorte_tematico": "A comparação entre o IDH e o crescimento do PIB como indicadores de desenvolvimento e a escolha de prioridades para o desenvolvimento social, considerando as consequências do consumo e da desigualdade",
+      "enunciado": {
+        "situacao_inicial": "Sua professora de Geografia abriu um fórum no ambiente virtual da disciplina para discutir o tópico “IDH e crescimento do PIB como indicadores de desenvolvimento” e propôs as seguintes questões: a) Observe a classificação do Brasil nos rankings apresentados nos gráficos 1 e 2; b) Interprete os textos 3, 4 e 5; e c) Indique se haveria diferenças no desenvolvimento social do Brasil caso o país optasse por uma política econômica que tenha como consequência uma melhor classificação no ranking do IDH ou no ranking do crescimento do PIB.",
+        "tarefa": {
+          "texto": "Publique uma postagem nesse fórum, na qual, a partir da leitura dos textos indicados abaixo, você deve:",
+          "itens": [
+            {
+                "item": "**a**",
+                "texto": "apontar em qual ranking o Brasil subiria se privilegiasse os aspectos qualidade de vida e igualdade no desenvolvimento social;"
+            },
+            {
+                "item": "**b**",
+                "texto": "apresentar as consequências de priorizar o consumo para o desenvolvimento social; e"
+            },
+            {
+                "item": "**c**",
+                "texto": "argumentar em favor do seu ponto de vista."
+            }
+          ],
+          "instrucoes_adicionais": "" 
+        },
+        "definicao_genero": "IDH significa Índice de Desenvolvimento Humano, medida concebida pela ONU (Organização das Nações Unidas) para avaliar a qualidade de vida e o desenvolvimento econômico de uma população.\nPIB significa Produto Interno Bruto, medida que representa a soma, em valores monetários, de todos os bens e serviços finais produzidos numa determinada região, durante um determinado período."
+      },
+      "coletanea": [
+        {
+          "numero": 1,
+          "genero": "Gráfico",
+          "autor": "Não informado",
+          "data_acesso": "28/06/2018",
+          "disponibilidade": "https://economia.estadao.com.br/noticias/geral,brasil-fica-em-ultimo-em-ranking-de-crescimento-com-47-paises,70002481872",
+          "tipo_texto": "Expositivo",
+          "palavras_chave": ["ranking", "crescimento do PIB", "países"],
+          "conteudo_imagens": [
+            {
+              "imagem": 1,
+              "posicao": "imagem única",
+              "descricao": "O gráfico de barras apresenta o ranking do crescimento do PIB de diversos países. A Índia lidera com um crescimento de 8,2%, seguida pela China com 6,7% e Filipinas com 6,0%. A Noruega ocupa a 25ª posição com um crescimento de 3,3%, enquanto a Croácia está logo abaixo, na 26ª posição, com 2,9%. O Brasil ocupa a 47ª e última posição com um crescimento de apenas 1,0%."
+            }
+          ]
+        },
+        {
+          "numero": 2,
+          "genero": "Gráfico",
+          "autor": "PNUD",
+          "data_acesso": "14/09/2018",
+          "disponibilidade": "http://hdr.undp.org/en/content/latest-human-development-index-ranking",
+          "tipo_texto": "Expositivo",
+          "palavras_chave": ["ranking", "IDH", "países"],
+          "conteudo_imagens": [
+            {
+              "imagem": 1,
+              "posicao": "imagem única",
+              "descricao": "O gráfico de barras apresenta o ranking do IDH de diversos países. A Noruega ocupa a primeira posição com um IDH de 0,953, seguida pela Suíça com 0,944 e Austrália com 0,939. O Brasil ocupa a 79ª posição com um IDH de 0,759, enquanto a China está na 96ª posição com 0,752 e a Índia na 130ª posição com 0,640."
+            }
+          ]
+        },
+        {
+          "numero": 3,
+          "genero": "Texto expositivo",
+          "autor": "Nina Guimarães",
+          "data_acesso": "19/04/2017",
+          "disponibilidade": "Metrópoles",
+          "tipo_texto": "Expositivo e argumentativo",
+          "palavras_chave": ["consumo", "meio ambiente", "trabalho escravo", "consequências"],
+          "conteudo_textual": "Um breve conjunto de informações para nos fazer repensar as relações de consumo:\n\n• A indústria da moda é a segunda maior consumidora de água no mundo. Só perde para a do petróleo.\n• Estima-se que 17% a 20% da poluição da água industrial vem de tingimento e tratamento têxtil.\n• Cerca de 15% a 20% de tecido é desperdiçado a cada peça cortada. E tecido não é reciclável.\n• Estima-se que 10% das emissões de gases de efeito estufa provêm da indústria da moda.\n• As fábricas de moda consomem mais de 130 milhões de toneladas de carvão/ano para gerar energia.\n• Para suprir a demanda do consumo, quase toda matéria-prima utilizada na moda resulta em problema: do algodão, cheio de pesticidas, ao poliéster, oriundo da exploração do petróleo.\n• Operários da indústria têxtil em países como China, Índia e Bangladesh trabalham mais de 12 horas por dia e ganham menos do que 100 dólares por mês.\n• Cerca de 80% da mão de obra deste mercado são mulheres. E menos de 2% ganham o suficiente para viver em condições dignas. Para ganhar mais, elas chegam a trabalhar mais de 75 horas por semana.\n\nE tem quem ache que o consumismo é um problema individual que só diz respeito à própria conta bancária…"
+        },
+        {
+          "numero": 4,
+          "genero": "Notícia",
+          "autor": "ABVTEX",
+          "data_acesso": "04/05/2018",
+          "disponibilidade": "http://www.abvtex.org.br/",
+          "tipo_texto": "Expositivo",
+          "palavras_chave": ["consumo", "crescimento econômico", "PIB", "varejo"],
+          "conteudo_textual": "As principais redes de varejo de moda do país associadas à ABVTEX (Associação Brasileira do Varejo Têxtil) já notam a melhora no ânimo dos consumidores. “O cenário é mais favorável, a partir do momento em que há maior disponibilidade de crédito; a inflação está abaixo do esperado, com aumento no poder de compra; e há uma leve redução do desemprego. Esses fatores somados ajudam a elevar a intenção de compra”, aponta Lima, diretor executivo da ABVTEX. A FGV estima que, em 2018, o PIB cresça 2,5%. Esse crescimento deve permanecer liderado pelo consumo."
+        },
+        {
+          "numero": 5,
+          "genero": "Notícia",
+          "autor": "ONU",
+          "data_acesso": "Não informado",
+          "disponibilidade": "Não informado",
+          "tipo_texto": "Expositivo",
+          "palavras_chave": ["Noruega", "IDH", "qualidade de vida", "igualdade", "desenvolvimento social"],
+          "conteudo_textual": "Pelo 12º ano consecutivo, só deu ela: a Noruega foi novamente eleita pela ONU como o melhor país do mundo para se viver. Segundo Jens Wandel, diretor do departamento administrativo do Programa de Desenvolvimento da ONU, o sucesso do país consiste em combinar o crescimento de renda com um elevado nível de igualdade. “Ao longo do tempo, a Noruega conseguiu aumentar sua renda e, ao mesmo tempo, garantir que os rendimentos sejam distribuídos de modo uniforme”." 
+        }
+      ]
+   }
+}

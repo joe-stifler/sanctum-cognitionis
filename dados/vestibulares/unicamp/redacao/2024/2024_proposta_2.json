@@ -1,0 +1,116 @@
+{
+    "propostas": {
+      "id": 8,
+      "numero": 2,
+      "ano": 2024,
+      "interlocutores": {
+        "enunciador_i": "Delegado brasileiro no MONUEM",
+        "interlocutor_i": "Delegados de outros países, especialmente o delegado da Hungria",
+        "mascara_discursiva_i": "Representante do Brasil e defensor dos direitos humanos"
+      },
+      "situacao_problema_s": "Discurso do delegado da Hungria contrário à política de acolhimento a refugiados",
+      "tema": "Acolhimento a refugiados e a defesa dos direitos humanos nas relações internacionais",
+      "recorte_tematico": "O acolhimento a refugiados como um desafio global e a importância da solidariedade internacional e da defesa dos direitos humanos",
+      "genero_g": "Discurso",
+      "construcao_composicional": "Introdução que apresente o posicionamento do Brasil e refute os argumentos da Hungria, desenvolvimento com argumentos que defendam o acolhimento a refugiados e as boas práticas do Brasil nas relações internacionais, conclusão que reforce o compromisso do Brasil com os direitos humanos e a solidariedade internacional",
+      "tipologia_textual": "Predominantemente argumentativa, com elementos expositivos",
+      "projeto_texto": "Refutar a posição da Hungria contrária ao acolhimento de refugiados e defender o compromisso do Brasil com os direitos humanos e a solidariedade internacional",
+      "leitura_textos_coletanea": "O candidato deve utilizar os textos da coletânea para compreender o conceito de refugiado, as políticas de acolhimento e os argumentos a favor da proteção dos direitos humanos",
+      "escolhas_lexicais_sintaticas": "Adequação ao registro formal de um discurso, com vocabulário preciso e que demonstre conhecimento sobre o tema",
+      "recursos_coesivos": "Uso de conectivos e recursos de sequenciação para articular os argumentos e organizar o texto",
+      "norma_culta": "Domínio da norma culta contemporânea",
+      "estilo": "Formal, persuasivo e que demonstre a autoridade do Brasil como defensor dos direitos humanos",
+      "originalidade": "O candidato deve apresentar argumentos originais e bem fundamentados",
+      "pertinencia": "Os argumentos devem ser pertinentes ao tema do acolhimento a refugiados e às políticas do Brasil nas relações internacionais",
+      "observacoes": "O candidato deve demonstrar conhecimento sobre o tema, capacidade de argumentação, senso crítico e habilidade para representar o Brasil em um fórum internacional",
+      "data_criacao": "2023-11-07", 
+      "data_ultima_edicao": "2023-11-07",
+      "enunciado": {
+        "situacao_inicial": "Sua escola participa do MONUEM (Modelo de Simulação da ONU para o Ensino Médio), projeto concebido pelo Ministério das Relações Exteriores, e que tem como objetivo realizar, nas escolas da rede pública de ensino de São Paulo, simulações de rodadas de negociação entre representantes das Nações Unidas. Cada delegado representa a posição de seu país na geopolítica. Você representa a delegação brasileira e, como tal, foi escolhido/a para responder, em plenário, ao discurso do delegado da Hungria, país contrário à política de acolhimento a refugiados.",
+        "tarefa": {
+          "texto": "Elabore um discurso em resposta ao delegado húngaro em cujo texto você:",
+          "itens": [
+            {
+                "item": "**a**",
+                "texto": "rebata a posição política da Hungria; e"
+            },
+            {
+                "item": "**b**",
+                "texto": "defenda o acolhimento aos refugiados em apoio às boas práticas nas relações internacionais do Brasil."
+            }
+          ],
+          "instrucoes_adicionais": "Você deve, obrigatoriamente, se apropriar de elementos da coletânea a seguir, demonstrando leitura crítica dela na elaboração de seu texto." 
+        },
+        "definicao_genero": "Asilo: Instituição jurídica que visa à proteção a qualquer cidadão estrangeiro que se encontre perseguido em seu território por delitos políticos, convicções religiosas ou situações raciais."
+      },
+      "coletanea": [
+        {
+          "numero": 1,
+          "genero": "Texto expositivo",
+          "autor": "ACNUR",
+          "data_acesso": "Não informado",
+          "disponibilidade": "“Refugiados” e “Migrantes” – Perguntas Frequentes da Agência da ONU para Refugiados",
+          "tipo_texto": "Expositivo",
+          "palavras_chave": ["refugiados", "perseguição", "proteção internacional", "direitos humanos"],
+          "conteudo_textual": "Refugiados são pessoas que estão fora de seu país de origem devido a temores de perseguição relacionados a questões de raça, religião, nacionalidade, opinião política, ou pertencimento a um determinado grupo social, e que não pode, ou não quer, valer-se da proteção do país de origem. Ou ainda, pessoas que estão fora de seu país de origem devido a conflitos, violência ou outras circunstâncias que perturbam seriamente a ordem pública e que, como resultado, necessitam de “proteção internacional”."
+        },
+        {
+          "numero": 2,
+          "genero": "Notícia",
+          "autor": "Observador e DW Brasil",
+          "data_acesso": "01/09/2021 e 28/07/2022",
+          "disponibilidade": "Observador e DW Brasil",
+          "tipo_texto": "Expositivo",
+          "palavras_chave": ["Hungria", "Viktor Orbán", "refugiados", "xenofobia", "racismo"],
+          "conteudo_textual": "Em 2015 “fui o primeiro a opor-me definitivamente” à política de aceitação de refugiados, disse o primeiro-ministro da Hungria, Viktor Orbán. “Esta abordagem pode destruir a identidade cultural da Europa. Acredito que muitas pessoas perigosas chegaram à Europa e contribuíram com o terrorismo e muitas dificuldades sociais”. Em 2022, Viktor Orbán fez declarações contra a “mistura de raças” em um discurso na região da Transilvânia, na Romênia. Disse que os húngaros “não querem se tornar um povo mestiço” e que isso se trata de uma “questão cultural”, não racial. Tais declarações geraram uma enxurrada de críticas de governos e instituições. “A posição que represento é um ponto de vista cultural, civilizacional”, afirmou o premiê. E, dirigindo-se a uma multidão, continuou: “existe um mundo em que os povos europeus são misturados com aqueles que chegam de fora da Europa. Esse é um mundo de raças mistas. E há o nosso mundo, em que os cidadãos da Europa transitam, trabalham e se movem. Estamos dispostos a nos misturar, mas não queremos nos tornar povos mestiços”, afirmou. Ele também disse que países em que europeus e não europeus se misturam “não são mais nações” nem parte do Ocidente."
+        },
+        {
+          "numero": 3,
+          "genero": "Charge",
+          "autor": "@alirezapakdel_artist",
+          "data_acesso": "Não informado",
+          "disponibilidade": "Instagram",
+          "tipo_texto": "Argumentativo visual",
+          "palavras_chave": ["refugiados", "crise humanitária", "indiferença", "omissão", "sociedade", "responsabilidade", "direitos humanos", "empatia", "solidariedade"],
+          "conteudo_imagens": [
+            {
+              "index": 1,
+              "posicao": "imagem única",
+              "descricao": "A imagem apresenta uma charge do artista brasileiro Carlos Latuff, reconhecido por suas ilustrações políticas e sociais. A cena retrata um grupo de pessoas visitando um aquário. Dentro do aquário, um barco lotado de refugiados está afundando, com pessoas caindo na água. As pessoas que visitam o aquário observam a cena com expressões de indiferença e curiosidade, como se estivessem assistindo a um espetáculo."
+            }
+          ]
+        },
+        {
+          "numero": 4,
+          "genero": "Grafico de barras",
+          "tipo_texto": "Expositivo",
+          "autor": "ACNUR",
+          "data_acesso": "Não informado",
+          "disponibilidade": "ACNUR",
+          "palavras_chave": ["refugiados", "percepção", "brasileiros", "obrigação humanitária",     "apoio", "ações", "engajamento", "redes sociais", "doações", "governo", "obstáculos"
+          ],
+          "conteudo_imagens": "A imagem apresenta dados de uma pesquisa realizada pelo Ipso, divulgada pelo jornal O Globo em 20 de junho de 2023, que mede a percepção dos brasileiros em relação aos refugiados. A pesquisa aborda três questões principais: 1. Receber refugiados no país é uma obrigação humanitária? Brasil: 50% dos brasileiros concordam que receber refugiados é uma obrigação humanitária. Média global: A média global de concordância com essa afirmação é de 42%, indicando que os brasileiros estão acima da média em termos de apoio ao acolhimento de refugiados. 2. Executaram alguma ação de apoio à causa nos últimos 12 meses? Brasil: 39% dos brasileiros afirmam ter realizado alguma ação de apoio à causa dos refugiados nos últimos 12 meses. Média global: A média global de pessoas que realizaram ações de apoio é de 33%, mostrando que o engajamento dos brasileiros com a causa também está acima da média global. 3. Quais foram as ações mais desempenhadas pelos brasileiros em prol dos refugiados? Postagens em redes sociais: 22% dos brasileiros que realizaram ações de apoio optaram por postagens em redes sociais. Doação de fundos: 11% realizaram doações de fundos para ajudar os refugiados. Contato com funcionários do governo ou assinatura de petições: 11% entraram em contato com funcionários do governo ou assinaram petições em apoio aos refugiados. Conclusão: A pesquisa revela que os brasileiros têm uma percepção positiva em relação aos refugiados, considerando seu acolhimento uma obrigação humanitária. Além disso, o engajamento dos brasileiros com a causa é significativo, com ações de apoio como postagens em redes sociais, doações de fundos e contato com autoridades governamentais. No entanto, o texto que acompanha o gráfico ressalta que, apesar da boa vontade da população, ainda existem obstáculos ao acolhimento de refugiados no Brasil."
+        },
+        {
+          "numero": 5,
+          "genero": "Artigo da Constituição",
+          "autor": "Governo Federal do Brasil",
+          "data_acesso": "Não informado",
+          "disponibilidade": "Constituição da República Federativa do Brasil de 1988",
+          "tipo_texto": "Expositivo",
+          "palavras_chave": ["Constituição", "princípios das relações internacionais", "direitos humanos", "asilo político"],
+          "conteudo_textual": "Art. 4º. A República Federativa do Brasil rege-se nas suas relações internacionais pelos seguintes princípios: I- independência nacional; II- prevalência dos direitos humanos; III- autodeterminação dos povos; IV- não-intervenção; V- igualdade entre os Estados; VI- defesa da paz; VII- solução pacífica dos conflitos; VIII- repúdio ao terrorismo e ao racismo; IX- cooperação entre os povos para o progresso da humanidade; X- concessão de asilo político."
+        },
+        {
+          "numero": 6,
+          "genero": "Notícia",
+          "autor": "Adaptado de: WENTZEL, M. “Como países como o Brasil podem se beneficiar da vinda de refugiados”",
+          "data_acesso": "02/09/2018",
+          "disponibilidade": "BBC News Brasil",
+          "tipo_texto": "Expositivo e argumentativo",
+          "palavras_chave": ["refugiados", "integração", "benefícios econômicos", "boas práticas"],
+          "conteudo_textual": "A pesquisadora Cindy Huang (Center for Global Development) explica que, quando os refugiados chegam, precisam de assistência pública, mas que esse gasto é “um investimento que pode retornar ao país” porque com o tempo eles também passam a pagar impostos. “Os refugiados vão contribuir de volta em termos fiscais e econômicos tão logo eles conseguirem ser integrados ao mercado de trabalho do país anfitrião”, diz. Especialistas afirmam que casos bem-sucedidos de acolhimento contaram com governos engajados, que promoveram, por exemplo, o ensino gratuito do idioma local, a promoção do acesso das crianças às escolas, o reconhecimento das qualificações acadêmicas dos imigrantes e a redistribuição dos imigrantes dentro do país."
+        }
+      ]
+   }
+}

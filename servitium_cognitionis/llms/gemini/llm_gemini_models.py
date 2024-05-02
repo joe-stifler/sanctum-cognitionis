@@ -42,6 +42,10 @@ class LLMGeminiBaseModel(LLMBaseModel):
 
         return self.process_ai_response_stream(ai_response_stream)
 
+    def send_stream_single_message(self, message):
+        ai_response_stream = self._model_instance.generate_content(message, stream=True)
+        return self.process_ai_response_stream(ai_response_stream)
+
     def process_ai_response_stream(self, responses):
         new_ai_message_args = {}
 

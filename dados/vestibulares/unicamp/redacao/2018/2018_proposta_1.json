@@ -1,0 +1,94 @@
+{
+  "propostas": {
+    "id": 13,
+    "numero": 1,
+    "ano": 2018,
+    "interlocutores": {
+      "enunciador_i": "Estudante do Ensino Médio",
+      "interlocutor_i": "Colegas de escola",
+      "mascara_discursiva_i": "Estudante que apresenta uma palestra sobre pós-verdade"
+    },
+    "situacao_problema_s": "Palestra sobre o fenômeno da pós-verdade a ser apresentada aos colegas de escola",
+    "tema": "Pós-verdade e as redes sociais",
+    "genero_g": "Texto base para palestra",
+    "construcao_composicional": "Introdução que apresente o tema e capte a atenção do público, desenvolvimento com explicação sobre o conceito de pós-verdade, exemplos de notícias falsas e consequências sociais, conclusão que reforce a importância da reflexão crítica e do combate à desinformação",
+    "tipologia_textual": "Predominantemente expositiva e argumentativa, com elementos narrativos",
+    "projeto_texto": "Explicar o conceito de pós-verdade, apresentar exemplos de notícias falsas e discutir as consequências sociais da disseminação de pós-verdades",
+    "leitura_textos_coletanea": "O candidato deve utilizar os textos da coletânea para compreender o conceito de pós-verdade, sua relação com as redes sociais e os impactos na sociedade",
+    "escolhas_lexicais_sintaticas": "Adequação ao registro formal de uma palestra, com vocabulário preciso e que demonstre conhecimento sobre o tema. As estruturas sintáticas devem ser claras e fluidas, adequadas à linguagem oral.",
+    "recursos_coesivos": "Uso de conectivos e recursos de sequenciação para organizar o texto e articular as ideias de forma lógica e coerente.",
+    "norma_culta": "Domínio da norma culta contemporânea",
+    "estilo": "Claro, objetivo, informativo e persuasivo",
+    "originalidade": "O candidato deve apresentar uma abordagem original e insights relevantes sobre o tema",
+    "pertinencia": "As informações e argumentos devem ser pertinentes ao tema da pós-verdade e sua relação com as redes sociais",
+    "observacoes": "O candidato deve demonstrar conhecimento sobre o tema, capacidade de argumentação e habilidade para comunicar-se de forma clara e envolvente em uma palestra",
+    "data_criacao": "2023-11-07",
+    "data_ultima_edicao": "2023-11-07",
+    "recorte_tematico": "O fenômeno da pós-verdade e sua relação com as redes sociais, considerando os impactos na sociedade e a importância da reflexão crítica e do combate à desinformação",
+    "enunciado": {
+      "situacao_inicial": "Você é um estudante do Ensino Médio e foi convidado pelo Grêmio Estudantil para fazer uma palestra aos colegas sobre um fenômeno recente: o da pós-verdade.",
+      "tarefa": {
+        "texto": "Leia os textos abaixo e, a partir deles, escreva um texto base para a sua palestra, que será lido em voz alta na íntegra. Seu texto deve conter:",
+        "itens": [
+          {
+            "item": "**a**",
+            "texto": "uma explicação sobre o que é pós-verdade e sua relação com as redes sociais;"
+          },
+          {
+            "item": "**b**",
+            "texto": "alguns exemplos de notícias falsas que circularam nas redes sociais e se tornaram pós-verdade; e"
+          },
+          {
+            "item": "**c**",
+            "texto": "consequências sociais que a disseminação de pós-verdades pode trazer."
+          }
+        ],
+        "instrucoes_adicionais": "Você poderá usar também informações de outras fontes para compor o seu texto."
+      }
+    },
+    "coletanea": [
+      {
+        "numero": 1,
+        "genero": "Tirinha",
+        "autor": "Não informado",
+        "data_acesso": "03/09/2017",
+        "disponibilidade": "https://horizontesafins.wordpress.com/2017/02/02/a-verdade-da-pos-verdade/",
+        "tipo_texto": "Descritivo e reflexivo",
+        "palavras_chave": [
+          "pós-verdade",
+          "verdade",
+          "crença",
+          "pensamento"
+        ],
+        "conteudo_imagens": [
+          {
+            "index": 1,
+            "posicao": "Quadro esquerdo",
+            "descricao": "Um personagem com características semelhantes a René Descartes, com expressão pensativa e barba, acompanhado da frase 'Penso, logo existo'."
+          },
+          {
+            "index": 2,
+            "posicao": "Quadro direito",
+            "descricao": "Um personagem com olhos arregalados e expressão de forte convicção, segurando uma pá e acompanhado da frase 'Acredito, logo estou certo'."
+          }
+        ]
+      },
+      {
+        "numero": 2,
+        "genero": "Artigo de opinião",
+        "autor": "André Cabette Fábio",
+        "data_acesso": "01/12/2017",
+        "disponibilidade": "https://www.nexojornal.com.br/expresso/2016/11/16/O-que-é-‘pós-verdade’-a-palavra-do-ano-segundo-a-Universidade-de-Oxford",
+        "tipo_texto": "Expositivo e argumentativo",
+        "palavras_chave": [
+          "pós-verdade",
+          "redes sociais",
+          "desinformação",
+          "política",
+          "fake news"
+        ],
+        "conteudo_textual": "O que é “pós-verdade”, a palavra do ano segundo a Universidade de Oxford\n\nAnualmente, a Oxford Dictionaries, parte do departamento de imprensa da Universidade de Oxford responsável pela  elaboração de dicionários, elege uma palavra para a língua inglesa. A de 2016 foi “pós-verdade” (post-truth).\n\nA palavra é usada por quem avalia que a verdade está perdendo importância no debate político. Por exemplo: o  boato amplamente divulgado de que o Papa Francisco apoiava a candidatura de Donald Trump não vale menos do  que as fontes confiáveis que negaram esta história. Segundo Oxford Dictionaries, a palavra vem sendo empregada  em análises sobre dois importantes acontecimentos políticos: a eleição de Donald Trump como presidente dos  Estados Unidos e o referendo que decidiu pela saída da Grã-Bretanha da União Europeia, designada como Brexit.  Ambas as campanhas fizeram uso indiscriminado de mentiras, como a de que a permanência na União Europeia  custava à Grã-Bretanha US$ 470 milhões por semana, no caso do Brexit, ou a de que Barack Obama é fundador do  Estado Islâmico, no caso da eleição de Trump.\n\nEm um artigo publicado em setembro de 2016, a influente revista britânica The Economist destaca que políticos  sempre mentiram, mas Donald Trump atingiu um outro patamar. A leitura de muitos acadêmicos e da mídia  tradicional é que as mentiras fizeram parte de uma bem-sucedida estratégia de apelar a preconceitos e radicalizar  posicionamentos do eleitorado. Apesar de claramente infundadas, denunciar essas informações como falsas não  bastou para mudar o voto majoritário.\n\nPara diversos veículos de impensa, a proliferação de boatos no Facebook e a forma como o feed de notícias funciona  foram decisivos para que informações falsas tivessem alcance e legitimidade. Este e outros motivos têm sido  apontados para explicar a ascensão da pós-verdade.\n\nPlataformas como Facebook, Twitter e Whatsapp favorecem a replicação de boatos e mentiras. Grande parte dos  factoides são compartilhados por conhecidos nos quais os usuários têm confiança, o que aumenta a aparência de  legitimidade das histórias. Os algoritmos utilizados pelo Facebook fazem com que usuários tendam a receber  informações que corroboram seu ponto de vista, formando bolhas que isolam as narrativas às quais aderem de  questionamentos à esquerda ou à direita."
+      }
+    ]
+  }
+}

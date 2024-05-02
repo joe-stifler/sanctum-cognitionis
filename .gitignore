@@ -26,10 +26,7 @@ secrets.toml
 estatisticas/
 data-preprocessing/
 
-!databases/**/*.csv
-!databases/**/*.json
-
-!personas/**/*.csv
-!personas/**/*.json
-!personas/**/*.md
-!personas/**/*.txt
+!dados/**/*.csv
+!dados/**/*.json
+!dados/**/*.md
+!dados/**/*.txt

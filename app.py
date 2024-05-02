@@ -144,13 +144,13 @@ div[data-testid='stFileUploader']:hover {{
 
 @media screen and (max-width: 900px) {{
     div[data-testid='stExpander'] {{
-        z-index: 99999;
-    }}
-    .stChatInput {{
         z-index: 99997;
     }}
-    div[data-testid='stFileUploader'] {{
+    .stChatInput {{
         z-index: 99998;
+    }}
+    div[data-testid='stFileUploader'] {{
+        z-index: 99999;
     }}
 }}
 """

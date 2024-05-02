@@ -1,0 +1,17 @@
+{
+    "name": "Dani Stella",
+    "knowledge": [
+        "dados/personas/professores/redacao/dani-stella/knowledge/conectivos.md",
+        "dados/personas/professores/redacao/dani-stella/knowledge/operadores-argumentativos.md",
+        "dados/vestibulares/professores/redacao/dani-stella/knowledge/generos-do-discurso.md",
+        "dados/vestibulares/redacao/unicamp/unicamp_redacoes_candidatos.json",
+        "dados/vestibulares/redacao/unicamp/unicamp_redacoes_propostas.json",
+        "dados/personas/professores/redacao/dani-stella/knowledge/a_redacao_na_unicamp.md",
+        "dados/personas/professores/redacao/dani-stella/knowledge/informacoes_importantes_sobre_a_redacao_unicamp.md"
+    ],
+    "persona_description": "dados/personas/professores/redacao/dani-stella/persona_description.md",
+    "thinking_style": "LLMGeminiFamily",
+    "thought_process": "gemini-1.5-pro-preview-0409",
+    "creativity_level": 0.1,
+    "speech_conciseness": 8192
+}

@@ -1,0 +1,83 @@
+{
+    "propostas": {
+      "id": 9,
+      "numero": 1,
+      "ano": 2022,
+      "interlocutores": {
+        "enunciador_i": "Adolescente digital influencer",
+        "interlocutor_i": "Seguidores nas redes sociais",
+        "mascara_discursiva_i": "Influenciador digital que reflete sobre sua experiência e se posiciona sobre a atuação de crianças e adolescentes nas redes sociais"
+      },
+      "situacao_problema_s": "Aumento da fama do enunciador como digital influencer e as opiniões divergentes de familiares e amigos sobre essa atividade",
+      "tema": "Crianças e adolescentes como digital influencers: desafios, riscos e oportunidades",
+      "genero_g": "Post em rede social ('textão')",
+      "construcao_composicional": "Introdução que apresente o tema e a situação do enunciador, desenvolvimento com a narrativa da trajetória como digital influencer e as impressões sobre essa experiência, conclusão com um posicionamento sobre a atuação de crianças e adolescentes como digital influencers",
+      "tipologia_textual": "Predominantemente narrativa, com elementos argumentativos e expositivos",
+      "projeto_texto": "Narrar a trajetória do enunciador como digital influencer, relatar suas impressões sobre essa experiência e assumir um posicionamento sobre a atuação de crianças e adolescentes como digital influencers",
+      "leitura_textos_coletanea": "O candidato deve utilizar os textos da coletânea para compreender os riscos e as oportunidades da atuação de crianças e adolescentes nas redes sociais, bem como as questões éticas e legais envolvidas",
+      "escolhas_lexicais_sintaticas": "Adequação ao registro informal de um post em rede social, com vocabulário acessível ao público jovem, mas com precisão para expressar as ideias",
+      "recursos_coesivos": "Uso de conectivos e recursos de sequenciação temporal para narrar a trajetória e articular as reflexões",
+      "norma_culta": "Domínio da norma culta, mesmo em um registro informal",
+      "estilo": "Pessoal, reflexivo, crítico e com elementos de humor ou ironia característicos das redes sociais",
+      "originalidade": "O candidato deve narrar sua experiência pessoal e apresentar reflexões originais sobre a atuação de crianças e adolescentes como digital influencers",
+      "pertinencia": "A narrativa e as reflexões devem ser pertinentes ao tema da atuação de crianças e adolescentes como digital influencers e à proposta do post",
+      "observacoes": "O candidato deve demonstrar autocrítica, senso crítico e capacidade de relacionar sua experiência pessoal com um contexto social mais amplo",
+      "data_criacao": "2023-11-07", 
+      "data_ultima_edicao": "2023-11-07",
+      "recorte_tematico": "A atuação de crianças e adolescentes como digital influencers: desafios, riscos e oportunidades, considerando as questões éticas, legais e psicológicas envolvidas",
+      "enunciado": {
+        "situacao_inicial": "Você tem 15 anos e tem conta em redes sociais desde os 13 anos. Há seis meses, contudo, seu número de seguidores quintuplicou e alcançou a marca de quase um milhão. Desde que se tornou um/a digital influencer, vários parentes e amigos passaram a alertar seus pais sobre os perigos de sua superexposição na internet, enfatizando a importância de eles (seus responsáveis legais) acompanharem todas as postagens e todos os comentários recebidos nas suas redes. Seus pais foram até mesmo aconselhados por alguns amigos a fecharem as contas que você mantinha, sob a alegação de que a atividade poderia configurar um tipo de trabalho infantil (isto é, uma atividade que envolve crianças com idade inferior a 16 anos). Outros não viram problema com a sua fama e até perguntaram se seus pais já tinham se informado sobre como “monetizar” os seus perfis.",
+        "tarefa": {
+          "texto": "Após refletir sobre essas opiniões divergentes, você decide escrever, em um de seus perfis, um extenso post (“textão”) a respeito. No seu texto, você",
+          "itens": [
+            {
+                "item": "**a**",
+                "texto": "narra a sua trajetória até se tornar digital influencer e"
+            },
+            {
+                "item": "**b**",
+                "texto": "relata suas impressões acerca dessa experiência, assumindo um posicionamento sobre o fato de crianças e adolescentes atuarem como digital influencers."
+            }
+          ],
+          "instrucoes_adicionais": "Para escrever seu post, leve em conta a coletânea de textos a seguir:" 
+        }
+      },
+      "coletanea": [
+        {
+          "numero": 1,
+          "genero": "Texto expositivo",
+          "autor": "UNICEF",
+          "data_acesso": "13/09/2021",
+          "disponibilidade": "https://www.unicef.org/brazil/cyberbullying-o-que-eh-e-como-para-lo",
+          "tipo_texto": "Expositivo",
+          "palavras_chave": ["cyberbullying", "tecnologias digitais", "mídias sociais", "violência"]
+        },
+        {
+          "numero": 2,
+          "genero": "Artigo de opinião",
+          "autor": "Mariana Mandelli",
+          "data_acesso": "13/09/2021",
+          "disponibilidade": "https://www1.folha.uol.com.br/educacao/2021/08/morte-de-adolescente-reacende-debate-sobre-exposicao-digital.shtml",
+          "tipo_texto": "Argumentativo",
+          "palavras_chave": ["redes sociais", "crianças", "adolescentes", "superexposição", "controle parental"]
+        },
+        {
+          "numero": 3,
+          "genero": "Biografia",
+          "autor": "Famous Birthdays",
+          "data_acesso": "20/11/2021",
+          "disponibilidade": "https://pt.famousbirthdays.com/people/amanda-carvalho.html",
+          "tipo_texto": "Expositivo",
+          "palavras_chave": ["digital influencer", "youtuber", "fama", "redes sociais"]
+        },
+        {
+          "numero": 4,
+          "genero": "Artigo de opinião",
+          "data_acesso": "11/09/2021",
+          "disponibilidade": "https://livredetrabalhoinfantil.org.br/noticias/reportagens/youtubers-mirins-forum-nacional-",
+          "tipo_texto": "Argumentativo",
+          "palavras_chave": ["youtubers mirins", "trabalho infantil", "publicidade infantil", "consumismo", "exploração"]
+        }
+      ]
+   }
+}

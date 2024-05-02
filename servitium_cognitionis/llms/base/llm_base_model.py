@@ -44,7 +44,7 @@ class LLMBaseModel(ABC):
 
     # make hte following method abstract
     @abstractmethod
-    def initialize_model(self, system_instruction=[]):
+    def initialize_model(self, system_instruction=[], temperature=None, max_output_tokens=None):
         pass
     
     @abstractmethod
@@ -53,4 +53,8 @@ class LLMBaseModel(ABC):
 
     @abstractmethod
     def send_stream_chat_message(self, session_id, message):
+        pass
+
+    @abstractmethod
+    def send_stream_single_message(self, message):
         pass

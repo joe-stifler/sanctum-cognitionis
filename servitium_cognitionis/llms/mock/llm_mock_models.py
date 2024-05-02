@@ -10,8 +10,15 @@ class LLMMockBaseModel(LLMBaseModel):
         self._model_chats = {}
         self._model_initialized = False
 
-    def initialize_model(self, system_instruction=[]):
+    def initialize_model(self, system_instruction=[], temperature=None, max_output_tokens=None):
         self._model_initialized = True
+
+    def process_message(self, session_id, message_chunks):
+        for message in message_chunks:
+            if session_id:
+                self._model_chats[session_id].append(AIMessage(message))
+            time.sleep(0.2)
+            yield message, {}
 
     def create_chat(self, session_id):
         if self._model_initialized is False:
@@ -27,22 +34,18 @@ class LLMMockBaseModel(LLMBaseModel):
             raise ValueError("Chat session does not exist. Call create_chat() first")
         
         if len(self._model_chats[session_id]) == 0:
-            message = f"Olá! Eu sou um modelo de linguagem de exemplo. O que você gostaria de conversar comigo?"
+            message = "Olá! Eu sou um modelo de linguagem de exemplo. O que você gostaria de conversar comigo?"
 
         self._model_chats[session_id].append(HumanMessage(message))
-
-        def process_message(message_chunks):
-            for message in message_chunks:
-                self._model_chats[session_id].append(AIMessage(message))
-                time.sleep(0.2)
-
-                yield message, {}
 
         # break 'message' in chunks of 20 chars
         chunked_message = [message[i:i + 20] for i in range(0, len(message), 20)]
 
-        return process_message(chunked_message)
+        return self.process_message(session_id, chunked_message)
 
+    def send_stream_single_message(self, message):
+        chunked_message = [message[i:i + 20] for i in range(0, len(message), 20)]
+        return self.process_message(None, chunked_message)
 
 class LLMMockModel(LLMMockBaseModel):
     def __init__(self, temperature=0.1, max_output_tokens=8192):
