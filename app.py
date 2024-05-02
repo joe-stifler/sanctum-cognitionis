@@ -80,8 +80,6 @@ def check_password():
 if not check_password():
     st.stop()
 
-
-
 pc = st.get_option('theme.primaryColor')
 bc = st.get_option('theme.backgroundColor')
 sbc = st.get_option('theme.secondaryBackgroundColor')
@@ -335,6 +333,8 @@ def chat_messages(chat_connector, user_input_message):
         with st.spinner("Processando resposta..."):
             with st.chat_message("assistant", avatar="👩🏽‍🏫"):
                 st.write_stream(ai_response)
+    else:
+        st.info("Dani Stella está pronta para conversar! Envie uma mensagem para começar.")
 
 def main():
     maybe_st_initialize_state()
@@ -350,8 +350,8 @@ def main():
     # side = max((100 - width) / 2, 0.01)
     # _, container, _ = st.columns([side, width, side])
 
-    with st.expander("Configurações do chat", expanded=False):
-        st.write("Configurações do chat")
+    # with st.expander("Configurações do chat", expanded=False):
+    #     st.write("Configurações do chat")
 
     chat_messages(chat_connector, user_input_message)
 
