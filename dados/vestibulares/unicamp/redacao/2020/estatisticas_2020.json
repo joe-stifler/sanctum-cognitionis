@@ -53,7 +53,7 @@
           "media_notas_padronizadas": 480.9, 
           "desvio_padrao_notas_padronizadas": 111.9
         }
-      }, 
+      },
       "texto_1": {
         "descricao": "Texto 1 da prova de redação",
         "estatisticas_gerais": {
@@ -98,7 +98,7 @@
               "formato": "A distribuição das notas brutas do texto 1 para Ciências Humanas é assimétrica à direita, com a maioria das notas concentradas na faixa de 6,5 a 9 pontos." 
             }
           }
-        } 
+        }
       },
       "texto_2": {
         "descricao": "Texto 2 da prova de redação",

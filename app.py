@@ -90,6 +90,7 @@ tc = st.get_option('theme.textColor')
 styl = """
 div[data-testid='stExpander'] {{
     position: fixed;
+        z-index: 99997;
     top: 2.9rem;
     width: inherit;
     background-color: {background_color};
@@ -98,6 +99,7 @@ div[data-testid='stExpander'] {{
 .stChatInput {{
     position: fixed;
     bottom: 2rem;
+        z-index: 99998;
 }}
 div[data-testid='stFileUploaderDropzoneInstructions'] {{
     visibility: hidden;
@@ -127,6 +129,7 @@ section[data-testid='stFileUploaderDropzone']:active {{
     color: {text_color};
 }}
 div[data-testid='stFileUploader'] {{
+        z-index: 99999;
     position: fixed;
     bottom: 5rem;
     width: inherit;
@@ -136,6 +139,7 @@ div[data-testid='stFileUploader'] {{
     color: {text_color};
 }}
 div[data-testid='stFileUploader']:hover {{
+        z-index: 99999;
     cursor: pointer;
     opacity: 1;
     rounded: 1rem;
@@ -202,7 +206,11 @@ def get_ai_chat():
     persona = Persona.from_json(persona_settings_path)
 
     llm_family = None
-    if persona.thinking_style == "LLMGeminiFamily":
+
+    if os.environ.get("FORCE_LLM_MOCK_FAMILY"):
+        llm_family = LLMMockFamily()
+        logger.info("Using LLMMockFamily")
+    elif persona.thinking_style == "LLMGeminiFamily":
         llm_family = LLMGeminiFamily()
         logger.info("Using LLMGeminiFamily")
     elif persona.thinking_style == "LLMMockFamily":
@@ -332,8 +340,8 @@ def main():
     maybe_st_initialize_state()
     chat_connector = create_chat_connector()
 
-    with st.container():
-        st.file_uploader("Upload de arquivos", accept_multiple_files=True, label_visibility="collapsed")
+    # with st.container():
+    #     st.file_uploader("Upload de arquivos", accept_multiple_files=True, label_visibility="collapsed")
 
     user_input_message = st.chat_input("Digite sua mensagem aqui")
 
@@ -346,9 +354,5 @@ def main():
         st.write("Configurações do chat")
 
     chat_messages(chat_connector, user_input_message)
-
-    st.divider()
-    st.write("")
-
 
 main()
