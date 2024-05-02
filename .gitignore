@@ -30,3 +30,4 @@ data-preprocessing/
 !dados/**/*.json
 !dados/**/*.md
 !dados/**/*.txt
+*.png
