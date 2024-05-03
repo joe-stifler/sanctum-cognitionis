@@ -15,7 +15,10 @@ import uuid
 import logging
 import vertexai
 import google.auth
+import pandas as pd
+from PIL import Image
 import streamlit as st
+from pathlib import Path
 from streamlit_extras.stylable_container import stylable_container
 from langchain_core.messages import HumanMessage, AIMessage
 
@@ -162,7 +165,7 @@ class ChatHistory:
         logger.debug("Adding new AI message: %s", ai_message)
         logger.debug("With kwargs: %s", kwargs)
         logger.debug("\n\n")
-        self.chat_messages.append(AIMessage(ai_message, **kwargs))
+        self.chat_messages.append(AIMessage(ai_message, extra_args=kwargs))
 
     def send_ai_message(self, user_message, user_uploaded_files={}):
         logger.debug("Sending user message to ai: %s", user_message)
@@ -179,9 +182,11 @@ class ChatHistory:
             yield text_message
 
     def send_user_message(self, user_message, user_uploaded_files=[]):
+        user_uploaded_files_ai = [(uploaded_file.name, uploaded_file.read()) for uploaded_file in user_uploaded_files]
+        
         self.chat_num_lines += user_message.count("\n")
-        self.chat_messages.append(HumanMessage(user_message))
-        return self.send_ai_message(user_message, user_uploaded_files=user_uploaded_files)
+        self.chat_messages.append(HumanMessage(user_message, upload_files=user_uploaded_files))
+        return self.send_ai_message(user_message, user_uploaded_files=user_uploaded_files_ai)
 
     def get_chat_num_lines(self):
         return self.chat_num_lines
@@ -193,14 +198,19 @@ class ChatHistory:
         while message_pos < len(self.chat_messages):
             message = self.chat_messages[message_pos]
             if isinstance(message, HumanMessage):
-                messages.append(("user", self.user_avatar, message.content))
+                messages.append(("user", self.user_avatar, message.content, message.upload_files))
                 message_pos += 1
             else:
                 message_content = ""
+                message_args = []
                 while message_pos < len(self.chat_messages) and not isinstance(self.chat_messages[message_pos], HumanMessage):
                     message_content += self.chat_messages[message_pos].content
+                    extra_args = self.chat_messages[message_pos].extra_args
+                    if len(extra_args) > 0:
+                        message_args.append()
+
                     message_pos += 1
-                messages.append(("assistant", self.persona.avatar, message_content))
+                messages.append(("assistant", self.persona.avatar, message_content, message_args))
         return messages
 
 
@@ -226,11 +236,23 @@ class ChatConnector:
             assert False, f"Chat with session_id {session_id} not found"
         return self.chats[session_id]
 
-
 @st.cache_resource
 def create_chat_connector():
     logger.info("Creating chat connector")
     return ChatConnector()
+
+def write_files(role, files):
+    popover_label = "Arquivos enviados pelo usuário"
+    if role == "assistant":
+        popover_label = "Metadados retornados na resposta do professor"
+    
+    with st.popover(popover_label):
+        for file in files:
+            extension = Path(file.name).suffix
+            
+            if extension in [".png", ".jpg", ".jpeg", ".gif"]:
+                image = Image.open(file)
+                st.write(image)
 
 # @st.experimental_fragment
 def chat_messages(chat_connector, user_input_message, user_uploaded_files):
@@ -238,14 +260,16 @@ def chat_messages(chat_connector, user_input_message, user_uploaded_files):
         chat_history = chat_connector.fetch_chat_history(st.session_state["session_id"])
 
         # Display chat history messages
-        for role, avatar, message in chat_history.get_chat_messages():
+        for role, avatar, message, args in chat_history.get_chat_messages():
             with st.chat_message(role, avatar=avatar):
-                st.markdown(message)
+                st.write(message)
+
+                if len(args) > 0:
+                    write_files(role, args)
 
     if user_input_message:
-        if len(user_uploaded_files) > 0:
-            print("User file list:", user_uploaded_files[0][0])
-
+        user_uploaded_files = [uploaded_file for uploaded_file in user_uploaded_files]
+        
         if "session_id" not in st.session_state:
             chat_history = chat_connector.create_chat_history()
 
@@ -259,6 +283,9 @@ def chat_messages(chat_connector, user_input_message, user_uploaded_files):
         with st.chat_message("user", avatar="👩🏾‍🎓"):
             st.write(user_input_message)
 
+            if len(user_uploaded_files) > 0:
+                write_files("user", user_uploaded_files)
+
         # Send user message to AI inference
         ai_response = chat_history.send_user_message(user_input_message, user_uploaded_files)
 
@@ -266,10 +293,8 @@ def chat_messages(chat_connector, user_input_message, user_uploaded_files):
         with st.spinner("Processando resposta..."):
             with st.chat_message("assistant", avatar="👩🏽‍🏫"):
                 st.write_stream(ai_response)
-
-        st.write("")
-        st.write("")
-    else:
+    
+    if "session_id" not in st.session_state:
         st.info("Dani Stella está pronta para conversar! Envie uma mensagem para começar.")
 
 def main():
@@ -285,12 +310,11 @@ def main():
             bottom: 0rem;
             height: 100%;
             padding-top: 4rem;
+            with: 100%;
         }
         """
     ):
-        st.title("Dani Stella")
-        st.divider()
-        chat_history_container = st.container(height=700, border=True)
+        chat_history_container = st.container(height=700, border=False)
 
         with stylable_container(
             key="chat_input_container",
@@ -306,7 +330,6 @@ def main():
             with expander:
                 files_container = st.empty()
                 user_uploaded_files = files_container.file_uploader("Upload de arquivos", accept_multiple_files=True, label_visibility="collapsed", key=st.session_state["counter"])
-                user_uploaded_files_list = [(uploaded_file.name, uploaded_file.read()) for uploaded_file in user_uploaded_files]
 
             user_input_message = st.chat_input("Digite sua mensagem aqui")
 
@@ -315,6 +338,6 @@ def main():
                 files_container.file_uploader("Upload de arquivos", accept_multiple_files=True, label_visibility="collapsed", key=st.session_state["counter"])
 
         with chat_history_container:
-            chat_messages(chat_connector, user_input_message, user_uploaded_files_list)
+            chat_messages(chat_connector, user_input_message, user_uploaded_files)
 
 main()
