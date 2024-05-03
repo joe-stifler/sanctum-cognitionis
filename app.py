@@ -16,6 +16,7 @@ import logging
 import vertexai
 import google.auth
 import streamlit as st
+from streamlit_extras.stylable_container import stylable_container
 from langchain_core.messages import HumanMessage, AIMessage
 
 def setup_logger():
@@ -77,94 +78,13 @@ def check_password():
     return False
 
 
-if not check_password():
-    st.stop()
+# if not check_password():
+#     st.stop()
 
 pc = st.get_option('theme.primaryColor')
 bc = st.get_option('theme.backgroundColor')
 sbc = st.get_option('theme.secondaryBackgroundColor')
 tc = st.get_option('theme.textColor')
-
-styl = """
-div[data-testid='stExpander'] {{
-    position: fixed;
-        z-index: 99997;
-    top: 2.9rem;
-    width: inherit;
-    background-color: {background_color};
-    color: {text_color};
-}}
-.stChatInput {{
-    position: fixed;
-    bottom: 2rem;
-        z-index: 99998;
-}}
-div[data-testid='stFileUploaderDropzoneInstructions'] {{
-    visibility: hidden;
-    position: fixed;
-}}
-button[data-testid='baseButton-secondary'] {{
-    visibility: hidden;
-    content: "",
-}}
-div[data-testid='stFileUploaderDropzoneInstructions']::after {{
-    visibility: visible;
-    position: absolute;
-    content: "📁 Arraste arquivos aqui";
-}}
-div[data-testid='stFileUploaderDropzoneInstructions']:hover {{
-    position: absolute;
-    color: {primary_color};
-    content: "📁 Arraste arquivos aqui";
-}}
-section[data-testid='stFileUploaderDropzone'] {{
-    cursor: unset;
-    height: 3rem;
-    align-content: center;
-}}
-section[data-testid='stFileUploaderDropzone']:active {{
-    align-content: center;
-    color: {text_color};
-}}
-div[data-testid='stFileUploader'] {{
-        z-index: 99999;
-    position: fixed;
-    bottom: 5rem;
-    width: inherit;
-    opacity: 0.5;
-    border-radius: 3rem;
-    background-color: {background_color};
-    color: {text_color};
-}}
-div[data-testid='stFileUploader']:hover {{
-        z-index: 99999;
-    cursor: pointer;
-    opacity: 1;
-    rounded: 1rem;
-    background-color: {background_color};
-}}
-
-@media screen and (max-width: 900px) {{
-    div[data-testid='stExpander'] {{
-        z-index: 99997;
-    }}
-    .stChatInput {{
-        z-index: 99998;
-    }}
-    div[data-testid='stFileUploader'] {{
-        z-index: 99999;
-    }}
-}}
-"""
-
-styl = "<style>" + styl.format(
-    background_color=sbc,
-    text_color=tc,
-    primary_color=pc
-) + "</style>"
-
-st.markdown(styl, unsafe_allow_html=True)
-
 
 ################################################################################
 
@@ -227,6 +147,7 @@ class ChatHistory:
         self.user_avatar = "👩🏾‍🎓"
         self.llm_model = llm_model
         self.session_id = session_id
+        self.chat_num_lines = 0
 
     def initialize_chat(self):
         self.llm_model.initialize_model(
@@ -243,18 +164,27 @@ class ChatHistory:
         logger.debug("\n\n")
         self.chat_messages.append(AIMessage(ai_message, **kwargs))
 
-    def send_ai_message(self, user_message):
+    def send_ai_message(self, user_message, user_uploaded_files={}):
         logger.debug("Sending user message to ai: %s", user_message)
         user_message = f"mensagem do usuário: {user_message}"
-        ai_response_stream = self.llm_model.send_stream_chat_message(self.session_id, user_message)
+        ai_response_stream = self.llm_model.send_stream_chat_message(
+            self.session_id,
+            user_message,
+            user_uploaded_files
+        )
 
         for text_message, ai_message_args in ai_response_stream:
             self.add_new_ai_message(text_message, **ai_message_args)
+            self.chat_num_lines += text_message.count("\n")
             yield text_message
 
-    def send_user_message(self, user_message):
+    def send_user_message(self, user_message, user_uploaded_files=[]):
+        self.chat_num_lines += user_message.count("\n")
         self.chat_messages.append(HumanMessage(user_message))
-        return self.send_ai_message(user_message)
+        return self.send_ai_message(user_message, user_uploaded_files=user_uploaded_files)
+
+    def get_chat_num_lines(self):
+        return self.chat_num_lines
 
     def get_chat_messages(self):
         messages = []
@@ -302,8 +232,8 @@ def create_chat_connector():
     logger.info("Creating chat connector")
     return ChatConnector()
 
-@st.experimental_fragment
-def chat_messages(chat_connector, user_input_message):
+# @st.experimental_fragment
+def chat_messages(chat_connector, user_input_message, user_uploaded_files):
     if "session_id" in st.session_state:
         chat_history = chat_connector.fetch_chat_history(st.session_state["session_id"])
 
@@ -313,6 +243,9 @@ def chat_messages(chat_connector, user_input_message):
                 st.markdown(message)
 
     if user_input_message:
+        if len(user_uploaded_files) > 0:
+            print("User file list:", user_uploaded_files[0][0])
+
         if "session_id" not in st.session_state:
             chat_history = chat_connector.create_chat_history()
 
@@ -327,12 +260,15 @@ def chat_messages(chat_connector, user_input_message):
             st.write(user_input_message)
 
         # Send user message to AI inference
-        ai_response = chat_history.send_user_message(user_input_message)
+        ai_response = chat_history.send_user_message(user_input_message, user_uploaded_files)
 
         # Display AI response
         with st.spinner("Processando resposta..."):
             with st.chat_message("assistant", avatar="👩🏽‍🏫"):
                 st.write_stream(ai_response)
+
+        st.write("")
+        st.write("")
     else:
         st.info("Dani Stella está pronta para conversar! Envie uma mensagem para começar.")
 
@@ -340,19 +276,45 @@ def main():
     maybe_st_initialize_state()
     chat_connector = create_chat_connector()
 
-    # with st.container():
-    #     st.file_uploader("Upload de arquivos", accept_multiple_files=True, label_visibility="collapsed")
+        
+    with stylable_container(
+        key="main_container",
+        css_styles="""{
+            overflow-y: auto;
+            position: fixed;
+            bottom: 0rem;
+            height: 100%;
+            padding-top: 4rem;
+        }
+        """
+    ):
+        st.title("Dani Stella")
+        st.divider()
+        chat_history_container = st.container(height=700, border=True)
 
-    user_input_message = st.chat_input("Digite sua mensagem aqui")
+        with stylable_container(
+            key="chat_input_container",
+            css_styles="""{
+                padding-bottom: 1rem;
+            }
+            """
+        ):
+            if "counter" not in st.session_state:
+                st.session_state["counter"] = 0
+            
+            expander = st.expander("Upload de arquivos", expanded=False)
+            with expander:
+                files_container = st.empty()
+                user_uploaded_files = files_container.file_uploader("Upload de arquivos", accept_multiple_files=True, label_visibility="collapsed", key=st.session_state["counter"])
+                user_uploaded_files_list = [(uploaded_file.name, uploaded_file.read()) for uploaded_file in user_uploaded_files]
 
-    # width = 50
-    # width = max(width, 0.01)
-    # side = max((100 - width) / 2, 0.01)
-    # _, container, _ = st.columns([side, width, side])
+            user_input_message = st.chat_input("Digite sua mensagem aqui")
 
-    # with st.expander("Configurações do chat", expanded=False):
-    #     st.write("Configurações do chat")
+            if user_input_message:
+                st.session_state["counter"] += 1
+                files_container.file_uploader("Upload de arquivos", accept_multiple_files=True, label_visibility="collapsed", key=st.session_state["counter"])
 
-    chat_messages(chat_connector, user_input_message)
+        with chat_history_container:
+            chat_messages(chat_connector, user_input_message, user_uploaded_files_list)
 
 main()

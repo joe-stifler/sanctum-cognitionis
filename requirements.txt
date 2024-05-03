@@ -11,7 +11,7 @@ plotly
 replicate
 python-dotenv
 vertexai===1.48.0
-streamlit
+streamlit===1.34.0
 streamlit-feedback
 langchain
 streamlit-chat===0.1.1
@@ -22,3 +22,4 @@ notion-client===2.2.1
 opencv-python===4.9.0.80
 pytesseract===0.3.10
 deskew===1.5.1
+streamlit-chat===0.1.1

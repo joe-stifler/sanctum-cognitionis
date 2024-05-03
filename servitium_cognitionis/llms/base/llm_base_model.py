@@ -52,9 +52,9 @@ class LLMBaseModel(ABC):
         pass
 
     @abstractmethod
-    def send_stream_chat_message(self, session_id, message):
+    def send_stream_chat_message(self, session_id, message, files=[]):
         pass
 
     @abstractmethod
-    def send_stream_single_message(self, message):
+    def send_stream_single_message(self, message, files=[]):
         pass
