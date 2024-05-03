@@ -326,52 +326,33 @@ def main():
         
     with stylable_container(
         key="main_container",
-        css_styles="""{
-            overflow-y: auto;
-            position: fixed;
+        css_styles=f"""{{
             bottom: 0rem;
-            height: 100%;
-            padding-top: 4rem;
-        }
+            z-index: 999999;
+            position: fixed;
+            padding-bottom: 2rem;
+            background-color: {bc};
+        }}
         """
     ):
-        chat_history_container = st.container(height=750, border=False)
+        if "counter" not in st.session_state:
+            st.session_state["counter"] = 0
 
-        with stylable_container(
-            key="chat_input_container",
-            css_styles="""{
-                padding-bottom: 0.2rem;
-            }
-            """
-        ):
-            if "counter" not in st.session_state:
-                st.session_state["counter"] = 0
+        col1, col2 = st.columns([1, 13], gap="small")
 
-            col1, col2 = st.columns([1, 8], gap="small")
+        with col1:
+            with st.popover("Upload"):
+                files_container = st.empty()
+                user_uploaded_files = files_container.file_uploader("Upload de arquivos", accept_multiple_files=True, label_visibility="collapsed", key=st.session_state["counter"])
 
-            with col1:
-                with st.popover("Upload de arquivos"):
-                    files_container = st.empty()
-                    user_uploaded_files = files_container.file_uploader("Upload de arquivos", accept_multiple_files=True, label_visibility="collapsed", key=st.session_state["counter"])
+        with col2:
+            user_input_message = st.chat_input("Digite sua mensagem aqui")
 
-            with col2:
-                user_input_message = st.chat_input("Digite sua mensagem aqui")
+        if user_input_message:
+            st.session_state["counter"] += 1
+            files_container.file_uploader("Upload de arquivos", accept_multiple_files=True, label_visibility="collapsed", key=st.session_state["counter"])
 
-            if user_input_message:
-                st.session_state["counter"] += 1
-                files_container.file_uploader("Upload de arquivos", accept_multiple_files=True, label_visibility="collapsed", key=st.session_state["counter"])
-
-        with chat_history_container:
-            with stylable_container(
-                key="chat_history_container",
-                css_styles="""{
-                    width: 100%;
-                }
-                [data-testid="stExpander"] details {
-                    border-style: none;
-                }
-                """
-            ):
-                chat_messages(chat_connector, user_input_message, user_uploaded_files)
+    with st.container(height=700, border=False):
+        chat_messages(chat_connector, user_input_message, user_uploaded_files)
 
 main()
