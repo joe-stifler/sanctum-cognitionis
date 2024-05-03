@@ -30,7 +30,6 @@ class LLMMockBaseModel(LLMBaseModel):
         self._model_chats[session_id] = []
 
     def send_stream_chat_message(self, session_id, message, files=[]):
-        print('sending message:', files)
         files = ['sending uploaded file: ' + key + '\n' for key, _ in files]
 
         if session_id not in self._model_chats:

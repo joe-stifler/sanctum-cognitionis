@@ -12,13 +12,15 @@ import os
 import hmac
 import time
 import uuid
+import base64
 import logging
 import vertexai
 import google.auth
 import pandas as pd
-from PIL import Image
 import streamlit as st
 from pathlib import Path
+from tempfile import NamedTemporaryFile
+from streamlit_pdf_viewer import pdf_viewer
 from streamlit_extras.stylable_container import stylable_container
 from langchain_core.messages import HumanMessage, AIMessage
 
@@ -242,17 +244,39 @@ def create_chat_connector():
     return ChatConnector()
 
 def write_files(role, files):
-    popover_label = "Arquivos enviados pelo usuário"
-    if role == "assistant":
-        popover_label = "Metadados retornados na resposta do professor"
-    
-    with st.popover(popover_label):
-        for file in files:
-            extension = Path(file.name).suffix
-            
-            if extension in [".png", ".jpg", ".jpeg", ".gif"]:
-                image = Image.open(file)
-                st.write(image)
+    if len(files) == 0:
+        return
+
+    st.divider()
+    st.write(f"**Arquivos associados:**")
+    for idx, file in enumerate(files):
+        with st.expander("## Arquivos associados a mensagem", expanded=True):
+            suffix = Path(file.name).suffix
+
+            st.write(f"**{idx}\. {file.name}:**")
+
+            if suffix in [".png", ".jpg", ".jpeg", ".gif"]:
+                st.image(file)
+            elif suffix in [".csv"]:
+                st.data_editor(pd.read_csv(file))
+            elif suffix in [".xlsx", ".xls"]:
+                st.data_editor(pd.read_excel(file))
+            elif suffix in [".json"]:
+                st.data_editor(pd.read_json(file), num_rows='dynamic')
+            elif suffix in [".pdf"]:
+                with NamedTemporaryFile(dir='.', suffix=suffix) as f:
+                    f.write(file.getbuffer())
+                    pdf_viewer(f.name, height=600, width=700)
+            elif suffix in [".txt"]:
+                st.text(file.read().decode('utf-8'))
+            elif suffix in [".py"]:
+                st.code(file.read().decode('utf-8'), language='python')
+            elif suffix in [".md"]:
+                st.markdown(file.read().decode('utf-8'))
+            elif suffix in [".html"]:
+                st.markdown(file.read().decode('utf-8'), unsafe_allow_html=True)
+            elif suffix in [".cpp", '.c', '.h', '.hpp']:
+                st.code(file.read().decode('utf-8'), language='cpp')
 
 # @st.experimental_fragment
 def chat_messages(chat_connector, user_input_message, user_uploaded_files):
@@ -269,7 +293,7 @@ def chat_messages(chat_connector, user_input_message, user_uploaded_files):
 
     if user_input_message:
         user_uploaded_files = [uploaded_file for uploaded_file in user_uploaded_files]
-        
+
         if "session_id" not in st.session_state:
             chat_history = chat_connector.create_chat_history()
 
@@ -293,7 +317,7 @@ def chat_messages(chat_connector, user_input_message, user_uploaded_files):
         with st.spinner("Processando resposta..."):
             with st.chat_message("assistant", avatar="👩🏽‍🏫"):
                 st.write_stream(ai_response)
-    
+
     if "session_id" not in st.session_state:
         st.info("Dani Stella está pronta para conversar! Envie uma mensagem para começar.")
 
@@ -310,7 +334,6 @@ def main():
             bottom: 0rem;
             height: 100%;
             padding-top: 4rem;
-            with: 100%;
         }
         """
     ):
@@ -325,9 +348,8 @@ def main():
         ):
             if "counter" not in st.session_state:
                 st.session_state["counter"] = 0
-            
-            expander = st.expander("Upload de arquivos", expanded=False)
-            with expander:
+
+            with st.popover("Upload de arquivos"):
                 files_container = st.empty()
                 user_uploaded_files = files_container.file_uploader("Upload de arquivos", accept_multiple_files=True, label_visibility="collapsed", key=st.session_state["counter"])
 
@@ -338,6 +360,16 @@ def main():
                 files_container.file_uploader("Upload de arquivos", accept_multiple_files=True, label_visibility="collapsed", key=st.session_state["counter"])
 
         with chat_history_container:
-            chat_messages(chat_connector, user_input_message, user_uploaded_files)
+            with stylable_container(
+                key="chat_history_container",
+                css_styles="""{
+                    width: 100%;
+                }
+                [data-testid="stExpander"] details {
+                    border-style: none;
+                }
+                """
+            ):
+                chat_messages(chat_connector, user_input_message, user_uploaded_files)
 
 main()
