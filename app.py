@@ -250,10 +250,8 @@ def write_files(role, files):
     st.divider()
     st.write(f"**Arquivos associados:**")
     for idx, file in enumerate(files):
-        with st.expander("## Arquivos associados a mensagem", expanded=True):
+        with st.expander(f"**{idx}\. {file.name}:**", expanded=True):
             suffix = Path(file.name).suffix
-
-            st.write(f"**{idx}\. {file.name}:**")
 
             if suffix in [".png", ".jpg", ".jpeg", ".gif"]:
                 st.image(file)
@@ -337,23 +335,27 @@ def main():
         }
         """
     ):
-        chat_history_container = st.container(height=700, border=False)
+        chat_history_container = st.container(height=750, border=False)
 
         with stylable_container(
             key="chat_input_container",
             css_styles="""{
-                padding-bottom: 1rem;
+                padding-bottom: 0.2rem;
             }
             """
         ):
             if "counter" not in st.session_state:
                 st.session_state["counter"] = 0
 
-            with st.popover("Upload de arquivos"):
-                files_container = st.empty()
-                user_uploaded_files = files_container.file_uploader("Upload de arquivos", accept_multiple_files=True, label_visibility="collapsed", key=st.session_state["counter"])
+            col1, col2 = st.columns([1, 8], gap="small")
 
-            user_input_message = st.chat_input("Digite sua mensagem aqui")
+            with col1:
+                with st.popover("Upload de arquivos"):
+                    files_container = st.empty()
+                    user_uploaded_files = files_container.file_uploader("Upload de arquivos", accept_multiple_files=True, label_visibility="collapsed", key=st.session_state["counter"])
+
+            with col2:
+                user_input_message = st.chat_input("Digite sua mensagem aqui")
 
             if user_input_message:
                 st.session_state["counter"] += 1
