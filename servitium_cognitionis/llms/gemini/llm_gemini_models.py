@@ -105,7 +105,7 @@ class LLMGeminiBaseModel(LLMBaseModel):
                     "candidate_index": candidate.index,
                     "candidate_content": candidate.content if hasattr(candidate, "content") else None,
                     "candidate_finish_reason": candidate.finish_reason,
-                    "candidate_safety_ratings": candidate.safety_ratings,
+                    # "candidate_safety_ratings": candidate.safety_ratings,
                     "candidate_function_calls": candidate.function_calls,
                     "candidate_finish_message": candidate.finish_message,
                     "candidate_citation_metadata": candidate.citation_metadata,

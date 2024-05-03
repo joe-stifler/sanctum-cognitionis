@@ -209,7 +209,7 @@ class ChatHistory:
                     message_content += self.chat_messages[message_pos].content
                     extra_args = self.chat_messages[message_pos].extra_args
                     if len(extra_args) > 0:
-                        message_args.append()
+                        message_args.append(extra_args)
 
                     message_pos += 1
                 messages.append(("assistant", self.persona.avatar, message_content, message_args))
@@ -249,6 +249,23 @@ def write_files(role, files):
 
     st.divider()
     st.write(f"**Arquivos associados:**")
+
+    if role == "assistant":
+        num_cols = min(3, len(files))
+        with st.expander(f"**Metadados da resposta**", expanded=False):
+            # cols = st.columns(num_cols)
+            result = pd.json_normalize(files)
+            print(result)
+            st.dataframe(result)
+
+            # for idx, arguments in enumerate(files):
+            #     with cols[idx % num_cols]:
+            #         st.divider()
+            #         st.write(f"{idx}\. Argumentos:")
+            #         st.json(arguments)
+
+        return
+
     for idx, file in enumerate(files):
         with st.expander(f"**{idx}\. {file.name}:**", expanded=True):
             suffix = Path(file.name).suffix
@@ -275,6 +292,9 @@ def write_files(role, files):
                 st.markdown(file.read().decode('utf-8'), unsafe_allow_html=True)
             elif suffix in [".cpp", '.c', '.h', '.hpp']:
                 st.code(file.read().decode('utf-8'), language='cpp')
+            else:
+                # file not supported
+                st.error(f"Arquivo não suportado: {file.name}")
 
 # @st.experimental_fragment
 def chat_messages(chat_connector, user_input_message, user_uploaded_files):

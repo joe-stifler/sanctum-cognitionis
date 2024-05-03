@@ -6,6 +6,7 @@ class Persona:
         self._name = persona_data.get('name', '')
         self._avatar = "👩🏽‍🏫"
         self._knowledge_files = persona_data.get('knowledge', [])
+        self._full_knowledge = persona_data.get('full_knowledge', False)
         self._thought_process = persona_data.get('thought_process', None)
         self._creativity_level = persona_data.get('creativity_level', None)
         self._speech_conciseness = persona_data.get('speech_conciseness', None)
