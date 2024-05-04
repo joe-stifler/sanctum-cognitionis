@@ -31,3 +31,5 @@ data-preprocessing/
 !dados/**/*.md
 !dados/**/*.txt
 *.png
+
+logs/

@@ -10,6 +10,7 @@ class Persona:
         self._thought_process = persona_data.get('thought_process', None)
         self._creativity_level = persona_data.get('creativity_level', None)
         self._speech_conciseness = persona_data.get('speech_conciseness', None)
+        self._backup_thought_process = persona_data.get('thought_process', None)
         self._thinking_style = persona_data.get('thinking_style', 'LLMMockFamily')
         self._persona_description_file = persona_data.get('persona_description', '')
 
@@ -64,7 +65,7 @@ class Persona:
         except FileNotFoundError:
             return "Description file not found."
 
-    def present_initial_state(self):
+    def present_yourself(self):
         files_str = self.convert_files_to_str(self._knowledge_files)
         description = self.read_description()
         return f"{files_str}\n---\n\n{description}"
