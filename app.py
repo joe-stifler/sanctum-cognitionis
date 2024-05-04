@@ -21,6 +21,7 @@ import streamlit as st
 from pathlib import Path
 from tempfile import NamedTemporaryFile
 from streamlit_pdf_viewer import pdf_viewer
+from streamlit_feedback import streamlit_feedback
 from langchain_core.messages import HumanMessage, AIMessage
 from streamlit_extras.stylable_container import stylable_container
 
@@ -34,7 +35,7 @@ def setup_logger():
     if not log_name:
         log_id = str(uuid.uuid4().hex)
         creation_date = datetime.datetime.now().strftime("date_%Y-%m-%d_time_%H-%M-%S")
-        log_name = f"{log_dir}/app_{creation_date}_{log_id}.log"
+        log_name = f"{log_dir}/{creation_date}_log_id_{log_id}.log"
         st.session_state['log_name'] = log_name
 
     # Create log directory if it doesn't exist
@@ -168,15 +169,20 @@ class ChatHistory:
         self.user_avatar = "👩🏾‍🎓"
         self.llm_model = llm_model
         self.session_id = session_id
-        self.chat_num_lines = 0
 
-    def add_new_ai_message(self, ai_message, **kwargs):
+    def get_persona(self):
+        return self.persona
+
+    def add_new_ai_message(self, message_id, ai_message, **kwargs):
         logger.debug("Adding new AI message: %s", ai_message)
         logger.debug("With kwargs: %s", kwargs)
         logger.debug("\n\n")
-        self.chat_messages.append(AIMessage(ai_message, extra_args=kwargs))
 
-    def initialize_chat(self, user_message, user_uploaded_files=[]):
+        assert self.chat_messages[-1]["message_id"] == message_id
+
+        self.chat_messages[-1]["ai_messages"].append(AIMessage(ai_message, extra_args=kwargs))
+
+    def initialize_chat(self, message_id, user_message, user_uploaded_files=[]):
         self.llm_model.initialize_model(
             temperature=self.persona.creativity_level,
             max_output_tokens=self.persona.speech_conciseness,
@@ -192,12 +198,14 @@ class ChatHistory:
             "# Agora abaixo está a primeira mensagem do usuário que você deve responder: \n\n" +
              user_message
         )
+
         return self.send_ai_message(
+            message_id,
             initial_ai_description_with_user_message,
             user_uploaded_files=user_uploaded_files
         )
 
-    def send_ai_message(self, user_message, user_uploaded_files={}):
+    def send_ai_message(self, message_id, user_message, user_uploaded_files={}):
         user_message = f"# Mensagem do usuário:\n\n{user_message}"
         ai_response_stream = self.llm_model.send_stream_chat_message(
             self.session_id,
@@ -206,26 +214,27 @@ class ChatHistory:
         )
 
         for text_message, ai_message_args in ai_response_stream:
-            self.add_new_ai_message(text_message, **ai_message_args)
-            self.chat_num_lines += text_message.count("\n")
-            yield text_message
+            self.add_new_ai_message(message_id, text_message, **ai_message_args)
+            yield text_message, ai_message_args
 
     def send_user_message(self, user_message, user_uploaded_files=[]):
         user_uploaded_files_ai = [(uploaded_file.name, uploaded_file.read()) for uploaded_file in user_uploaded_files]
-        
-        self.chat_num_lines += user_message.count("\n")
-        self.chat_messages.append(HumanMessage(user_message, upload_files=user_uploaded_files))
+
+        message_id = str(uuid.uuid4().hex)
+
+        self.chat_messages.append({})
+
+        self.chat_messages[-1]["message_id"] = message_id
+        self.chat_messages[-1]["user_message"] = HumanMessage(user_message, upload_files=user_uploaded_files)
+        self.chat_messages[-1]["ai_messages"] = []
 
         logger.info("Sending user message: %s", user_message)
 
         if len(self.get_chat_messages()) == 1:
             logger.info("Initializing chat")
-            return self.initialize_chat(user_message, user_uploaded_files=user_uploaded_files_ai)
+            return self.initialize_chat(message_id, user_message, user_uploaded_files=user_uploaded_files_ai)
 
-        return self.send_ai_message(user_message, user_uploaded_files=user_uploaded_files_ai)
-
-    def get_chat_num_lines(self):
-        return self.chat_num_lines
+        return message_id, self.send_ai_message(message_id, user_message, user_uploaded_files=user_uploaded_files_ai)
 
     def get_chat_messages(self):
         messages = []
@@ -233,20 +242,12 @@ class ChatHistory:
 
         while message_pos < len(self.chat_messages):
             message = self.chat_messages[message_pos]
+
             if isinstance(message, HumanMessage):
                 messages.append(("user", self.user_avatar, message.content, message.upload_files))
                 message_pos += 1
             else:
-                message_content = ""
-                message_args = []
-                while message_pos < len(self.chat_messages) and not isinstance(self.chat_messages[message_pos], HumanMessage):
-                    message_content += self.chat_messages[message_pos].content
-                    extra_args = self.chat_messages[message_pos].extra_args
-                    if len(extra_args) > 0:
-                        message_args.append(extra_args)
 
-                    message_pos += 1
-                messages.append(("assistant", self.persona.avatar, message_content, message_args))
         return messages
 
 
@@ -277,29 +278,26 @@ def create_chat_connector():
     logger.info("Creating chat connector")
     return ChatConnector()
 
-def write_files(role, files):
+def write_medatada_chat_message(role, files):
     if len(files) == 0:
         return
 
     st.divider()
-    st.write(f"**Arquivos associados:**")
 
     if role == "assistant":
         num_cols = min(3, len(files))
         with st.expander(f"**Metadados da resposta**", expanded=False):
-            # cols = st.columns(num_cols)
-            result = pd.json_normalize(files)
-            print(result)
-            st.dataframe(result)
+            cols = st.columns(num_cols)
 
-            # for idx, arguments in enumerate(files):
-            #     with cols[idx % num_cols]:
-            #         st.divider()
-            #         st.write(f"{idx}\. Argumentos:")
-            #         st.json(arguments)
+            for idx, arguments in enumerate(files):
+                with cols[idx % num_cols]:
+                    st.divider()
+                    st.write(f"{idx}\. Argumentos:")
+                    st.json(arguments)
 
         return
 
+    st.write(f"**Arquivos associados:**")
     for idx, file in enumerate(files):
         with st.expander(f"**{idx}\. {file.name}:**", expanded=True):
             suffix = Path(file.name).suffix
@@ -338,10 +336,15 @@ def chat_messages(chat_connector, user_input_message, user_uploaded_files):
         # Display chat history messages
         for role, avatar, message, args in chat_history.get_chat_messages():
             with st.chat_message(role, avatar=avatar):
+                if role == "user":
+                    st.write(f":blue[Usuário]")
+                else:
+                    st.write(f":red[{chat_history.get_persona().name}]")
+
                 st.write(message)
 
                 if len(args) > 0:
-                    write_files(role, args)
+                    write_medatada_chat_message(role, args)
 
     if user_input_message:
         try:
@@ -350,20 +353,37 @@ def chat_messages(chat_connector, user_input_message, user_uploaded_files):
             if "session_id" not in st.session_state:
                 chat_history = chat_connector.create_chat_history()
 
-            # Display User Message
-            with st.chat_message("user", avatar="👩🏾‍🎓"):
-                st.write(user_input_message)
+            # # Display User Message
+            # with st.chat_message("user", avatar="👩🏾‍🎓"):
+            #     st.write(f":blue[Usuário]")
+            #     st.write(user_input_message)
 
-                if len(user_uploaded_files) > 0:
-                    write_files("user", user_uploaded_files)
+            #     if len(user_uploaded_files) > 0:
+            #         write_medatada_chat_message("user", user_uploaded_files)
 
-            # Send user message to AI inference
-            ai_response = chat_history.send_user_message(user_input_message, user_uploaded_files)
+            # # Send user message to AI inference
+            # ai_response = chat_history.send_user_message(user_input_message, user_uploaded_files)
 
-            # Display AI response
-            with st.spinner("Processando resposta..."):
-                with st.chat_message("assistant", avatar="👩🏽‍🏫"):
-                    st.write_stream(ai_response)
+            # metadata_reply = []
+
+            # # Display AI response
+            # with st.chat_message("assistant", avatar="👩🏽‍🏫"):
+            #     st.write(f":red[{chat_history.get_persona().name}]")
+            #     with st.spinner('Processando sua mensagem...'):
+            #         def process_response(response):
+            #             for message, args in response:
+            #                 metadata_reply.append(args)
+            #                 yield message
+
+            #         st.write_stream(process_response(ai_response))
+            #         write_medatada_chat_message("assistant", metadata_reply)
+
+            feedback = streamlit_feedback(
+                feedback_type="thumbs",  # Apply the selected feedback style
+                optional_text_label="[Optional] Please provide an explanation",  # Allow for additional comments
+                key=f"feedback_{st.session_state.run_id}",
+            )
+
         except FileNotFoundError as e:
             logger.error("Erro ao inicializar a persona: %s", str(e))
             st.error(f"Erro ao inicializar a persona: {e}")
