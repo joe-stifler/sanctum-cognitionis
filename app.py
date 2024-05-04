@@ -162,6 +162,47 @@ def get_ai_chat():
     return llm_model, persona
 
 
+class ChatMessage:
+    def __init__(self, message_id, user_message, user_upload_files=None):
+        self._ai_messages = []
+        self._feedback_value = None
+        self._message_id = message_id
+        self._user_message = user_message
+        self._timestamp = datetime.datetime.now()
+        self._user_uploaded_files = user_upload_files
+
+    @property
+    def message_id(self):
+        return self._message_id
+
+    @property
+    def timestamp(self):
+        return self._timestamp
+
+    @property
+    def feedback_value(self):
+        return self._feedback_value
+
+    @feedback_value.setter
+    def feedback_value(self, value):
+        self._feedback_value = value
+
+    @property
+    def user_message(self):
+        return self._user_message
+
+    @property
+    def user_uploaded_files(self):
+        return self._user_uploaded_files
+
+    @property
+    def ai_messages(self):
+        return self._ai_messages
+
+    def add_ai_message(self, ai_message, **kwargs):
+        self._ai_messages.append(ai_message)
+
+
 class ChatHistory:
     def __init__(self, session_id, llm_model, persona):
         self.persona = persona
@@ -172,15 +213,6 @@ class ChatHistory:
 
     def get_persona(self):
         return self.persona
-
-    def add_new_ai_message(self, message_id, ai_message, **kwargs):
-        logger.debug("Adding new AI message: %s", ai_message)
-        logger.debug("With kwargs: %s", kwargs)
-        logger.debug("\n\n")
-
-        assert self.chat_messages[-1]["message_id"] == message_id
-
-        self.chat_messages[-1]["ai_messages"].append(AIMessage(ai_message, extra_args=kwargs))
 
     def initialize_chat(self, message_id, user_message, user_uploaded_files=[]):
         self.llm_model.initialize_model(
@@ -213,28 +245,26 @@ class ChatHistory:
             user_uploaded_files
         )
 
-        for text_message, ai_message_args in ai_response_stream:
-            self.add_new_ai_message(message_id, text_message, **ai_message_args)
-            yield text_message, ai_message_args
-
     def send_user_message(self, user_message, user_uploaded_files=[]):
         user_uploaded_files_ai = [(uploaded_file.name, uploaded_file.read()) for uploaded_file in user_uploaded_files]
 
         message_id = str(uuid.uuid4().hex)
-
-        self.chat_messages.append({})
-
-        self.chat_messages[-1]["message_id"] = message_id
-        self.chat_messages[-1]["user_message"] = HumanMessage(user_message, upload_files=user_uploaded_files)
-        self.chat_messages[-1]["ai_messages"] = []
-
+        self.chat_messages.append(
+            ChatMessage(
+                message_id,
+                user_message,
+                user_uploaded_files=user_uploaded_files_ai
+            )
+        )
         logger.info("Sending user message: %s", user_message)
 
         if len(self.get_chat_messages()) == 1:
             logger.info("Initializing chat")
             return self.initialize_chat(message_id, user_message, user_uploaded_files=user_uploaded_files_ai)
 
-        return message_id, self.send_ai_message(message_id, user_message, user_uploaded_files=user_uploaded_files_ai)
+        ai_message = self.send_ai_message(message_id, user_message, user_uploaded_files=user_uploaded_files_ai)
+
+        return message_id, ai_response
 
     def get_chat_messages(self):
         messages = []
