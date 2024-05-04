@@ -17,7 +17,6 @@ class ChatHistory:
     def maybe_initialize_chat_message(self):
         """Initialize the chat and return the system message."""
         if not self.llm_model.check_chat_session_exists(self.session_id):
-            logger.info("Initializing chat")
             self.llm_model.initialize_model(
                 temperature=self.persona.creativity_level,
                 system_instruction=[
@@ -41,7 +40,6 @@ class ChatHistory:
 
     def send_ai_message(self, user_message, user_uploaded_files=None):
         """Send AI response for a given chat message."""
-        logger.info("Sending user message:\n\n```text\n%s\n```", user_message)
         self.maybe_initialize_chat_message()
 
         new_message = self.create_new_message(user_message, user_uploaded_files)

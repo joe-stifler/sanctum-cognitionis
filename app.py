@@ -1,5 +1,4 @@
 # module imports from the praesentatio_cognitionis package
-from praesentatio_cognitionis.chat_message import ChatMessage
 from praesentatio_cognitionis.chat_history import ChatHistory
 from praesentatio_cognitionis.header import show_header
 show_header(0)
@@ -22,6 +21,7 @@ import google.auth
 import pandas as pd
 import streamlit as st
 from pathlib import Path
+from streamlit_extras.row import row
 from tempfile import NamedTemporaryFile
 from streamlit_pdf_viewer import pdf_viewer
 from streamlit_extras.stylable_container import stylable_container
@@ -112,9 +112,9 @@ tc = st.get_option('theme.textColor')
 ################################################################################
 
 def maybe_st_initialize_state():
-    if "persona_settings" not in st.session_state:
+    if "persona_settings_path" not in st.session_state:
         st.session_state["persona_settings_path"] = "dados/personas/professores/redacao/dani-stella/persona_config.json"
-        
+
         logger.info("Setting persona settings path to: %s", st.session_state["persona_settings_path"])
 
     key_path = ".streamlit/google_secrets.json"
@@ -163,57 +163,6 @@ def get_ai_chat():
     llm_model = llm_family.get_model(persona.thought_process)
 
     return llm_model, persona
-
-
-class ChatHistory:
-    def __init__(self, session_id, llm_model, persona):
-        self.persona = persona
-        self.chat_messages = []
-        self.llm_model = llm_model
-        self.session_id = session_id
-
-    def get_persona(self):
-        return self.persona
-
-    def maybe_initialize_chat_message(self):
-        """Initialize the chat and return the system message."""
-        if not self.llm_model.check_chat_session_exists(self.session_id):
-            logger.info("Initializing chat")
-            self.llm_model.initialize_model(
-                temperature=self.persona.creativity_level,
-                system_instruction=[
-                    self.persona.present_yourself()
-                ],
-                max_output_tokens=self.persona.speech_conciseness
-            )
-            self.llm_model.create_chat(self.session_id)
-
-    def create_new_message(self, user_message="", user_uploaded_files=None):
-        """Create a new chat message and return it."""
-        new_chat_message = ChatMessage(
-            message_id=str(uuid.uuid4().hex),
-            ai_name=self.persona.name,
-            user_name="Usuário",
-            user_message=user_message,
-            user_upload_files=user_uploaded_files
-        )
-        self.chat_messages.append(new_chat_message)
-        return new_chat_message
-
-    def send_ai_message(self, user_message, user_uploaded_files=None):
-        """Send AI response for a given chat message."""
-        logger.info("Sending user message:\n\n```text\n%s\n```", user_message)
-        self.maybe_initialize_chat_message()
-
-        new_message = self.create_new_message(user_message, user_uploaded_files)
-        ai_response_stream = self.llm_model.send_stream_chat_message(
-            self.session_id,
-            user_message,
-            user_uploaded_files
-        )
-        new_message.set_ai_message_stream(ai_response_stream)
-
-        return new_message
 
 
 class ChatConnector:
@@ -293,8 +242,6 @@ def write_medatada_chat_message(role, files):
             else:
                 st.error(f"Arquivo não suportado: {file.name}")
 
-
-@st.experimental_fragment
 def chat_messages(chat_connector, user_input_message, user_uploaded_files):
     # Initialize or fetch existing chat history
     if "session_id" not in st.session_state:
@@ -319,15 +266,14 @@ def chat_messages(chat_connector, user_input_message, user_uploaded_files):
                 if os.environ.get("FORCE_LLM_MOCK_FAMILY"):
                     write_medatada_chat_message("assistant", chat_message.ai_extra_args)
 
-        if len(chat_history.chat_messages) == 0:
-            st.info("Dani Stella está pronta para conversar! Envie uma mensagem para começar.")
-
     if user_input_message:
         try:
             # Display User Message
             with st.chat_message("user", avatar="👩🏾‍🎓"):
                 st.write(f":blue[Usuário]")
                 st.write(user_input_message)
+
+            logger.debug("Sending user message:\n\n```text\n%s\n```", user_input_message)
 
             # Send user message to AI inference
             new_chat_message = chat_history.send_ai_message(
@@ -352,29 +298,53 @@ def chat_messages(chat_connector, user_input_message, user_uploaded_files):
             error_details = traceback.format_exc()
             logger.error(f"Error processing user input: %s\nDetails: %s", error_message, error_details)
             st.error(f"Sorry, there was a problem processing your message: {error_message}. Please try again.")
-
+    else:
+        if len(chat_history.chat_messages) == 0:
+            st.info("Dani Stella está pronta para conversar! Envie uma mensagem para começar.")
 
 def main():
     chat_connector = maybe_st_initialize_state()
 
-    with stylable_container(
-        key="main_container",
-        css_styles=f"""{{
-            bottom: 0rem;
-            z-index: 999999;
-            position: fixed;
-            padding-bottom: 2rem;
-            background-color: {bc};
-        }}
-        """
-    ):
-        if "counter" not in st.session_state:
-            st.session_state["counter"] = 0
+    if "counter" not in st.session_state:
+        st.session_state["counter"] = 0
 
-        col1, col2 = st.columns([1, 40], gap="large")
+    with stylable_container(key="main_container", css_styles="""
+            {
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                max-height: 100vh;
+                position: fixed;
+                overflow-y: auto;
+                overflow-x: hidden;
+                padding-left: 50px;
+                padding-right: 50px;
+            }
+    """):
+        parent_chat_container = stylable_container(key="chat_container", css_styles="""
+                {
+                    min-height: 5vh;
+                    max-height: 80vh;
+                    padding-top: 5vh;
+                    position: relative;
+                }
+        """)
 
-        with col1:
-            with st.popover("📎"):
+        with stylable_container(
+            key="chat_input_container",
+            css_styles="""
+                {
+                    white-space: nowrap;
+                    margin-bottom: 3vh;
+                }
+                div[data-testid="stPopover"] {
+                    min-width: 2rem;
+                }
+            """
+        ):
+            rows = row([1, 20], gap="small")
+
+            with rows.popover("📎", use_container_width=True):
                 files_container = st.empty()
                 user_uploaded_files = files_container.file_uploader(
                     "Upload de arquivos",
@@ -383,14 +353,10 @@ def main():
                     key=st.session_state["counter"]
                 )
 
-        with col2:
-            user_input_message = st.chat_input("Digite sua mensagem aqui")
+            user_input_message = rows.chat_input("Digite sua mensagem aqui...")
 
-        if user_input_message:
-            st.session_state["counter"] += 1
-            files_container.file_uploader("Upload de arquivos", accept_multiple_files=True, label_visibility="collapsed", key=st.session_state["counter"])
-
-    with st.container(height=700, border=True):
-        chat_messages(chat_connector, user_input_message, user_uploaded_files)
+        with parent_chat_container:
+            with st.container(height=10000, border=False):
+                chat_messages(chat_connector, user_input_message, user_uploaded_files)
 
 main()
