@@ -1,4 +1,5 @@
 # module imports from the praesentatio_cognitionis package
+from praesentatio_cognitionis.chat_message import ChatMessage
 from praesentatio_cognitionis.header import show_header
 show_header(0)
 
@@ -163,65 +164,6 @@ def get_ai_chat():
     return llm_model, persona
 
 
-class ChatMessage:
-    def __init__(self, message_id, ai_name, user_name, user_message, user_upload_files=None):
-        self._ai_messages = []
-        self.ai_name = ai_name
-        self.user_name = user_name
-        self._feedback_value = None
-        self._message_id = message_id
-        self._ai_messages_stream = None
-        self._user_message = user_message
-        self._timestamp = datetime.datetime.now()
-        self._user_uploaded_files = user_upload_files
-
-    @property
-    def message_id(self):
-        return self._message_id
-
-    @property
-    def timestamp(self):
-        return self._timestamp
-
-    @property
-    def feedback_value(self):
-        return self._feedback_value
-
-    @feedback_value.setter
-    def feedback_value(self, value):
-        self._feedback_value = value
-
-    @property
-    def user_message(self):
-        return self._user_message
-
-    @property
-    def user_uploaded_files(self):
-        return self._user_uploaded_files
-
-    @property
-    def ai_messages(self):
-        return [ai_message for ai_message, _ in self._ai_messages]
-
-    @property
-    def ai_extra_args(self):
-        return [args for _, args in self._ai_messages]
-
-    def add_ai_message(self, ai_message, **kwargs):
-        self._ai_messages.append((ai_message, kwargs))
-
-    def set_ai_message_stream(self, ai_message_stream):
-        self._ai_messages_stream = ai_message_stream
-
-    def process_ai_messages(self):
-        if self._ai_messages_stream:
-            for ai_message_chunk, ai_message_args_chunk in self._ai_messages_stream:
-                logger.debug(f"Adding new AI message: {ai_message_chunk}")
-                logger.debug(f"With kwargs: {ai_message_args_chunk}")
-                self.add_ai_message(ai_message_chunk, **ai_message_args_chunk)
-                yield ai_message_chunk
-
-
 class ChatHistory:
     def __init__(self, session_id, llm_model, persona):
         self.persona = persona
@@ -368,7 +310,7 @@ def chat_messages(chat_connector, user_input_message, user_uploaded_files):
                 st.write(chat_message.user_message)
                 write_medatada_chat_message("assistant", chat_message.user_uploaded_files)
 
-            with st.chat_message("user", avatar="👩🏽‍🏫"):
+            with st.chat_message("assistant", avatar="👩🏽‍🏫"):
                 st.write(f":red[{chat_message.ai_name}]")
                 st.write(''.join(chat_message.ai_messages))
 
@@ -392,10 +334,14 @@ def chat_messages(chat_connector, user_input_message, user_uploaded_files):
 
             # Display AI responses
             with st.chat_message("assistant", avatar="👩🏽‍🏫"):
-                st.write(f":red[{chat_history.get_persona().name}]")
                 with st.spinner('Processando sua mensagem...'):
+                    st.write(f":red[{chat_history.get_persona().name}]")
                     st.write_stream(new_chat_message.process_ai_messages())
-                write_medatada_chat_message("assistant", new_chat_message.ai_extra_args)
+
+                    logger.debug(f"AI new messages: \n\n{new_chat_message.ai_extra_args}")
+                    logger.debug(f"\n\nAI new message kwargs: \n\n{new_chat_message.ai_extra_args}")
+
+                    write_medatada_chat_message("assistant", new_chat_message.ai_extra_args)
         except FileNotFoundError as e:
             logger.error("Erro ao inicializar a persona: %s", str(e))
             st.error(f"Erro ao inicializar a persona: {e}")
@@ -418,6 +364,7 @@ def main():
             position: fixed;
             padding-bottom: 2rem;
             background-color: {bc};
+            overflow-y: auto;
         }}
         """
     ):
@@ -429,7 +376,12 @@ def main():
         with col1:
             with st.popover("📎"):
                 files_container = st.empty()
-                user_uploaded_files = files_container.file_uploader("Upload de arquivos", accept_multiple_files=True, label_visibility="collapsed", key=st.session_state["counter"])
+                user_uploaded_files = files_container.file_uploader(
+                    "Upload de arquivos",
+                    accept_multiple_files=True,
+                    label_visibility="collapsed",
+                    key=st.session_state["counter"]
+                )
 
         with col2:
             user_input_message = st.chat_input("Digite sua mensagem aqui")
@@ -438,7 +390,6 @@ def main():
             st.session_state["counter"] += 1
             files_container.file_uploader("Upload de arquivos", accept_multiple_files=True, label_visibility="collapsed", key=st.session_state["counter"])
 
-    with st.container(height=700, border=False):
-        chat_messages(chat_connector, user_input_message, user_uploaded_files)
+    chat_messages(chat_connector, user_input_message, user_uploaded_files)
 
 main()
