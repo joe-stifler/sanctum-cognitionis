@@ -12,6 +12,7 @@ class LLMMockBaseModel(LLMBaseModel):
 
     def initialize_model(self, system_instruction=[], temperature=None, max_output_tokens=None):
         self._model_initialized = True
+        self._model_chats = {}
 
     def process_message(self, session_id, message_chunks):
         for message in message_chunks:
@@ -19,6 +20,9 @@ class LLMMockBaseModel(LLMBaseModel):
                 self._model_chats[session_id].append(AIMessage(message))
             time.sleep(0.01)
             yield message, {}
+
+    def check_chat_session_exists(self, session_id):
+        return session_id in self._model_chats
 
     def create_chat(self, session_id):
         if self._model_initialized is False:

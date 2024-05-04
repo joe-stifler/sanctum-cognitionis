@@ -163,10 +163,13 @@ def get_ai_chat():
 
 
 class ChatMessage:
-    def __init__(self, message_id, user_message, user_upload_files=None):
+    def __init__(self, message_id, ai_name, user_name, user_message, user_upload_files=None):
         self._ai_messages = []
+        self.ai_name = ai_name
+        self.user_name = user_name
         self._feedback_value = None
         self._message_id = message_id
+        self._ai_messages_stream = None
         self._user_message = user_message
         self._timestamp = datetime.datetime.now()
         self._user_uploaded_files = user_upload_files
@@ -189,18 +192,31 @@ class ChatMessage:
 
     @property
     def user_message(self):
-        return self._user_message
+        return f":blue[{self.user_name}]: " + self._user_message
 
     @property
     def user_uploaded_files(self):
-        return self._user_uploaded_files
+        return f":red[{self.ai_name}]: " + self._user_uploaded_files
 
     @property
     def ai_messages(self):
         return self._ai_messages
 
     def add_ai_message(self, ai_message, **kwargs):
-        self._ai_messages.append(ai_message)
+        self._ai_messages.append((ai_message, kwargs))
+
+    def set_ai_message_stream(self, ai_message_stream):
+        self._ai_messages_stream = ai_message_stream
+
+    def process_ai_messages(self):
+        if self._ai_messages_stream:
+            for ai_message_chunk, ai_message_args_chunk in self._ai_messages_stream:
+                logger.debug(f"Adding new AI message: {ai_message_chunk}")
+                logger.debug(f"With kwargs: {ai_message_args_chunk}")
+
+                self.add_ai_message(ai_message_chunk, **ai_message_args_chunk)
+
+                yield ai_message_chunk, ai_message_args_chunk
 
 
 class ChatHistory:
@@ -214,71 +230,59 @@ class ChatHistory:
     def get_persona(self):
         return self.persona
 
-    def initialize_chat(self, message_id, user_message, user_uploaded_files=[]):
+    def initialize_chat(self):
+        """Initialize the chat with an initial message."""
+        logger.info("Initializing chat")
+
         self.llm_model.initialize_model(
             temperature=self.persona.creativity_level,
-            max_output_tokens=self.persona.speech_conciseness,
+            max_output_tokens=self.persona.speech_conciseness
         )
         self.llm_model.create_chat(self.session_id)
 
         persona_presentation = self.persona.present_yourself()
 
         initial_ai_description_with_user_message = (
-            persona_presentation +
-            "\n\n---\n\n" +
-            "# Acima estão as informações iniciais sobre quem e como você deve se comportar.\n" +
-            "# Agora abaixo está a primeira mensagem do usuário que você deve responder: \n\n" +
-             user_message
+            f"{persona_presentation}\n\n---\n\n"
+            f"# Acima estão as informações iniciais sobre quem e como você deve se comportar.\n"
         )
 
-        return self.send_ai_message(
-            message_id,
-            initial_ai_description_with_user_message,
-            user_uploaded_files=user_uploaded_files
-        )
+        return initial_ai_description_with_user_message
 
-    def send_ai_message(self, message_id, user_message, user_uploaded_files={}):
-        user_message = f"# Mensagem do usuário:\n\n{user_message}"
+    def create_new_message(self, user_message="", user_uploaded_files=None):
+        """Create a new chat message and return it."""
+        new_chat_message = ChatMessage(
+            message_id=str(uuid.uuid4().hex),
+            ai_name=self.persona.name,
+            user_name="Usuário",
+            user_message=user_message,
+            user_upload_files=user_uploaded_files
+        )
+        self.chat_messages.append(new_chat_message)
+        return new_chat_message
+
+    def send_ai_message(self, message, context=None, files=[]):
+        """Send AI response for a given chat message."""
+        new_message = self.create_new_message(message, files)
+
         ai_response_stream = self.llm_model.send_stream_chat_message(
             self.session_id,
-            user_message,
-            user_uploaded_files
+            context + "\n\n--\n" + new_message.user_message,
+            files
         )
+        new_message.set_ai_message_stream(ai_response_stream)
 
-    def send_user_message(self, user_message, user_uploaded_files=[]):
-        user_uploaded_files_ai = [(uploaded_file.name, uploaded_file.read()) for uploaded_file in user_uploaded_files]
+        return new_message
 
-        message_id = str(uuid.uuid4().hex)
-        self.chat_messages.append(
-            ChatMessage(
-                message_id,
-                user_message,
-                user_uploaded_files=user_uploaded_files_ai
-            )
-        )
-        logger.info("Sending user message: %s", user_message)
+    def send_user_message(self, user_message, user_uploaded_files=None):
+        """Send a user message and process AI response."""
+        logger.info(f"Sending user message:\n\n```text\n{user_message}\n```")
 
-        if len(self.get_chat_messages()) == 1:
-            logger.info("Initializing chat")
-            return self.initialize_chat(message_id, user_message, user_uploaded_files=user_uploaded_files_ai)
+        context = None
+        if self.llm_model.check_chat_session_exists(self.session_id) is False:
+            context = self.initialize_chat()
 
-        ai_message = self.send_ai_message(message_id, user_message, user_uploaded_files=user_uploaded_files_ai)
-
-        return message_id, ai_response
-
-    def get_chat_messages(self):
-        messages = []
-        message_pos = 0
-
-        while message_pos < len(self.chat_messages):
-            message = self.chat_messages[message_pos]
-
-            if isinstance(message, HumanMessage):
-                messages.append(("user", self.user_avatar, message.content, message.upload_files))
-                message_pos += 1
-            else:
-
-        return messages
+        return self.send_ai_message(user_message, context, user_uploaded_files)
 
 
 class ChatConnector:

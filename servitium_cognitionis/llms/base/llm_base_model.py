@@ -46,7 +46,11 @@ class LLMBaseModel(ABC):
     @abstractmethod
     def initialize_model(self, system_instruction=[], temperature=None, max_output_tokens=None):
         pass
-    
+
+    @abstractmethod
+    def check_chat_session_exists(self, session_id):
+        pass
+
     @abstractmethod
     def create_chat(self, session_id):
         pass

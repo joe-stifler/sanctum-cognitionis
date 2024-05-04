@@ -11,6 +11,7 @@ class LLMGeminiBaseModel(LLMBaseModel):
         self._model_chats = {}
 
     def initialize_model(self, system_instruction=[], temperature=None, max_output_tokens=None):
+        self._model_chats = {}
         self._model_instance = GenerativeModel(
             model_name=self.name,
             generation_config={
@@ -25,6 +26,9 @@ class LLMGeminiBaseModel(LLMBaseModel):
                 generative_models.HarmCategory.HARM_CATEGORY_HATE_SPEECH: generative_models.HarmBlockThreshold.BLOCK_ONLY_HIGH,
             }
         )
+
+    def check_chat_session_exists(self, session_id):
+        return session_id in self._model_chats
 
     def create_chat(self, session_id):
         if self._model_instance is None:
