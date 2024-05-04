@@ -1,5 +1,6 @@
 # module imports from the praesentatio_cognitionis package
 from praesentatio_cognitionis.chat_message import ChatMessage
+from praesentatio_cognitionis.chat_history import ChatHistory
 from praesentatio_cognitionis.header import show_header
 show_header(0)
 
@@ -23,8 +24,6 @@ import streamlit as st
 from pathlib import Path
 from tempfile import NamedTemporaryFile
 from streamlit_pdf_viewer import pdf_viewer
-from streamlit_feedback import streamlit_feedback
-from langchain_core.messages import HumanMessage, AIMessage
 from streamlit_extras.stylable_container import stylable_container
 
 @st.cache_data
@@ -141,6 +140,8 @@ def maybe_st_initialize_state():
     gemini_cloud_location = st.secrets["VERTEXAI"]["GEMINI_CLOUD_LOCATION"]
     _, project_id = google.auth.default()
     vertexai.init(project=project_id, location=gemini_cloud_location)
+
+    return create_chat_connector()
 
 
 def get_ai_chat():
@@ -262,6 +263,7 @@ def write_medatada_chat_message(role, files):
         return
 
     st.write("**Arquivos associados:**")
+
     for idx, file in enumerate(files):
         with st.expander(f"**{idx}. {file.name}:**", expanded=True):
             suffix = Path(file.name).suffix
@@ -353,8 +355,7 @@ def chat_messages(chat_connector, user_input_message, user_uploaded_files):
 
 
 def main():
-    maybe_st_initialize_state()
-    chat_connector = create_chat_connector()
+    chat_connector = maybe_st_initialize_state()
 
     with stylable_container(
         key="main_container",
@@ -364,7 +365,6 @@ def main():
             position: fixed;
             padding-bottom: 2rem;
             background-color: {bc};
-            overflow-y: auto;
         }}
         """
     ):
@@ -390,6 +390,7 @@ def main():
             st.session_state["counter"] += 1
             files_container.file_uploader("Upload de arquivos", accept_multiple_files=True, label_visibility="collapsed", key=st.session_state["counter"])
 
-    chat_messages(chat_connector, user_input_message, user_uploaded_files)
+    with st.container(height=700, border=True):
+        chat_messages(chat_connector, user_input_message, user_uploaded_files)
 
 main()
