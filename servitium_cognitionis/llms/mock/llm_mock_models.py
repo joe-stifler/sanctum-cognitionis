@@ -40,7 +40,7 @@ class LLMMockBaseModel(LLMBaseModel):
             raise ValueError("Chat session does not exist. Call create_chat() first")
 
         if len(self._model_chats[session_id]) == 0:
-            message = "Olá! Eu sou um modelo de linguagem de exemplo. O que você gostaria de conversar comigo?"
+            message = "Olá! Eu sou o Zoid Mock! Prazer em conhecê-lo. O que você gostaria de saber hoje?"
 
         self._model_chats[session_id].append(HumanMessage(message))
 
