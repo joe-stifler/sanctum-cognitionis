@@ -26,6 +26,7 @@ import streamlit as st
 from streamlit_extras.row import row
 from tempfile import NamedTemporaryFile
 from streamlit_pdf_viewer import pdf_viewer
+from streamlit_feedback import streamlit_feedback
 from streamlit_extras.stylable_container import stylable_container
 
 
@@ -195,7 +196,6 @@ def write_medatada_chat_message(role, files):
                     with cols[idx % num_cols]:
                         st.divider()
                         st.json(arguments)
-
         return
 
     for idx, file in enumerate(files):
@@ -203,7 +203,7 @@ def write_medatada_chat_message(role, files):
             if isinstance(file, ImageFile):
                 st.image(file.content, caption=file.name)
             elif isinstance(file, PDFFile):
-                pdf_viewer(file.content, height=600, key=f"pdf_{st.session_state['counter']}")
+                pdf_viewer(file.content, height=600, key=f"pdf_{st.session_state['counter']}_{idx}")
             elif isinstance(file, TextFile):
                 st.markdown(file.content)
             elif isinstance(file, AudioFile):
@@ -221,19 +221,16 @@ def write_medatada_chat_message(role, files):
 
 def chat_messages(chat_connector, user_input_message, user_uploaded_files):
     # Initialize or fetch existing chat history
-    if "chat_history" not in st.session_state:
+    if "session_id" not in st.session_state:
         llm_model, persona = get_ai_chat()
         logger.info("Chosen Persona: %s", persona)
         logger.info("Chosen LLM Model: %s", llm_model)
         chat_history = chat_connector.create_chat_history()
         chat_history.initialize_chat_message(llm_model, persona)
-
-        # logger.info("Length of chats: %s", len(self.chats))
-        # logger.info("Creating chat history with session_id: %s", session_id)
-
-        st.session_state["chat_history"] = chat_history
+        logger.info("Creating chat history with session_id: %s", chat_history.session_id)
+        st.session_state["session_id"] = chat_history.session_id
     else:
-        chat_history = st.session_state["chat_history"]
+        chat_history = chat_connector.fetch_chat_history(st.session_state["session_id"])
 
     # Display past messages from chat history
     if chat_history:
@@ -246,6 +243,7 @@ def chat_messages(chat_connector, user_input_message, user_uploaded_files):
             with st.chat_message("assistant", avatar="👩🏽‍🏫"):
                 st.write(f":red[{chat_message.ai_name}]")
                 st.write(''.join(chat_message.ai_messages))
+                print("My ai messages: ", ''.join(chat_message.ai_messages))
 
                 if os.environ.get("FORCE_LLM_MOCK_FAMILY"):
                     write_medatada_chat_message("assistant", chat_message.ai_extra_args)
@@ -267,14 +265,22 @@ def chat_messages(chat_connector, user_input_message, user_uploaded_files):
 
             # Display AI responses
             with st.chat_message("assistant", avatar="👩🏽‍🏫"):
-                with st.spinner('Processando sua mensagem...'):
-                    st.write(f":red[{chat_history.get_persona().name}]")
-                    st.write_stream(new_chat_message.process_ai_messages())
+                st.write(f":red[{chat_history.get_persona().name}]")
 
-                    logger.debug(f"AI new messages: \n\n{new_chat_message.ai_extra_args}")
-                    logger.debug(f"\n\nAI new message kwargs: \n\n{new_chat_message.ai_extra_args}")
+                # with st.spinner('Processando sua mensagem...'):
+                time.sleep(1.5)
+                st.write_stream(new_chat_message.process_ai_messages())
+                
+                feedback = streamlit_feedback(
+                    feedback_type="thumbs",
+                    optional_text_label="[Opcional] Por favor, forneça um feedback",
+                    align="flex-start",
+                )
 
-                    write_medatada_chat_message("assistant", new_chat_message.ai_extra_args)
+                    # logger.debug(f"AI new messages: \n\n{new_chat_message.ai_extra_args}")
+                    # logger.debug(f"\n\nAI new message kwargs: \n\n{new_chat_message.ai_extra_args}")
+
+                    # write_medatada_chat_message("assistant", new_chat_message.ai_extra_args)
 
         except FileNotFoundError as e:
             logger.error("Erro ao inicializar a persona: %s", str(e))
@@ -329,12 +335,12 @@ def main():
 
     with stylable_container(key="main_container", css_styles="""
             {
-                bottom: 0;
                 left: 0;
+                bottom: 0;
                 width: 100%;
-                max-height: 100vh;
                 position: fixed;
                 overflow-y: auto;
+                max-height: 100vh;
                 overflow-x: hidden;
                 padding-left: 10vw;
                 padding-right: 10vw;
@@ -343,9 +349,8 @@ def main():
         parent_chat_container = stylable_container(key="chat_container", css_styles="""
                 {
                     min-height: 5vh;
-                    max-height: 80vh;
+                    max-height: 85vh;
                     padding-top: 5vh;
-                    position: relative;
                 }
         """)
 
@@ -364,7 +369,7 @@ def main():
                     }
                 """
             ):
-                rows = row([1, 20], gap="small")
+                rows = row([1, 10], gap="medium")
 
                 rows_popover = rows.popover("📎", use_container_width=True)
                 user_input_message = rows.chat_input("Digite sua mensagem aqui...")
