@@ -1,7 +1,7 @@
 from servitium_cognitionis.llms.base import LLMBaseModel
+from servitium_cognitionis.llms.gemini import GeminiFileHandler
 
 from vertexai import generative_models
-from vertexai.generative_models import Part, Image
 from vertexai.generative_models import GenerativeModel, FinishReason
 
 class LLMGeminiBaseModel(LLMBaseModel):
@@ -39,34 +39,10 @@ class LLMGeminiBaseModel(LLMBaseModel):
 
         self._model_chats[session_id] = self._model_instance.start_chat(response_validation=False)
 
-    def process_file(self, files):
-        gemini_files = []
-        
-        if len(files) == 0:
-            return gemini_files
-
-        gemini_files.append("Abaixo segue todos os arquivos associados com a mensagem do usuário:\n\n")
-
-        for file_path, byte_values in files:
-            extension = file_path.split(".")[-1]
-
-            if extension in ["jpg", "jpeg", "png"]:
-                gemini_files.append(f"abaixo segue o arquivo {extension} `{file_path}`:\n")
-                gemini_files.append(Image.from_bytes(byte_values))
-            elif extension in ["txt"]:
-                gemini_files.append(f"abaixo segue o arquivo {extension} `{file_path}`:\n")
-                gemini_files.append(Part.from_bytes(byte_values))
-            else:
-                
-                raise ValueError(f"Formato de arquivo não suportado: {extension}")
-
-        if len(gemini_files) != 0:
-            gemini_files.append("\n\n---\n\n")
-
-        return gemini_files
-
     def format_message(self, message, files):
-        return self.process_file(files) + ["Abaixo segue a mensagem do usuário:\n\n" + message]
+        gemini_handler = GeminiFileHandler(files)
+        gemini_parts = gemini_handler.create_llm_request(message)
+        return gemini_parts
 
     def send_stream_chat_message(self, session_id, message, files=[]):
         messages = self.format_message(message, files)

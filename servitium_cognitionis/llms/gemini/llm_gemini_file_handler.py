@@ -1,4 +1,4 @@
-import vertexai
+from io import BytesIO
 from vertexai.generative_models import Part, Image
 
 class GeminiFileHandler:
@@ -17,7 +17,10 @@ class GeminiFileHandler:
         gemini_parts = []
         for filename, content, file_type in self.processed_files:
             if file_type == "image":
-                part = Image.from_bytes(content.tobytes())
+                img_byte_arr = BytesIO()
+                content.save(img_byte_arr, format='PNG')  # You can change the format as needed
+                img_bytes = img_byte_arr.getvalue()
+                part = Image.from_bytes(img_bytes)
             elif file_type in ["json", "text", "code"]:
                 part = Part.from_text(content)
             elif file_type == "pandas":
@@ -28,9 +31,9 @@ class GeminiFileHandler:
             else:
                 raise Exception(f"Unsupported file format for Gemini conversion: {file_type}")
 
-            filename_prompt = f"File `{filename}`:"
+            filename_part = Part.from_text(f"File: `{filename}`\n")
 
-            gemini_parts.extend([filename_prompt, part])
+            gemini_parts.extend([filename_part, part])
         return gemini_parts
 
     def create_llm_request(self, prompt):
