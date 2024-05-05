@@ -4,7 +4,7 @@ __all__ = [
     'llm_gemini_file_handler'
 ]
 
-from .llm_gemini_file_handler import GeminiFileHandler
+from .llm_gemini_file_handler import create_llm_request
 from .llm_gemini_models import (
     LLMGeminiBaseModel,
     LLMGeminiModel1_5Pro,

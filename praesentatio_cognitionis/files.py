@@ -61,22 +61,6 @@ class PDFFile(BaseFile):
     def get_content_as_bytes(self):
         return self.content
 
-class AudioFile(BaseFile):
-    """Represents an audio file."""
-    SUPPORTED_TYPES = {
-        "mp3": "audio/mpeg",
-        "wav": "audio/wav",
-        "ogg": "audio/ogg",
-        "flac": "audio/flac",
-    }
-
-    def __init__(self, name, content, extension):
-        mime_type = AudioFile.SUPPORTED_TYPES[extension]
-        super().__init__(name, content, mime_type, "audio")
-
-    def get_content_as_bytes(self):
-        return self.content
-
 class ImageFile(BaseFile):
     """Represents an image file."""
     SUPPORTED_TYPES = {
@@ -132,19 +116,19 @@ class CodeFile(BaseFile):
         "hpp": "text/plain",
     }
 
-    def __init__(self, name, content):
+    def __init__(self, name, content, suffix):
         super().__init__(name, content, "text/plain", "code")
 
         self._language = ""
 
-        if self.file_type == "py":
+        if suffix == "py":
             self._language = "python"
-        elif self.file_type in ["c", "h"]:
+        elif suffix in ["c", "h"]:
             self._language = "c"
-        elif self.file_type in ["cpp", "hpp"]:
+        elif suffix in ["cpp", "hpp"]:
             self._language = "cpp"
         else:
-            raise ValueError(f"Unsupported code file type: {self.file_type}")
+            raise ValueError(f"Unsupported code file type: {suffix}")
 
     def get_content_as_bytes(self):
         return self.content.encode('utf-8')
@@ -152,3 +136,34 @@ class CodeFile(BaseFile):
     @property
     def language(self):
         return self._language
+
+class VideoFile(BaseFile):
+    """Represents a video file."""
+    SUPPORTED_TYPES = {
+        "mp4": "video/mp4",
+        "avi": "video/avi",
+        "mov": "video/quicktime",
+    }
+
+    def __init__(self, name, content, extension):
+        mime_type = VideoFile.SUPPORTED_TYPES[extension]
+        super().__init__(name, content, mime_type, "video")
+
+    def get_content_as_bytes(self):
+        return self.content
+
+class AudioFile(BaseFile):
+    """Represents an audio file."""
+    SUPPORTED_TYPES = {
+        "mp3": "audio/mp3",
+        "wav": "audio/wav",
+        "ogg": "audio/ogg",
+        "flac": "audio/flac",
+    }
+
+    def __init__(self, name, content, extension):
+        mime_type = AudioFile.SUPPORTED_TYPES[extension]
+        super().__init__(name, content, mime_type, "audio")
+
+    def get_content_as_bytes(self):
+        return self.content

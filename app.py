@@ -2,7 +2,7 @@
 from praesentatio_cognitionis.chat_connector import ChatConnector
 from praesentatio_cognitionis.streamlit_file_handler import StreamlitFileHandler
 from praesentatio_cognitionis.files import (
-    PandasFile, PDFFile, AudioFile, ImageFile, TextFile, JsonFile, CodeFile
+    PandasFile, PDFFile, AudioFile, ImageFile, TextFile, JsonFile, CodeFile, VideoFile
 )
 from praesentatio_cognitionis.header import show_header
 show_header(0)
@@ -199,7 +199,7 @@ def write_medatada_chat_message(role, files):
         return
 
     for idx, file in enumerate(files):
-        with st.expander(f"**{idx}. {file.name}:**", expanded=False):
+        with st.expander(f"**{file.name}:**", expanded=False):
             if isinstance(file, ImageFile):
                 st.image(file.content, caption=file.name)
             elif isinstance(file, PDFFile):
@@ -214,6 +214,8 @@ def write_medatada_chat_message(role, files):
                 st.dataframe(file.content)
             elif isinstance(file, CodeFile):
                 st.code(file.content, language="python")
+            elif isinstance(file, VideoFile):
+                st.video(file.content, format=file.mime_type)
             else:
                 st.error(f"Arquivo não suportado: {file.name}")
 
@@ -334,8 +336,8 @@ def main():
                 position: fixed;
                 overflow-y: auto;
                 overflow-x: hidden;
-                padding-left: 50px;
-                padding-right: 50px;
+                padding-left: 10vw;
+                padding-right: 10vw;
             }
     """):
         parent_chat_container = stylable_container(key="chat_container", css_styles="""
@@ -358,7 +360,7 @@ def main():
                         margin-bottom: 3vh;
                     }
                     div[data-testid="stPopover"] {
-                        min-width: 2rem;
+                        min-width: 50px;
                     }
                 """
             ):

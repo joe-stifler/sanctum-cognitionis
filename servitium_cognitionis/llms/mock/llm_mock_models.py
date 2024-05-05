@@ -34,7 +34,7 @@ class LLMMockBaseModel(LLMBaseModel):
 
         self._model_chats[session_id] = []
 
-    def send_stream_chat_message(self, session_id, message, files=[]):
+    def send_stream_chat_message(self, session_id, message, system_message=None, files=[]):
         files = ['sending uploaded file: ' + file.name + '\n' for file in files]
 
         if session_id not in self._model_chats:
@@ -50,7 +50,7 @@ class LLMMockBaseModel(LLMBaseModel):
 
         return self.process_message(session_id, chunked_message)
 
-    def send_stream_single_message(self, message, files=[]):
+    def send_stream_single_message(self, message, system_message=None, files=[]):
         files = ['sending uploaded file: ' + key + '\n' for key, _ in files]
 
         chunked_message = files + [message[i:i + 20] for i in range(0, len(message), 20)]

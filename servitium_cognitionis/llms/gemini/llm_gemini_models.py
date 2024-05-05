@@ -1,5 +1,5 @@
 from servitium_cognitionis.llms.base import LLMBaseModel
-from servitium_cognitionis.llms.gemini import GeminiFileHandler
+from servitium_cognitionis.llms.gemini import create_llm_request
 
 from vertexai import generative_models
 from vertexai.generative_models import GenerativeModel, FinishReason
@@ -19,7 +19,7 @@ class LLMGeminiBaseModel(LLMBaseModel):
                 "max_output_tokens": max_output_tokens if max_output_tokens else self.max_output_tokens,
             },
             system_instruction=system_instruction,
-            safety_settings = {
+            safety_settings={
                 generative_models.HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: generative_models.HarmBlockThreshold.BLOCK_ONLY_HIGH,
                 generative_models.HarmCategory.HARM_CATEGORY_HARASSMENT: generative_models.HarmBlockThreshold.BLOCK_ONLY_HIGH,
                 generative_models.HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT: generative_models.HarmBlockThreshold.BLOCK_ONLY_HIGH,
@@ -39,13 +39,8 @@ class LLMGeminiBaseModel(LLMBaseModel):
 
         self._model_chats[session_id] = self._model_instance.start_chat(response_validation=False)
 
-    def format_message(self, message, files):
-        gemini_handler = GeminiFileHandler(files)
-        gemini_parts = gemini_handler.create_llm_request(message)
-        return gemini_parts
-
-    def send_stream_chat_message(self, session_id, message, files=[]):
-        messages = self.format_message(message, files)
+    def send_stream_chat_message(self, session_id, message, system_message=None, files=[]):
+        messages = create_llm_request(message, system_message, files)
 
         if session_id not in self._model_chats:
             raise ValueError("Chat session does not exist. Call create_chat() first")
@@ -54,8 +49,8 @@ class LLMGeminiBaseModel(LLMBaseModel):
 
         return self.process_ai_response_stream(ai_response_stream)
 
-    def send_stream_single_message(self, message, files=[]):
-        messages = self.format_message(message, files)
+    def send_stream_single_message(self, message, system_message=None, files=[]):
+        messages = create_llm_request(message, system_message, files)
 
         ai_response_stream = self._model_instance.generate_content(messages, stream=True)
         return self.process_ai_response_stream(ai_response_stream)

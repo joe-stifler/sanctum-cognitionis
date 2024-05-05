@@ -5,7 +5,8 @@ from praesentatio_cognitionis.files import (
     AudioFile,
     ImageFile,
     TextFile,
-    CodeFile
+    CodeFile,
+    VideoFile
 )
 
 import json
@@ -21,7 +22,9 @@ class StreamlitFileHandler:
         **PDFFile.SUPPORTED_TYPES,
         **AudioFile.SUPPORTED_TYPES,
         **ImageFile.SUPPORTED_TYPES,
-        **TextFile.SUPPORTED_TYPES
+        **TextFile.SUPPORTED_TYPES,
+        **CodeFile.SUPPORTED_TYPES,
+        **VideoFile.SUPPORTED_TYPES,
     }
 
     def __init__(self, uploaded_files):
@@ -47,13 +50,12 @@ class StreamlitFileHandler:
             return JsonFile(file.name, json.loads(file.getvalue().decode('utf-8')))
         elif suffix in PandasFile.SUPPORTED_TYPES:
             return PandasFile(file.name, pd.read_csv(BytesIO(file.getvalue())))
-        elif suffix in ['.py', '.cpp', '.c', '.h', '.hpp']:
-            return CodeFile(file.name, file.getvalue().decode('utf-8'))
+        elif suffix in CodeFile.SUPPORTED_TYPES:
+            return CodeFile(file.name, file.getvalue().decode('utf-8'), suffix)
+        elif suffix in VideoFile.SUPPORTED_TYPES:
+            return VideoFile(file.name, file.getvalue(), suffix)
 
-        # elif suffix in ['.mp4', '.mov']: 
-        #     return VideoFile(file.name, file.getvalue(), suffix[1:]) # Extract extension without the dot
-        
-        raise ValueError(f"Unsupported file type: {suffix}")
+        assert False, f"Unsupported file type: {suffix}"
 
     def process_files(self):
         """Processes uploaded files and returns a list of CustomFile objects."""
