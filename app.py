@@ -1,8 +1,9 @@
 # module imports from the praesentatio_cognitionis package
-from praesentatio_cognitionis.chat_history import ChatHistory
 from praesentatio_cognitionis.chat_connector import ChatConnector
 from praesentatio_cognitionis.streamlit_file_handler import StreamlitFileHandler
-from praesentatio_cognitionis.files import PandasFile, PDFFile, AudioFile, ImageFile, TextFile
+from praesentatio_cognitionis.files import (
+    PandasFile, PDFFile, AudioFile, ImageFile, TextFile, JsonFile, CodeFile
+)
 from praesentatio_cognitionis.header import show_header
 show_header(0)
 
@@ -21,9 +22,7 @@ import datetime
 import vertexai
 import traceback
 import google.auth
-import pandas as pd
 import streamlit as st
-from pathlib import Path
 from streamlit_extras.row import row
 from tempfile import NamedTemporaryFile
 from streamlit_pdf_viewer import pdf_viewer
@@ -209,15 +208,12 @@ def write_medatada_chat_message(role, files):
                 st.markdown(file.content)
             elif isinstance(file, AudioFile):
                 st.audio(file.content, format=file.mime_type)
-
-            # elif file_type == "pandas":
-            #     st.data_editor(file)
-            # elif file_type in [".json"]:
-            #     st.json(file)
-            # elif file_type in ["text"]:
-            #     st.text(file)
-            # elif file_type in ["code"]:
-            #     st.code(file)
+            elif isinstance(file, JsonFile):
+                st.json(file.content)
+            elif isinstance(file, PandasFile):
+                st.dataframe(file.content)
+            elif isinstance(file, CodeFile):
+                st.code(file.content, language="python")
             else:
                 st.error(f"Arquivo não suportado: {file.name}")
 

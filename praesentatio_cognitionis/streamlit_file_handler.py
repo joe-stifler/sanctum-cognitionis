@@ -1,29 +1,29 @@
-from praesentatio_cognitionis.files import PandasFile, PDFFile, AudioFile, ImageFile, TextFile
+from praesentatio_cognitionis.files import (
+    PandasFile,
+    JsonFile,
+    PDFFile,
+    AudioFile,
+    ImageFile,
+    TextFile,
+    CodeFile
+)
 
+import json
+import pandas as pd
 from PIL import Image
 from io import BytesIO
 from pathlib import Path
 
 class StreamlitFileHandler:
-    SUPPORTED_FILE_TYPES = [
-        # Image Files
-        'png', 'jpg', '.jpeg', '.gif',
+    SUPPORTED_FILE_TYPES = {
+        **PandasFile.SUPPORTED_TYPES,
+        **JsonFile.SUPPORTED_TYPES,
+        **PDFFile.SUPPORTED_TYPES,
+        **AudioFile.SUPPORTED_TYPES,
+        **ImageFile.SUPPORTED_TYPES,
+        **TextFile.SUPPORTED_TYPES
+    }
 
-        # Text Files
-        '.json', '.txt', '.md', '.srt',
-        
-        # Tabular Data Files
-        '.csv', '.xlsx', '.xls',
-        
-        # Code Files
-        '.py', '.cpp', '.c', '.h', '.hpp',
-        
-        # Audio Files
-        '.wav', '.mp3', '.ogg', '.flac',
-        
-        # PDF Files
-        '.pdf'
-    ]
     def __init__(self, uploaded_files):
         self.uploaded_files = uploaded_files
 
@@ -43,19 +43,17 @@ class StreamlitFileHandler:
             return TextFile(file.name, file.getvalue().decode('utf-8'), suffix)
         elif suffix in AudioFile.SUPPORTED_TYPES:
             return AudioFile(file.name, file.getvalue(), suffix)
+        elif suffix in JsonFile.SUPPORTED_TYPES:
+            return JsonFile(file.name, json.loads(file.getvalue().decode('utf-8')))
+        elif suffix in PandasFile.SUPPORTED_TYPES:
+            return PandasFile(file.name, pd.read_csv(BytesIO(file.getvalue())))
+        elif suffix in ['.py', '.cpp', '.c', '.h', '.hpp']:
+            return CodeFile(file.name, file.getvalue().decode('utf-8'))
 
-        # elif suffix in ['.json']:
-        #     return JSONFile(file.name, json.load(BytesIO(file.getvalue())))
-        # elif suffix in ['.py', '.cpp', '.c', '.h', '.hpp']:
-        #     return CodeFile(file.name, file.getvalue().decode('utf-8'))
-        # elif suffix in ['.csv']:
-        #     return PandasFile(file.name, pd.read_csv(BytesIO(file.getvalue())))
-        # elif suffix in ['.xlsx', '.xls']:
-        #     return PandasFile(file.name, pd.read_excel(BytesIO(file.getvalue())))
-        # elif suffix in ['.wav', '.mp3', '.ogg', '.flac']:
-        #     return AudioFile(file.name, file.getvalue(), suffix[1:]) # Extract extension without the dot
         # elif suffix in ['.mp4', '.mov']: 
         #     return VideoFile(file.name, file.getvalue(), suffix[1:]) # Extract extension without the dot
+        
+        raise ValueError(f"Unsupported file type: {suffix}")
 
     def process_files(self):
         """Processes uploaded files and returns a list of CustomFile objects."""

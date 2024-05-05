@@ -1,3 +1,4 @@
+import json
 from io import BytesIO
 from abc import ABC, abstractmethod
 
@@ -38,16 +39,21 @@ class BaseFile(ABC):
 
 class PandasFile(BaseFile):
     """Represents a Pandas DataFrame file."""
+    SUPPORTED_TYPES = {
+        "csv": "text/plain",
+    }
 
     def __init__(self, name, content):
-        super().__init__(name, content, "text/csv", "tabular_data")
+        super().__init__(name, content, "text/plain", "tabular_data")
 
     def get_content_as_bytes(self):
         return self.content.to_csv(index=False).encode('utf-8')
 
 class PDFFile(BaseFile):
     """Represents a PDF file."""
-    SUPPORTED_TYPES = ["pdf"]
+    SUPPORTED_TYPES = {
+        "pdf": "application/pdf",
+    }
 
     def __init__(self, name, content):
         super().__init__(name, content, "application/pdf", "pdf")
@@ -95,7 +101,6 @@ class TextFile(BaseFile):
         "txt": "text/plain",
         "md": "text/markdown",
         "srt": "text/plain",
-        "json": "application/json",
     }
 
     def __init__(self, name, content, extension):
@@ -105,3 +110,45 @@ class TextFile(BaseFile):
     def get_content_as_bytes(self):
         return self.content.encode('utf-8')
 
+class JsonFile(BaseFile):
+    """Represents a JSON file."""
+    SUPPORTED_TYPES = {
+        "json": "application/json",
+    }
+
+    def __init__(self, name, content):
+        super().__init__(name, content, "text/plain", "text")
+
+    def get_content_as_bytes(self):
+        return json.dumps(self.content).encode('utf-8')
+
+class CodeFile(BaseFile):
+    """Represents a code file."""
+    SUPPORTED_TYPES = {
+        "py": "text/plain",
+        "cpp": "text/plain",
+        "c": "text/plain",
+        "h": "text/plain",
+        "hpp": "text/plain",
+    }
+
+    def __init__(self, name, content):
+        super().__init__(name, content, "text/plain", "code")
+
+        self._language = ""
+
+        if self.file_type == "py":
+            self._language = "python"
+        elif self.file_type in ["c", "h"]:
+            self._language = "c"
+        elif self.file_type in ["cpp", "hpp"]:
+            self._language = "cpp"
+        else:
+            raise ValueError(f"Unsupported code file type: {self.file_type}")
+
+    def get_content_as_bytes(self):
+        return self.content.encode('utf-8')
+
+    @property
+    def language(self):
+        return self._language
