@@ -17,16 +17,6 @@ class GeminiFileHandler:
         for file in self.processed_files:
             part = Part.from_data(file.get_content_as_bytes(), mime_type=file.mime_type)
 
-            # elif file_type in ["json", "text", "code"]:
-            #     part = Part.from_text(content)
-            # elif file_type == "pandas":
-            #     part = Part.from_text(content.to_string())
-            # elif file_type == "pdf":
-            #     # Assuming PDF handling is supported by Part.from_bytes
-            #     part = Part.from_data(content, mime_type="application/pdf")
-            # else:
-            #     raise Exception(f"Unsupported file format for Gemini conversion: {file_type}")
-
             filename_part = Part.from_text(f"File: `{file.name}`\n")
 
             gemini_parts.extend([filename_part, part])

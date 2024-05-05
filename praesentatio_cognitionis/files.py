@@ -57,14 +57,15 @@ class PDFFile(BaseFile):
 
 class AudioFile(BaseFile):
     """Represents an audio file."""
+    SUPPORTED_TYPES = {
+        "mp3": "audio/mpeg",
+        "wav": "audio/wav",
+        "ogg": "audio/ogg",
+        "flac": "audio/flac",
+    }
 
     def __init__(self, name, content, extension):
-        mime_type = {
-            "mp3": "audio/mpeg",
-            "wav": "audio/wav",
-            "ogg": "audio/ogg",
-            "flac": "audio/flac",
-        }[extension]
+        mime_type = AudioFile.SUPPORTED_TYPES[extension]
         super().__init__(name, content, mime_type, "audio")
 
     def get_content_as_bytes(self):
@@ -90,9 +91,17 @@ class ImageFile(BaseFile):
 
 class TextFile(BaseFile):
     """Represents a text file."""
+    SUPPORTED_TYPES = {
+        "txt": "text/plain",
+        "md": "text/markdown",
+        "srt": "text/plain",
+        "json": "application/json",
+    }
 
-    def __init__(self, name, content):
-        super().__init__(name, content, "text/plain", "text")
+    def __init__(self, name, content, extension):
+        mime_type = TextFile.SUPPORTED_TYPES[extension]
+        super().__init__(name, content, mime_type, "text")
 
     def get_content_as_bytes(self):
         return self.content.encode('utf-8')
+

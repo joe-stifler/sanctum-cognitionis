@@ -1,4 +1,4 @@
-from praesentatio_cognitionis.files import PandasFile, PDFFile, AudioFile, ImageFile
+from praesentatio_cognitionis.files import PandasFile, PDFFile, AudioFile, ImageFile, TextFile
 
 from PIL import Image
 from io import BytesIO
@@ -10,7 +10,7 @@ class StreamlitFileHandler:
         'png', 'jpg', '.jpeg', '.gif',
 
         # Text Files
-        '.json', '.txt', '.md', '.srt', '.sub',
+        '.json', '.txt', '.md', '.srt',
         
         # Tabular Data Files
         '.csv', '.xlsx', '.xls',
@@ -39,8 +39,10 @@ class StreamlitFileHandler:
             return ImageFile(file.name, image, suffix)
         elif suffix in PDFFile.SUPPORTED_TYPES:
             return PDFFile(file.name, file.getvalue())
-        # elif suffix in ['.txt', '.md', '.srt', '.sub']:
-        #     return TextFile(file.name, file.getvalue().decode('utf-8'))
+        elif suffix in TextFile.SUPPORTED_TYPES:
+            return TextFile(file.name, file.getvalue().decode('utf-8'), suffix)
+        elif suffix in AudioFile.SUPPORTED_TYPES:
+            return AudioFile(file.name, file.getvalue(), suffix)
 
         # elif suffix in ['.json']:
         #     return JSONFile(file.name, json.load(BytesIO(file.getvalue())))
@@ -54,8 +56,6 @@ class StreamlitFileHandler:
         #     return AudioFile(file.name, file.getvalue(), suffix[1:]) # Extract extension without the dot
         # elif suffix in ['.mp4', '.mov']: 
         #     return VideoFile(file.name, file.getvalue(), suffix[1:]) # Extract extension without the dot
-        else:
-            raise Exception(f"Arquivo nao suportado: {suffix}")
 
     def process_files(self):
         """Processes uploaded files and returns a list of CustomFile objects."""

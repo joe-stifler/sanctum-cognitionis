@@ -2,7 +2,7 @@
 from praesentatio_cognitionis.chat_history import ChatHistory
 from praesentatio_cognitionis.chat_connector import ChatConnector
 from praesentatio_cognitionis.streamlit_file_handler import StreamlitFileHandler
-from praesentatio_cognitionis.files import PandasFile, PDFFile, AudioFile, ImageFile
+from praesentatio_cognitionis.files import PandasFile, PDFFile, AudioFile, ImageFile, TextFile
 from praesentatio_cognitionis.header import show_header
 show_header(0)
 
@@ -195,7 +195,6 @@ def write_medatada_chat_message(role, files):
                 if len(arguments) > 0:
                     with cols[idx % num_cols]:
                         st.divider()
-                        st.write(f"{idx}. Argumentos:")
                         st.json(arguments)
 
         return
@@ -205,7 +204,11 @@ def write_medatada_chat_message(role, files):
             if isinstance(file, ImageFile):
                 st.image(file.content, caption=file.name)
             elif isinstance(file, PDFFile):
-                pdf_viewer(file.content, height=600)
+                pdf_viewer(file.content, height=600, key=f"pdf_{st.session_state['counter']}")
+            elif isinstance(file, TextFile):
+                st.markdown(file.content)
+            elif isinstance(file, AudioFile):
+                st.audio(file.content, format=file.mime_type)
 
             # elif file_type == "pandas":
             #     st.data_editor(file)
