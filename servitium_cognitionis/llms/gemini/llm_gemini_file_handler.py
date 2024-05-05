@@ -27,7 +27,7 @@ class GeminiFileHandler:
                 part = Part.from_text(content.to_string())
             elif file_type == "pdf":
                 # Assuming PDF handling is supported by Part.from_bytes
-                part = Part.from_bytes(content, mime_type="application/pdf")
+                part = Part.from_data(content, mime_type="application/pdf")
             else:
                 raise Exception(f"Unsupported file format for Gemini conversion: {file_type}")
 

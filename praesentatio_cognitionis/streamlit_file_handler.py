@@ -30,7 +30,7 @@ class StreamlitFileHandler:
         elif suffix in ['.xlsx', '.xls']:
             return "pandas", pd.read_excel(BytesIO(file.getvalue()))
         elif suffix in ['.pdf']:
-            return "pdf", file.getbuffer()
+            return "pdf", file.getvalue()
 
         raise Exception(f"Unsupported file format: {suffix}")
 
