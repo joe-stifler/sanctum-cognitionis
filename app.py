@@ -184,6 +184,9 @@ def write_medatada_chat_message(role, files):
         if sum([len(arguments) for arguments in files]) == 0:
             return
 
+        if not os.environ.get("FORCE_LLM_MOCK_FAMILY"):
+            return
+
         with st.expander("**Metadados da resposta**", expanded=False):
             cols = st.columns(num_cols)
 
