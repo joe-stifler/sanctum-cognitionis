@@ -35,7 +35,7 @@ class LLMMockBaseModel(LLMBaseModel):
         self._model_chats[session_id] = []
 
     def send_stream_chat_message(self, session_id, message, files=[]):
-        files = ['sending uploaded file: ' + file_name + '\n' for file_name, _, _ in files]
+        files = ['sending uploaded file: ' + file.name + '\n' for file in files]
 
         if session_id not in self._model_chats:
             raise ValueError("Chat session does not exist. Call create_chat() first")

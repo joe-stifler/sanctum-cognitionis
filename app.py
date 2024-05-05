@@ -2,6 +2,7 @@
 from praesentatio_cognitionis.chat_history import ChatHistory
 from praesentatio_cognitionis.chat_connector import ChatConnector
 from praesentatio_cognitionis.streamlit_file_handler import StreamlitFileHandler
+from praesentatio_cognitionis.files import PandasFile, PDFFile, AudioFile, ImageFile
 from praesentatio_cognitionis.header import show_header
 show_header(0)
 
@@ -199,22 +200,23 @@ def write_medatada_chat_message(role, files):
 
         return
 
-    st.write("**Arquivos associados:**")
+    for idx, file in enumerate(files):
+        with st.expander(f"**{idx}. {file.name}:**", expanded=False):
+            if isinstance(file, ImageFile):
+                st.image(file.content, caption=file.name)
+            elif isinstance(file, PDFFile):
+                pdf_viewer(file.content, height=600)
 
-    for idx, (file_name, file, file_type) in enumerate(files):
-        with st.expander(f"**{idx}. {file_name}:**", expanded=False):
-            if file_type == "image":
-                st.image(file)
-            elif file_type == "pandas":
-                st.data_editor(file)
-            elif file_type in [".json"]:
-                st.json(file)
-            elif file_type in ["text"]:
-                st.text(file)
-            elif file_type in ["code"]:
-                st.code(file)
+            # elif file_type == "pandas":
+            #     st.data_editor(file)
+            # elif file_type in [".json"]:
+            #     st.json(file)
+            # elif file_type in ["text"]:
+            #     st.text(file)
+            # elif file_type in ["code"]:
+            #     st.code(file)
             else:
-                st.error(f"Arquivo não suportado: {file_name}")
+                st.error(f"Arquivo não suportado: {file.name}")
 
 def chat_messages(chat_connector, user_input_message, user_uploaded_files):
     # Initialize or fetch existing chat history
@@ -238,7 +240,7 @@ def chat_messages(chat_connector, user_input_message, user_uploaded_files):
             with st.chat_message("user", avatar="👩🏾‍🎓"):
                 st.write(":blue[Usuário]")
                 st.write(chat_message.user_message)
-                write_medatada_chat_message("assistant", chat_message.user_uploaded_files)
+                write_medatada_chat_message("user", chat_message.user_uploaded_files)
 
             with st.chat_message("assistant", avatar="👩🏽‍🏫"):
                 st.write(f":red[{chat_message.ai_name}]")
@@ -346,32 +348,34 @@ def main():
                 }
         """)
 
-        with stylable_container(
-            key="chat_input_container",
-            css_styles="""
-                {
-                    white-space: nowrap;
-                    margin-bottom: 3vh;
-                }
-                div[data-testid="stPopover"] {
-                    min-width: 2rem;
-                }
-            """
-        ):
-            rows = row([1, 20], gap="small")
+        error_container = st.empty()
 
-            rows_popover = rows.popover("📎", use_container_width=True)
-            user_input_message = rows.chat_input("Digite sua mensagem aqui...")
+        try:
+            with stylable_container(
+                key="chat_input_container",
+                css_styles="""
+                    {
+                        white-space: nowrap;
+                        margin-bottom: 3vh;
+                    }
+                    div[data-testid="stPopover"] {
+                        min-width: 2rem;
+                    }
+                """
+            ):
+                rows = row([1, 20], gap="small")
 
-            try:
+                rows_popover = rows.popover("📎", use_container_width=True)
+                user_input_message = rows.chat_input("Digite sua mensagem aqui...")
+
                 with rows_popover:
                     user_uploaded_files = file_uploader_fragment(user_input_message)
-            except Exception as e:
-                logger.error("Error processing uploaded files: %s", str(e))
-                st.error(e)
 
-        with parent_chat_container:
-            with st.container(height=10000, border=False):
-                chat_messages(chat_connector, user_input_message, user_uploaded_files)
+                with parent_chat_container:
+                    with st.container(height=10000, border=False):
+                        chat_messages(chat_connector, user_input_message, user_uploaded_files)
+        except Exception as e:
+            logger.error("Error occurred: %s", str(e))
+            error_container.error(e)
 
 main()
