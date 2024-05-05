@@ -1,6 +1,7 @@
 __all__ = [
     'llm_gemini_models',
     'llm_gemini_family',
+    'llm_gemini_file_handler'
 ]
 
 from .llm_gemini_models import (
@@ -10,3 +11,4 @@ from .llm_gemini_models import (
     LLMGeminiModelExperimental,
 )
 from .llm_gemini_family import LLMGeminiFamily
+from .llm_gemini_file_handler import GeminiFileHandler
