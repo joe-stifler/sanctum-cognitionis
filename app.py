@@ -88,7 +88,7 @@ def maybe_st_initialize_state():
 def get_ai_chat():
     creativity_level = 1.0
     speech_conciseness = 2048
-    llm_model_default_name = "GeminiDevModelPro1_5"
+    llm_model_default_name = "GeminiDevModelPro1_0"
     llm_family_name = st.session_state.get("LLM_FAMILY", "GeminiDevFamily")
 
     if llm_family_name == "GeminiDevFamily":
@@ -285,8 +285,8 @@ def main():
     if "api_token_value" not in st.session_state:
         st.session_state["api_token_value"] = "asdf"
 
-        if os.environ.get("GOOGLE_API_KEY"):
-            st.session_state["api_token_value"] = os.environ.get("GOOGLE_API_KEY")
+        if "GOOGLE_API_KEY" in st.secrets["GOOGLE_DEV"]:
+            st.session_state["api_token_value"] = st.secrets["GOOGLE_DEV"]["GOOGLE_API_KEY"]
 
     with st.sidebar:
         with st.form("api_token_form"):
