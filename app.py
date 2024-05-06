@@ -281,7 +281,7 @@ def main():
     if "api_token_value" not in st.session_state:
         st.session_state["api_token_value"] = "asdf"
 
-        if "GOOGLE_API_KEY" in st.secrets["GOOGLE_DEV"]:
+        if "GOOGLE_DEV" in st.secrets["GOOGLE_DEV"]:
             st.session_state["api_token_value"] = st.secrets["GOOGLE_DEV"]["GOOGLE_API_KEY"]
 
     with st.sidebar:
