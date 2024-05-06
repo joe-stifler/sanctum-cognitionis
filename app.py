@@ -87,6 +87,7 @@ def maybe_st_initialize_state():
 def get_ai_chat():
     creativity_level = 1.0
     speech_conciseness = 2048
+    thought_process = "Intuitivo"
     llm_model_default_name = "GeminiDevModelPro1_0"
     llm_family_name = st.session_state.get("LLM_FAMILY", "GeminiDevFamily")
 
@@ -100,7 +101,7 @@ def get_ai_chat():
     llm_model_name = st.session_state.get("LLM_MODEL", llm_model_default_name)
 
     persona_name = st.session_state.get("persona_name", "Zoid")
-    thought_process = st.session_state.get("thought_process", "Intuitivo")
+    thought_process = st.session_state.get("thought_process", thought_process)
     creativity_level = st.session_state.get("creativity_level", creativity_level)
     speech_conciseness = st.session_state.get("speech_conciseness", speech_conciseness)
 
@@ -349,8 +350,8 @@ def model_settings():
 
             st.session_state["LLM_MODEL"] = llm_model
             st.session_state["creativity_level"] = creativity_level
+            st.session_state["thought_process"] = simple_llm_model_name
             st.session_state["speech_conciseness"] = speech_conciseness
-            st.session_state["simple_llm_model_name"] = simple_llm_model_name
 
             if "session_id" in st.session_state:
                 del st.session_state["session_id"]
