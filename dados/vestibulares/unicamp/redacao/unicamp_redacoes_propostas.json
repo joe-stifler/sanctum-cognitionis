@@ -434,19 +434,32 @@
           "ano_2019_proposta_1_descricao": "Texto 1 da prova de redação",
           "ano_2019_proposta_1_estatisticas": {
             "estatisticas_gerais": {
-              "media_notas_brutas": 7.4,
-              "desvio_padrao_notas_brutas": 2,
+              "media_notas": 7.4,
+              "desvio_padrao_notas": 2,
               "quartil_1": 6,
               "mediana": 7.5,
               "quartil_3": 9,
               "minimo": 0,
               "maximo": 12
             },
-            "distribuicao_notas_brutas": {
+            "distribuicao_notas": {
               "descricao": "Histograma da Figura 8",
               "formato": "A distribuição das notas brutas do texto 1 é assimétrica à direita, com a maioria das notas concentradas na faixa de 6 a 9 pontos."
+            },
+            "classificacao_notas_brutas": {
+              "abaixo_da_media": {
+                "inicio": 0,
+                "fim": 6
+              },
+              "na_media": {
+                "inicio": 6,
+                "fim": 9
+              },
+              "acima_da_media": {
+                "inicio": 9,
+                "fim": 10
+              }
             }
-          }
         },
         "exemplos_com_nota": {
           "acima_media": {

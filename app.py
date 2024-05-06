@@ -329,7 +329,7 @@ def main():
     with stylable_container(key="main_container", css_styles="""
             {
                 left: 0;
-                bottom: 0;
+                bottom: 10px;
                 width: 100%;
                 position: fixed;
                 overflow-y: auto;
@@ -342,33 +342,36 @@ def main():
         parent_chat_container = stylable_container(key="chat_container", css_styles="""
                 {
                     min-height: 5vh;
-                    max-height: 85vh;
-                    padding-top: 5vh;
+                    height: calc(100% - 90px);
+                    max-height: calc(93vh - 90px);
                 }
         """)
 
         with stylable_container(
-            key="chat_input_container",
+            key="footer_container",
             css_styles="""
-                {
-                    white-space: nowrap;
-                    margin-bottom: 3vh;
+                * {
+                    max-height: 100px;
+                    
                 }
                 div[data-testid="stPopover"] {
-                    min-width: 50px;
+                    max-width: 7vw;
+                    max-width: 7vw;
                 }
             """
         ):
-            rows = row([1, 10], gap="medium")
+            columns = st.columns([1, 10])
 
-            rows_popover = rows.popover("📎", use_container_width=True)
-            user_input_message = rows.chat_input("Digite sua mensagem aqui...")
+            rows_popover = columns[0].popover("📎", use_container_width=True)
+
+            with columns[1]:
+                user_input_message = st.chat_input("Digite sua mensagem aqui...")
 
             with rows_popover:
                 user_uploaded_files = file_uploader_fragment(user_input_message)
 
-            with parent_chat_container:
-                with st.container(height=10000, border=False):
-                    chat_messages(chat_connector, user_input_message, user_uploaded_files)
+        with parent_chat_container:
+            with st.container(height=10000, border=False):
+                chat_messages(chat_connector, user_input_message, user_uploaded_files)
 
 main()
