@@ -203,13 +203,13 @@ def chat_messages(chat_connector, user_input_message, user_uploaded_files):
 
             logger.debug("Sending user message:\n\n```text\n%s\n```", user_input_message)
 
-            # Send user message to AI inference
-            new_chat_message = chat_history.send_ai_message(
-                user_input_message, user_uploaded_files
-            )
-
             # Display AI responses
             with st.spinner("Estou processando sua mensagem..."):
+                # Send user message to AI inference
+                new_chat_message = chat_history.send_ai_message(
+                    user_input_message, user_uploaded_files
+                )
+
                 with st.chat_message("assistant", avatar="👩🏽‍🏫"):
                     st.write(f":red[{chat_history.get_persona().name}]")
 
