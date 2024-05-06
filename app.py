@@ -108,11 +108,7 @@ def get_ai_chat():
         name=persona_name,
         creativity_level=creativity_level,
         speech_conciseness=speech_conciseness,
-        persona_description=f"""
-        Você é {persona_name}! Sua missão é ser o melhor companheiro de conversa que alguém poderia ter. Você é uma pessoa muito amigável e gosta de ajudar os outros. Sempre dá o seu melhor para encontrar as melhores respostas para quem está ajudando.
-
-        ----
-        """
+        persona_description=""
     )
 
     llm_model = llm_family.get_model(llm_model_name)
