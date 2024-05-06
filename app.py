@@ -15,14 +15,11 @@ from servitium_cognitionis.personas.persona_base import Persona
 
 # module imports from the standard python environment
 import os
-import hmac
 import time
 import uuid
 import logging
 import datetime
-import vertexai
 import traceback
-import google.auth
 import streamlit as st
 import google.generativeai as genai
 from streamlit_extras.row import row
@@ -71,43 +68,6 @@ def setup_logger():
 
 logger = setup_logger()
 
-def check_password():
-    """Returns `True` if the user had a correct password."""
-
-    def login_form():
-        """Form with widgets to collect user information"""
-        with st.form("Credentials"):
-            st.text_input("Username", key="username")
-            st.text_input("Password", type="password", key="password")
-            st.form_submit_button("Log in", on_click=password_entered)
-
-    def password_entered():
-        """Checks whether a password entered by the user is correct."""
-        if st.session_state["username"] in st.secrets[
-            "passwords"
-        ] and hmac.compare_digest(
-            st.session_state["password"],
-            st.secrets.passwords[st.session_state["username"]],
-        ):
-            st.session_state["password_correct"] = True
-            del st.session_state["password"]  # Don't store the username or password.
-        else:
-            st.session_state["password_correct"] = False
-
-    # Return True if the username + password is validated.
-    if st.session_state.get("password_correct", False):
-        return True
-
-    # Show inputs for username + password.
-    login_form()
-    if "password_correct" in st.session_state:
-        st.error("😕 User not known or password incorrect")
-    return False
-
-
-# if not check_password():
-#     st.stop()
-
 pc = st.get_option('theme.primaryColor')
 bc = st.get_option('theme.backgroundColor')
 sbc = st.get_option('theme.secondaryBackgroundColor')
@@ -122,53 +82,37 @@ def maybe_st_initialize_state():
 
         logger.info("Setting persona settings path to: %s", st.session_state["persona_settings_path"])
 
-    key_path = ".streamlit/google_secrets.json"
-
-    if "created_google_json" not in st.session_state:
-        st.session_state["created_google_json"] = True
-
-        if not os.path.exists(".streamlit"):
-            os.makedirs(".streamlit")
-
-        with open(key_path, "w", encoding='utf-8') as file:
-            file.write(st.secrets["VERTEXAI"]["GOOGLE_JSON_SECRETS"])
-
-        time.sleep(0.1)
-
-    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = key_path
-
-    os.environ["LANGCHAIN_TRACING_V2"] = str(st.secrets["LANGCHAIN"]["LANGCHAIN_TRACING_V2"])
-    os.environ["LANGCHAIN_ENDPOINT"] = st.secrets["LANGCHAIN"]["LANGCHAIN_ENDPOINT"]
-    os.environ["LANGCHAIN_API_KEY"] = st.secrets["LANGCHAIN"]["LANGCHAIN_API_KEY"]
-    os.environ["LANGCHAIN_PROJECT"] = st.secrets["LANGCHAIN"]["LANGCHAIN_PROJECT"]
-
-    gemini_cloud_location = st.secrets["VERTEXAI"]["GEMINI_CLOUD_LOCATION"]
-    _, project_id = google.auth.default()
-    vertexai.init(project=project_id, location=gemini_cloud_location)
-
     return create_chat_connector()
 
 
 def get_ai_chat():
-    persona_settings_path = st.session_state["persona_settings_path"]
-    persona = Persona.from_json(persona_settings_path)
+    creativity_level = 1.0
+    speech_conciseness = 2048
+    llm_model_default_name = ""
+    llm_family_name = st.session_state.get("LLM_FAMILY", "GeminiDevFamily")
 
-    llm_family = None
-
-    if os.environ.get("FORCE_LLM_MOCK_FAMILY"):
-        llm_family = LLMMockFamily()
-        logger.info("Using LLMMockFamily")
-    elif persona.thinking_style == "GeminiDevFamily":
+    if llm_family_name == "GeminiDevFamily":
         llm_family = GeminiDevFamily()
+        llm_model_default_name = "gemini-pro"
         logger.info("Using GeminiDevFamily")
-    elif persona.thinking_style == "GeminiVertexAIFamily":
-        llm_family = GeminiVertexAIFamily()
-        logger.info("Using GeminiVertexAIFamily")
-    elif persona.thinking_style == "LLMMockFamily":
+    elif llm_family_name == "LLMMockFamily":
         llm_family = LLMMockFamily()
+        llm_model_default_name = "mock-pro-1.0"
         logger.info("Using LLMMockFamily")
 
-    llm_model = llm_family.get_model(persona.thought_process)
+    llm_model_name = st.session_state.get("LLM_MODEL", llm_model_default_name)
+
+    speech_conciseness = st.session_state.get("speech_conciseness", speech_conciseness)
+    creativity_level = st.session_state.get("creativity_level", creativity_level)
+    persona_name = st.session_state.get("persona_name", "Zoid")
+
+    persona = Persona(
+        name=persona_name,
+        creativity_level=creativity_level,
+        speech_conciseness=speech_conciseness
+    )
+
+    llm_model = llm_family.get_model(llm_model_name)
 
     return llm_model, persona
 
@@ -339,16 +283,43 @@ def main():
     if "api_token_value" not in st.session_state:
         st.session_state["api_token_value"] = "asdf"
 
+        if os.environ.get("GOOGLE_API_KEY"):
+            st.session_state["api_token_value"] = os.environ.get("GOOGLE_API_KEY")
+
     with st.sidebar:
         with st.form("api_token_form"):
+            llm_family = st.selectbox(
+                "Família de LLM",
+                ["GeminiDevFamily", "LLMMockFamily"],
+            )
+            st.session_state["LLM_FAMILY"] = llm_family
+
+            modelos = []
+            if llm_family == "GeminiDevFamily":
+                modelos = [
+                    "GeminiDevModelPro1_0",
+                    "GeminiDevModelPro1_0Vision",
+                    "GeminiDevModelPro1_5"
+                ]
+            elif llm_family == "LLMMockFamily":
+                modelos = ["mock-1.0"]
+
+            llm_model = st.selectbox(
+                "Modelo de LLM",
+                modelos
+            )
+            st.session_state["LLM_MODEL"] = llm_model
+
             api_key = st.text_input("API Token", key="api_token", type="password")
             api_buttom = st.form_submit_button("Salvar")
 
         if api_buttom:
-            st.session_state["api_token_value"] = api_key
-            
-            del st.session_state["session_id"]
-            
+            if len(api_key) > 0:
+                st.session_state["api_token_value"] = api_key
+
+            if "session_id" in st.session_state:
+                del st.session_state["session_id"]
+
             st.rerun()
 
     chat_connector = maybe_st_initialize_state()
@@ -375,34 +346,28 @@ def main():
                 }
         """)
 
-        error_container = st.empty()
+        with stylable_container(
+            key="chat_input_container",
+            css_styles="""
+                {
+                    white-space: nowrap;
+                    margin-bottom: 3vh;
+                }
+                div[data-testid="stPopover"] {
+                    min-width: 50px;
+                }
+            """
+        ):
+            rows = row([1, 10], gap="medium")
 
-        try:
-            with stylable_container(
-                key="chat_input_container",
-                css_styles="""
-                    {
-                        white-space: nowrap;
-                        margin-bottom: 3vh;
-                    }
-                    div[data-testid="stPopover"] {
-                        min-width: 50px;
-                    }
-                """
-            ):
-                rows = row([1, 10], gap="medium")
+            rows_popover = rows.popover("📎", use_container_width=True)
+            user_input_message = rows.chat_input("Digite sua mensagem aqui...")
 
-                rows_popover = rows.popover("📎", use_container_width=True)
-                user_input_message = rows.chat_input("Digite sua mensagem aqui...")
+            with rows_popover:
+                user_uploaded_files = file_uploader_fragment(user_input_message)
 
-                with rows_popover:
-                    user_uploaded_files = file_uploader_fragment(user_input_message)
-
-                with parent_chat_container:
-                    with st.container(height=10000, border=False):
-                        chat_messages(chat_connector, user_input_message, user_uploaded_files)
-        except Exception as e:
-            logger.error("Error occurred: %s", str(e))
-            error_container.error(e)
+            with parent_chat_container:
+                with st.container(height=10000, border=False):
+                    chat_messages(chat_connector, user_input_message, user_uploaded_files)
 
 main()

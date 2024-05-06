@@ -2,17 +2,14 @@ import json
 from datetime import datetime
 
 class Persona:
-    def __init__(self, persona_data):
-        self._name = persona_data.get('name', '')
+    def __init__(self, **kwargs):
+        self._name = kwargs.get('name', '')
         self._avatar = "👩🏽‍🏫"
-        self._knowledge_files = persona_data.get('knowledge', [])
-        self._full_knowledge = persona_data.get('full_knowledge', False)
-        self._thought_process = persona_data.get('thought_process', None)
-        self._creativity_level = persona_data.get('creativity_level', None)
-        self._speech_conciseness = persona_data.get('speech_conciseness', None)
-        self._backup_thought_process = persona_data.get('thought_process', None)
-        self._thinking_style = persona_data.get('thinking_style', 'LLMMockFamily')
-        self._persona_description_file = persona_data.get('persona_description', '')
+        self._knowledge_files = kwargs.get('knowledge', [])
+        self._full_knowledge = kwargs.get('full_knowledge', False)
+        self._creativity_level = kwargs.get('creativity_level', None)
+        self._speech_conciseness = kwargs.get('speech_conciseness', None)
+        self._persona_description_file = kwargs.get('persona_description', '')
 
     @property
     def name(self):
@@ -23,20 +20,12 @@ class Persona:
         return self._avatar
 
     @property
-    def thinking_style(self):
-        return self._thinking_style
-
-    @property
     def speech_conciseness(self):
         return self._speech_conciseness
 
     @property
     def knowledge_files(self):
         return self._knowledge_files
-
-    @property
-    def thought_process(self):
-        return self._thought_process
 
     @property
     def creativity_level(self):
@@ -77,10 +66,8 @@ class Persona:
         return (
             f"Name: {self._name}\n"
             f"Avatar: {self._avatar}\n"
-            f"Thinking Style: {self._thinking_style}\n"
             f"Speech Conciseness: {self._speech_conciseness}\n"
             f"Knowledge Files: {self._knowledge_files}\n"
-            f"Thought Process: {self._thought_process}\n"
             f"Creativity Level: {self._creativity_level}\n"
             f"Persona Description File: {self._persona_description_file}"
         )
