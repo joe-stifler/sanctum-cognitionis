@@ -88,16 +88,14 @@ def maybe_st_initialize_state():
 def get_ai_chat():
     creativity_level = 1.0
     speech_conciseness = 2048
-    llm_model_default_name = ""
+    llm_model_default_name = "GeminiDevModelPro1_5"
     llm_family_name = st.session_state.get("LLM_FAMILY", "GeminiDevFamily")
 
     if llm_family_name == "GeminiDevFamily":
         llm_family = GeminiDevFamily()
-        llm_model_default_name = "gemini-pro"
         logger.info("Using GeminiDevFamily")
     elif llm_family_name == "LLMMockFamily":
         llm_family = LLMMockFamily()
-        llm_model_default_name = "mock-pro-1.0"
         logger.info("Using LLMMockFamily")
 
     llm_model_name = st.session_state.get("LLM_MODEL", llm_model_default_name)
@@ -109,13 +107,17 @@ def get_ai_chat():
     persona = Persona(
         name=persona_name,
         creativity_level=creativity_level,
-        speech_conciseness=speech_conciseness
+        speech_conciseness=speech_conciseness,
+        persona_description=f"""
+        Você é {persona_name}! Sua missão é ser o melhor companheiro de conversa que alguém poderia ter. Você é uma pessoa muito amigável e gosta de ajudar os outros. Sempre dá o seu melhor para encontrar as melhores respostas para quem está ajudando.
+
+        ----
+        """
     )
 
     llm_model = llm_family.get_model(llm_model_name)
 
     return llm_model, persona
-
 
 @st.cache_resource
 def create_chat_connector():
@@ -298,7 +300,6 @@ def main():
             if llm_family == "GeminiDevFamily":
                 modelos = [
                     "GeminiDevModelPro1_0",
-                    "GeminiDevModelPro1_0Vision",
                     "GeminiDevModelPro1_5"
                 ]
             elif llm_family == "LLMMockFamily":

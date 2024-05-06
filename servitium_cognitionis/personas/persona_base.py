@@ -9,6 +9,7 @@ class Persona:
         self._full_knowledge = kwargs.get('full_knowledge', False)
         self._creativity_level = kwargs.get('creativity_level', None)
         self._speech_conciseness = kwargs.get('speech_conciseness', None)
+        self._persona_description = kwargs.get('persona_description', '')
         self._persona_description_file = kwargs.get('persona_description', '')
 
     @property
@@ -30,6 +31,10 @@ class Persona:
     @property
     def creativity_level(self):
         return self._creativity_level
+
+    @property
+    def persona_description(self):
+        return self._persona_description
 
     def convert_files_to_str(self):
         if len(self._knowledge_files) == 0:
@@ -59,8 +64,7 @@ class Persona:
 
     def present_yourself(self):
         files_str = self.convert_files_to_str()
-        description = self.read_description()
-        return f"{files_str}\n---\n\n{description}"
+        return f"{files_str}\n---\n\n{self.persona_description}"
 
     def __str__(self):
         return (
@@ -69,6 +73,7 @@ class Persona:
             f"Speech Conciseness: {self._speech_conciseness}\n"
             f"Knowledge Files: {self._knowledge_files}\n"
             f"Creativity Level: {self._creativity_level}\n"
+            f"Persona Description: {self._persona_description}\n"
             f"Persona Description File: {self._persona_description_file}"
         )
 
