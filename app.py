@@ -219,11 +219,11 @@ def chat_messages(chat_connector, user_input_message, user_uploaded_files):
                 logger.debug(f"\n\nAI new message kwargs: \n\n{new_chat_message.ai_extra_args}")
                 write_medatada_chat_message("assistant", new_chat_message.ai_extra_args)
 
-                feedback = streamlit_feedback(
-                    feedback_type="thumbs",
-                    optional_text_label="[Opcional] Por favor, forneça um feedback",
-                    align="flex-start",
-                )
+                # feedback = streamlit_feedback(
+                #     feedback_type="thumbs",
+                #     optional_text_label="[Opcional] Por favor, forneça um feedback",
+                #     align="flex-start",
+                # )
 
         except FileNotFoundError as e:
             logger.error("Erro ao inicializar a persona: %s", str(e))
@@ -240,7 +240,7 @@ def chat_messages(chat_connector, user_input_message, user_uploaded_files):
                 st.error(f"Erro: {error_str}\nDetails: {error_details}")
     else:
         if len(chat_history.chat_messages) == 0:
-            st.info("Dani Stella está pronta para conversar! Envie uma mensagem para começar.")
+            st.warning("Defina sua chave de API na  barra lateral esquerda antes de iniciar a conversa.")
 
 def file_uploader_fragment(user_input_message):
     if "counter" not in st.session_state:
@@ -348,10 +348,9 @@ def main():
             css_styles="""
                 * {
                     max-height: 100px;
-                    
                 }
                 div[data-testid="stPopover"] {
-                    max-width: 7vw;
+                    min-width: 50px;
                     max-width: 7vw;
                 }
             """
