@@ -209,15 +209,14 @@ def chat_messages(chat_connector, user_input_message, user_uploaded_files):
             )
 
             # Display AI responses
-            with st.chat_message("assistant", avatar="👩🏽‍🏫"):
-                st.write(f":red[{chat_history.get_persona().name}]")
+            with st.spinner("Estou processando sua mensagem..."):
+                with st.chat_message("assistant", avatar="👩🏽‍🏫"):
+                    st.write(f":red[{chat_history.get_persona().name}]")
 
-                # with st.spinner('Processando sua mensagem...'):
-                time.sleep(1.5)
-                st.write_stream(new_chat_message.process_ai_messages())
-                logger.debug(f"AI new messages: \n\n{new_chat_message.ai_extra_args}")
-                logger.debug(f"\n\nAI new message kwargs: \n\n{new_chat_message.ai_extra_args}")
-                write_medatada_chat_message("assistant", new_chat_message.ai_extra_args)
+                    st.write_stream(new_chat_message.process_ai_messages())
+                    logger.debug(f"AI new messages: \n\n{new_chat_message.ai_extra_args}")
+                    logger.debug(f"\n\nAI new message kwargs: \n\n{new_chat_message.ai_extra_args}")
+                    write_medatada_chat_message("assistant", new_chat_message.ai_extra_args)
 
                 # feedback = streamlit_feedback(
                 #     feedback_type="thumbs",

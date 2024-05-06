@@ -19,7 +19,7 @@ class LLMMockBaseModel(LLMBaseModel):
         for message in message_chunks:
             if session_id:
                 self._model_chats[session_id].append(AIMessage(message))
-            time.sleep(0.01)
+            time.sleep(0.1)
             yield message, {}
 
     def check_chat_session_exists(self, session_id):
