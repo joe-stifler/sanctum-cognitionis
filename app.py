@@ -207,7 +207,7 @@ def chat_messages(chat_connector, user_input_message, user_uploaded_files):
                 st.write(chat_message.user_message)
                 write_medatada_chat_message("user", chat_message.user_uploaded_files)
 
-            with st.chat_message("assistant", avatar=persona.avatar):
+            with st.chat_message("assistant", avatar="🤖"):
                 st.write(f":red[{chat_message.ai_name}]")
                 st.write(''.join(chat_message.ai_messages))
 
@@ -235,7 +235,7 @@ def chat_messages(chat_connector, user_input_message, user_uploaded_files):
                     user_input_message, user_uploaded_files
                 )
 
-                with st.chat_message("assistant", avatar="👩🏽‍🏫"):
+                with st.chat_message("assistant", avatar="🤖"):
                     st.write(f":red[{chat_history.get_persona().name}]")
 
                     st.write_stream(new_chat_message.process_ai_messages())
