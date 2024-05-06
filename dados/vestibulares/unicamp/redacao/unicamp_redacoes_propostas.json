@@ -448,7 +448,7 @@
             },
             "classificacao_notas_brutas": {
               "abaixo_da_media": {
-                "inicio": 0,
+                "inicio": 1,
                 "fim": 6
               },
               "na_media": {
@@ -457,7 +457,7 @@
               },
               "acima_da_media": {
                 "inicio": 9,
-                "fim": 10
+                "fim": 12
               }
             }
         },

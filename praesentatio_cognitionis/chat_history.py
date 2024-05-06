@@ -15,6 +15,9 @@ class ChatHistory:
     def get_persona(self):
         return self.persona
 
+    def get_llm_model(self):
+        return self.llm_model
+
     def initialize_chat_message(self, llm_model, persona):
         """Initialize the chat and return the system message."""
         assert self.llm_model is None, "Chat already initialized"

@@ -10,7 +10,6 @@ show_header(0)
 # module imports from the servitium_cognitionis package
 from servitium_cognitionis.llms.mock import LLMMockFamily
 from servitium_cognitionis.llms.gemini import GeminiDevFamily
-from servitium_cognitionis.llms.gemini import GeminiVertexAIFamily
 from servitium_cognitionis.personas.persona_base import Persona
 
 # module imports from the standard python environment
@@ -100,15 +99,22 @@ def get_ai_chat():
 
     llm_model_name = st.session_state.get("LLM_MODEL", llm_model_default_name)
 
-    speech_conciseness = st.session_state.get("speech_conciseness", speech_conciseness)
-    creativity_level = st.session_state.get("creativity_level", creativity_level)
     persona_name = st.session_state.get("persona_name", "Zoid")
+    thought_process = st.session_state.get("thought_process", "Intuitivo")
+    creativity_level = st.session_state.get("creativity_level", creativity_level)
+    speech_conciseness = st.session_state.get("speech_conciseness", speech_conciseness)
+
+    # change llm_family to LLMMockFamily in case FORCE_LLM_MOCK_FAMILY is set in the env var
+    if os.environ.get("FORCE_LLM_MOCK_FAMILY"):
+        llm_family = LLMMockFamily()
+        logger.info("Using LLMMockFamily as the LLM family due to the FORCE_LLM_MOCK_FAMILY env var.")
 
     persona = Persona(
         name=persona_name,
         creativity_level=creativity_level,
-        speech_conciseness=speech_conciseness,
-        persona_description=""
+        speech_conciseness=speech_conciseness // 4,
+        persona_description="",
+        thought_process=thought_process,
     )
 
     llm_model = llm_family.get_model(llm_model_name)
@@ -177,6 +183,21 @@ def chat_messages(chat_connector, user_input_message, user_uploaded_files):
         st.session_state["session_id"] = chat_history.session_id
     else:
         chat_history = chat_connector.fetch_chat_history(st.session_state["session_id"])
+        llm_model = chat_history.get_llm_model()
+        persona = chat_history.get_persona()
+
+    warning_message = "⚠️ Defina sua chave de API na barra lateral esquerda antes de iniciar a conversa."
+
+    if not st.session_state["api_token_value"]:
+        st.warning(warning_message)
+        st.toast(warning_message)
+        return
+
+    info_columns = st.columns(2)
+    info_columns[0].info(f"""🤖 **Nome:** {persona.name}\n
+💡 **Processo de pensamento:** {persona.thought_process}\n\n""")
+    info_columns[1].info(f"""🎨 **Criatividade:** {persona.creativity_level}\n
+📃 **Concisão do discurso:** ~{4 * persona.speech_conciseness} letras por resposta\n\n""")
 
     # Display past messages from chat history
     if chat_history:
@@ -186,7 +207,7 @@ def chat_messages(chat_connector, user_input_message, user_uploaded_files):
                 st.write(chat_message.user_message)
                 write_medatada_chat_message("user", chat_message.user_uploaded_files)
 
-            with st.chat_message("assistant", avatar="👩🏽‍🏫"):
+            with st.chat_message("assistant", avatar=persona.avatar):
                 st.write(f":red[{chat_message.ai_name}]")
                 st.write(''.join(chat_message.ai_messages))
 
@@ -195,6 +216,10 @@ def chat_messages(chat_connector, user_input_message, user_uploaded_files):
 
     if user_input_message:
         try:
+            if not st.session_state["api_token_value"]:
+                st.warning(warning_message)
+                return
+
             # Display User Message
             with st.chat_message("user", avatar="👩🏾‍🎓"):
                 st.write(f":blue[Usuário]")
@@ -237,9 +262,6 @@ def chat_messages(chat_connector, user_input_message, user_uploaded_files):
                 st.error("Erro ao inicializar o chat: API key inválida")
             else:
                 st.error(f"Erro: {error_str}\nDetails: {error_details}")
-    else:
-        if len(chat_history.chat_messages) == 0:
-            st.warning("Defina sua chave de API na  barra lateral esquerda antes de iniciar a conversa.")
 
 def file_uploader_fragment(user_input_message):
     if "counter" not in st.session_state:
@@ -276,35 +298,47 @@ def file_uploader_fragment(user_input_message):
 
     return processed_files
 
-def main():
-    if "api_token_value" not in st.session_state:
-        st.session_state["api_token_value"] = "asdf"
-
-        if "GOOGLE_DEV" in st.secrets:
-            st.session_state["api_token_value"] = st.secrets["GOOGLE_DEV"]["GOOGLE_API_KEY"]
-
+def model_settings():
     with st.sidebar:
         with st.form("api_token_form"):
-            llm_family = st.selectbox(
-                "Família de LLM",
-                ["GeminiDevFamily", "LLMMockFamily"],
-            )
-            st.session_state["LLM_FAMILY"] = llm_family
+            st.session_state["LLM_FAMILY"] = "GeminiDevFamily"
 
-            modelos = []
-            if llm_family == "GeminiDevFamily":
-                modelos = [
-                    "GeminiDevModelPro1_0",
-                    "GeminiDevModelPro1_5"
-                ]
-            elif llm_family == "LLMMockFamily":
-                modelos = ["mock-1.0"]
+            gemini_models = {
+                "Intuitivo": "GeminiDevModelPro1_0",
+                "Racional": "GeminiDevModelPro1_5",
+            }
 
-            llm_model = st.selectbox(
-                "Modelo de LLM",
-                modelos
+            simple_llm_model_name = st.selectbox(
+                "Processo de pensamento",
+                list(gemini_models.keys())
             )
-            st.session_state["LLM_MODEL"] = llm_model
+
+            if simple_llm_model_name == "Intuitivo":
+                min_conciseness = 0 * 4
+                max_conciseness = 4096 * 4
+            elif simple_llm_model_name == "Racional":
+                min_conciseness = 0 * 4
+                max_conciseness = 8192 * 4
+
+            speech_conciseness = st.slider(
+                "Concisão do discurso (letras por resposta)",
+                min_value=min_conciseness,
+                max_value=max_conciseness,
+                value=max_conciseness,
+                step=128 * 4,
+                help=f"Utilize valores próximos de {min_conciseness} para respostas mais curtas ou próximos de {max_conciseness} para respostas mais longas."
+            )
+
+            creativity_level = st.slider(
+                "Nível de criatividade",
+                min_value=0.0,
+                max_value=1.0,
+                value=1.0,
+                step=0.1,
+                help="Utilize valores próximos de 0 para respostas mais diretas ou próximos de 1 para respostas mais criativas."
+            )
+
+            llm_model = gemini_models[simple_llm_model_name]
 
             api_key = st.text_input("API Token", key="api_token", type="password")
             api_buttom = st.form_submit_button("Salvar")
@@ -313,10 +347,24 @@ def main():
             if len(api_key) > 0:
                 st.session_state["api_token_value"] = api_key
 
+            st.session_state["LLM_MODEL"] = llm_model
+            st.session_state["creativity_level"] = creativity_level
+            st.session_state["speech_conciseness"] = speech_conciseness
+            st.session_state["simple_llm_model_name"] = simple_llm_model_name
+
             if "session_id" in st.session_state:
                 del st.session_state["session_id"]
 
             st.rerun()
+
+def main():
+    if "api_token_value" not in st.session_state:
+        st.session_state["api_token_value"] = None
+
+        # if "GOOGLE_DEV" in st.secrets:
+        #     st.session_state["api_token_value"] = st.secrets["GOOGLE_DEV"]["GOOGLE_API_KEY"]
+
+    model_settings()
 
     chat_connector = maybe_st_initialize_state()
     genai.configure(api_key=st.session_state["api_token_value"])
@@ -332,6 +380,7 @@ def main():
                 overflow-x: hidden;
                 padding-left: 10vw;
                 padding-right: 10vw;
+                padding-bottom: 15px;
             }
     """):
         parent_chat_container = stylable_container(key="chat_container", css_styles="""

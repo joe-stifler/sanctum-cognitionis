@@ -4,9 +4,10 @@ from datetime import datetime
 class Persona:
     def __init__(self, **kwargs):
         self._name = kwargs.get('name', '')
-        self._avatar = "👩🏽‍🏫"
+        self._avatar = "🤖"
         self._knowledge_files = kwargs.get('knowledge', [])
         self._full_knowledge = kwargs.get('full_knowledge', False)
+        self._thought_process = kwargs.get('thought_process', None)
         self._creativity_level = kwargs.get('creativity_level', None)
         self._speech_conciseness = kwargs.get('speech_conciseness', None)
         self._persona_description = kwargs.get('persona_description', '')
@@ -31,6 +32,10 @@ class Persona:
     @property
     def creativity_level(self):
         return self._creativity_level
+
+    @property
+    def thought_process(self):
+        return self._thought_process
 
     @property
     def persona_description(self):
