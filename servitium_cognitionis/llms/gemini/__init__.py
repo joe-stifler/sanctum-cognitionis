@@ -1,14 +1,20 @@
 __all__ = [
-    'llm_gemini_models',
-    'llm_gemini_family',
-    'llm_gemini_file_handler'
+    'dev_models',
+    'dev_family',
+    'vertexai_models',
+    'vertexai_family',
 ]
 
-from .llm_gemini_file_handler import create_llm_request
-from .llm_gemini_models import (
-    LLMGeminiBaseModel,
-    LLMGeminiModel1_5Pro,
-    LLMGeminiModel1_0Pro002,
-    LLMGeminiModelExperimental,
+from .dev_models import (
+    GeminiDevBaseModel,
+    GeminiDevModelPro
 )
-from .llm_gemini_family import LLMGeminiFamily
+from .dev_family import GeminiDevFamily
+
+from .vertexai_models import (
+    GeminiVertexAIBaseModel,
+    GeminiVertexAIModel1_5Pro,
+    GeminiVertexAIModel1_0Pro002,
+    GeminiVertexAIModelExperimental,
+)
+from .vertexai_family import GeminiVertexAIFamily

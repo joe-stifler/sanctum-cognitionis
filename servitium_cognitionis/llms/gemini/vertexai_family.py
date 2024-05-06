@@ -1,18 +1,18 @@
 from servitium_cognitionis.llms.base import LLMBaseFamily
 from servitium_cognitionis.llms.gemini import (
-    LLMGeminiBaseModel, LLMGeminiModel1_5Pro, LLMGeminiModel1_0Pro002, LLMGeminiModelExperimental
+    GeminiVertexAIBaseModel, GeminiVertexAIModel1_5Pro, GeminiVertexAIModel1_0Pro002, GeminiVertexAIModelExperimental
 )
 
 from typing import List
 
-class LLMGeminiFamily(LLMBaseFamily):
+class GeminiVertexAIFamily(LLMBaseFamily):
     def __init__(self):
-        super().__init__("Vertex AI Gemini Family")
+        super().__init__("Gemini Vertex AI Family")
 
         available_models = [
-            LLMGeminiModelExperimental(),
-            LLMGeminiModel1_5Pro(),
-            LLMGeminiModel1_0Pro002(),
+            GeminiVertexAIModelExperimental(),
+            GeminiVertexAIModel1_5Pro(),
+            GeminiVertexAIModel1_0Pro002(),
         ]
 
         self._available_models = {
@@ -22,7 +22,7 @@ class LLMGeminiFamily(LLMBaseFamily):
     def model_names(self) -> List[str]:
         return self._available_models.keys()
 
-    def get_model(self, model_name: str) -> LLMGeminiBaseModel:
+    def get_model(self, model_name: str) -> GeminiVertexAIBaseModel:
         if model_name not in self._available_models:
             raise ValueError(f"Model {model_name} not found in {self.name} family.")
 

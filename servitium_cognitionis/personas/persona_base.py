@@ -42,11 +42,14 @@ class Persona:
     def creativity_level(self):
         return self._creativity_level
 
-    def convert_files_to_str(self, files_path):
+    def convert_files_to_str(self):
+        if len(self._knowledge_files) == 0:
+            return ""
+
         files_content = "## Arquivos disponíveis na base de conhecimento do professor(a):\n\n"
         files_content += "--------------------------------------------------------\n\n"
-        
-        for file_path in files_path:
+
+        for file_path in self._knowledge_files:
             files_content += f"### Conteúdo do arquivo `{file_path}`:\n\n"
             
             extension = file_path.split(".")[-1]
@@ -59,14 +62,14 @@ class Persona:
         return files_content
 
     def read_description(self):
-        try:
-            with open(self._persona_description_file, 'r', encoding='utf-8') as file:
-                return file.read()
-        except FileNotFoundError:
-            return "Description file not found."
+        if len(self._persona_description_file) == 0:
+            return ""
+
+        with open(self._persona_description_file, 'r', encoding='utf-8') as file:
+            return file.read()
 
     def present_yourself(self):
-        files_str = self.convert_files_to_str(self._knowledge_files)
+        files_str = self.convert_files_to_str()
         description = self.read_description()
         return f"{files_str}\n---\n\n{description}"
 

@@ -9,7 +9,8 @@ show_header(0)
 
 # module imports from the servitium_cognitionis package
 from servitium_cognitionis.llms.mock import LLMMockFamily
-from servitium_cognitionis.llms.gemini import LLMGeminiFamily
+from servitium_cognitionis.llms.gemini import GeminiDevFamily
+from servitium_cognitionis.llms.gemini import GeminiVertexAIFamily
 from servitium_cognitionis.personas.persona_base import Persona
 
 # module imports from the standard python environment
@@ -23,12 +24,11 @@ import vertexai
 import traceback
 import google.auth
 import streamlit as st
+import google.generativeai as genai
 from streamlit_extras.row import row
-from tempfile import NamedTemporaryFile
 from streamlit_pdf_viewer import pdf_viewer
 from streamlit_feedback import streamlit_feedback
 from streamlit_extras.stylable_container import stylable_container
-
 
 @st.cache_data
 def setup_logger():
@@ -117,7 +117,8 @@ tc = st.get_option('theme.textColor')
 
 def maybe_st_initialize_state():
     if "persona_settings_path" not in st.session_state:
-        st.session_state["persona_settings_path"] = "dados/personas/professores/redacao/dani-stella/persona_config.json"
+        # st.session_state["persona_settings_path"] = "dados/personas/professores/redacao/dani-stella/persona_config.json"
+        st.session_state["persona_settings_path"] = "dados/personas/empty/persona_config.json"
 
         logger.info("Setting persona settings path to: %s", st.session_state["persona_settings_path"])
 
@@ -157,9 +158,12 @@ def get_ai_chat():
     if os.environ.get("FORCE_LLM_MOCK_FAMILY"):
         llm_family = LLMMockFamily()
         logger.info("Using LLMMockFamily")
-    elif persona.thinking_style == "LLMGeminiFamily":
-        llm_family = LLMGeminiFamily()
-        logger.info("Using LLMGeminiFamily")
+    elif persona.thinking_style == "GeminiDevFamily":
+        llm_family = GeminiDevFamily()
+        logger.info("Using GeminiDevFamily")
+    elif persona.thinking_style == "GeminiVertexAIFamily":
+        llm_family = GeminiVertexAIFamily()
+        logger.info("Using GeminiVertexAIFamily")
     elif persona.thinking_style == "LLMMockFamily":
         llm_family = LLMMockFamily()
         logger.info("Using LLMMockFamily")
@@ -243,7 +247,6 @@ def chat_messages(chat_connector, user_input_message, user_uploaded_files):
             with st.chat_message("assistant", avatar="👩🏽‍🏫"):
                 st.write(f":red[{chat_message.ai_name}]")
                 st.write(''.join(chat_message.ai_messages))
-                print("My ai messages: ", ''.join(chat_message.ai_messages))
 
                 if os.environ.get("FORCE_LLM_MOCK_FAMILY"):
                     write_medatada_chat_message("assistant", chat_message.ai_extra_args)
@@ -270,26 +273,29 @@ def chat_messages(chat_connector, user_input_message, user_uploaded_files):
                 # with st.spinner('Processando sua mensagem...'):
                 time.sleep(1.5)
                 st.write_stream(new_chat_message.process_ai_messages())
-                
+                logger.debug(f"AI new messages: \n\n{new_chat_message.ai_extra_args}")
+                logger.debug(f"\n\nAI new message kwargs: \n\n{new_chat_message.ai_extra_args}")
+                write_medatada_chat_message("assistant", new_chat_message.ai_extra_args)
+
                 feedback = streamlit_feedback(
                     feedback_type="thumbs",
                     optional_text_label="[Opcional] Por favor, forneça um feedback",
                     align="flex-start",
                 )
 
-                    # logger.debug(f"AI new messages: \n\n{new_chat_message.ai_extra_args}")
-                    # logger.debug(f"\n\nAI new message kwargs: \n\n{new_chat_message.ai_extra_args}")
-
-                    # write_medatada_chat_message("assistant", new_chat_message.ai_extra_args)
-
         except FileNotFoundError as e:
             logger.error("Erro ao inicializar a persona: %s", str(e))
             st.error(f"Erro ao inicializar a persona: {e}")
         except Exception as e:
-            error_message = f"An error occurred: {str(e)}"
+            error_str = str(e)
+
             error_details = traceback.format_exc()
-            logger.error(f"Error processing user input: %s\nDetails: %s", error_message, error_details)
-            st.error(f"Error processing user input: {error_message}\nDetails: {error_details}")
+            logger.error(f"Error processing user input: %s\nDetails: %s", error_str, error_details)
+
+            if "400 API key not valid" in error_str:
+                st.error("Erro ao inicializar o chat: API key inválida")
+            else:
+                st.error(f"Erro: {error_str}\nDetails: {error_details}")
     else:
         if len(chat_history.chat_messages) == 0:
             st.info("Dani Stella está pronta para conversar! Envie uma mensagem para começar.")
@@ -329,9 +335,24 @@ def file_uploader_fragment(user_input_message):
 
     return processed_files
 
-
 def main():
+    if "api_token_value" not in st.session_state:
+        st.session_state["api_token_value"] = "asdf"
+
+    with st.sidebar:
+        with st.form("api_token_form"):
+            api_key = st.text_input("API Token", key="api_token", type="password")
+            api_buttom = st.form_submit_button("Salvar")
+
+        if api_buttom:
+            st.session_state["api_token_value"] = api_key
+            
+            del st.session_state["session_id"]
+            
+            st.rerun()
+
     chat_connector = maybe_st_initialize_state()
+    genai.configure(api_key=st.session_state["api_token_value"])
 
     with stylable_container(key="main_container", css_styles="""
             {

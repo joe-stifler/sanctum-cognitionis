@@ -1,10 +1,9 @@
 from servitium_cognitionis.llms.base import LLMBaseModel
-from servitium_cognitionis.llms.gemini import create_llm_request
 
 from vertexai import generative_models
-from vertexai.generative_models import GenerativeModel, FinishReason
+from vertexai.generative_models import Part, GenerativeModel, FinishReason
 
-class LLMGeminiBaseModel(LLMBaseModel):
+class GeminiVertexAIBaseModel(LLMBaseModel):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self._model_instance = None
@@ -39,8 +38,30 @@ class LLMGeminiBaseModel(LLMBaseModel):
 
         self._model_chats[session_id] = self._model_instance.start_chat(response_validation=False)
 
+    def convert_to_gemini_parts(self, processed_files):
+        """
+        Converts processed files to Gemini Part objects with filenames.
+        """
+        gemini_parts = []
+        for file in processed_files:
+            part = Part.from_data(file.get_content_as_bytes(), mime_type=file.mime_type)
+
+            filename_part = Part.from_text(f"File: `{file.name}`\n")
+
+            gemini_parts.extend([filename_part, part])
+        return gemini_parts
+
+    def create_llm_request(self, prompt, system_message, processed_files):
+        """
+        Creates a complete LLM request with processed files and prompt.
+        """
+        gemini_system_part = [Part.from_text(system_message), ] if system_message else []
+        gemini_file_parts = self.convert_to_gemini_parts(processed_files)
+        gemini_prompt_part = [Part.from_text(prompt)]
+        return gemini_system_part + gemini_file_parts + gemini_prompt_part
+
     def send_stream_chat_message(self, session_id, message, system_message=None, files=[]):
-        messages = create_llm_request(message, system_message, files)
+        messages = self.create_llm_request(message, system_message, files)
 
         if session_id not in self._model_chats:
             raise ValueError("Chat session does not exist. Call create_chat() first")
@@ -50,7 +71,7 @@ class LLMGeminiBaseModel(LLMBaseModel):
         return self.process_ai_response_stream(ai_response_stream)
 
     def send_stream_single_message(self, message, system_message=None, files=[]):
-        messages = create_llm_request(message, system_message, files)
+        messages = self.create_llm_request(message, system_message, files)
 
         ai_response_stream = self._model_instance.generate_content(messages, stream=True)
         return self.process_ai_response_stream(ai_response_stream)
@@ -105,7 +126,7 @@ class LLMGeminiBaseModel(LLMBaseModel):
             text_message = f":red[Erro ao processar a mensagem: {e}]"
             yield text_message, new_ai_message_args
 
-class LLMGeminiModel1_5Pro(LLMGeminiBaseModel):
+class GeminiVertexAIModel1_5Pro(GeminiVertexAIBaseModel):
     def __init__(self, temperature=0.1, max_output_tokens=8192):
         super().__init__(
             model_name="gemini-1.5-pro-preview-0409",
@@ -115,7 +136,7 @@ class LLMGeminiModel1_5Pro(LLMGeminiBaseModel):
             output_tokens_range=(1, 8192)
         )
 
-class LLMGeminiModel1_0Pro002(LLMGeminiBaseModel):
+class GeminiVertexAIModel1_0Pro002(GeminiVertexAIBaseModel):
     def __init__(self, temperature=0.1, max_output_tokens=8192):
         super().__init__(
             model_name="gemini-1.0-pro-002",
@@ -125,7 +146,7 @@ class LLMGeminiModel1_0Pro002(LLMGeminiBaseModel):
             output_tokens_range=(1, 8192)
         )
 
-class LLMGeminiModelExperimental(LLMGeminiBaseModel):
+class GeminiVertexAIModelExperimental(GeminiVertexAIBaseModel):
     def __init__(self, temperature=0.1, max_output_tokens=8192):
         super().__init__(
             model_name="gemini-experimental",

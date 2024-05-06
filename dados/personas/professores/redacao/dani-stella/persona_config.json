@@ -11,7 +11,7 @@
         "dados/personas/professores/redacao/dani-stella/knowledge/informacoes_importantes_sobre_a_redacao_unicamp.md"
     ],
     "persona_description": "dados/personas/professores/redacao/dani-stella/persona_description.md",
-    "thinking_style": "LLMGeminiFamily",
+    "thinking_style": "GeminiVertexAIFamily",
     "thought_process": "gemini-1.5-pro-preview-0409",
     "backup_thought_process": "gemini-1.0-pro-002",
     "creativity_level": 0.1,
