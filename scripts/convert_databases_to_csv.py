@@ -12,8 +12,9 @@ def convert_csv_to_json(file_paths_csv: List[str]):
         # save df as json
         df.to_json(file_path_json)
 
+
+base_dir = "/mnt/c/Users/josep/Documents/DocumentsWSL/1-PROJECTS/sanctum-cognitionis/dados/vestibulares/unicamp/redacao/"
 convert_csv_to_json([
-    "databases/unicamp/redacao/unicamp_redacoes_alunos.csv",
-    "databases/unicamp/redacao/unicamp_redacoes_propostas.csv",
-    "databases/unicamp/redacao/unicamp_redacoes_candidatos.csv",
+    base_dir + "redacoes_comentadas_por_corretores_da_unicamp.csv",
+    base_dir + "redacoes_alunos_corrigidas_por_dani_stella.csv",
 ])

@@ -306,189 +306,160 @@
         "id": 11,
         "numero": 1,
         "ano": 2019,
-        "detalhes": {
-          "interlocutores": {
-            "enunciador_i": "Estudante do Ensino Médio na rede pública estadual",
-            "interlocutor_i": "Direção da escola",
-            "mascara_discursiva_i": "Estudante indignado com a censura à professora de Filosofia e defensor da liberdade de pensamento e dos Direitos Humanos"
-          },
-          "situacao_problema_s": "Ofensas e ameaças anônimas à professora de Filosofia por abordar a temática dos Direitos Humanos em sala de aula",
-          "tema": "Liberdade de pensamento e a importância da educação em Direitos Humanos",
-          "genero_g": "Abaixo-assinado",
-          "construcao_composicional": "Introdução com apresentação do problema e identificação dos signatários, desenvolvimento com argumentos que defendam a liberdade de pensamento da professora e a importância da educação em Direitos Humanos, conclusão com as reivindicações e solicitação de providências à direção da escola",
-          "tipologia_textual": "Predominantemente argumentativa, com elementos expositivos e narrativos",
-          "projeto_texto": "Reivindicar que a escola se posicione em defesa da professora de Filosofia, defender a manutenção de aulas sobre Direitos Humanos e justificar essas reivindicações com base na liberdade de pensamento e na importância da educação para a cidadania",
-          "leitura_textos_coletanea": "O candidato deve utilizar os textos da coletânea para compreender o conceito de Direitos Humanos, a importância da liberdade de pensamento e os riscos da censura e do totalitarismo",
-          "escolhas_lexicais_sintaticas": "Adequação ao registro formal de um abaixo-assinado, com vocabulário preciso e que demonstre conhecimento sobre o tema",
-          "recursos_coesivos": "Uso de conectivos e recursos de sequenciação para articular os argumentos e organizar o texto",
-          "norma_culta": "Domínio da norma culta contemporânea",
-          "estilo": "Formal, crítico, persuasivo e que demonstre a indignação e a mobilização dos estudantes",
-          "originalidade": "O candidato deve apresentar argumentos originais e bem fundamentados",
-          "pertinencia": "Os argumentos devem ser pertinentes ao tema da liberdade de pensamento e da educação em Direitos Humanos",
-          "observacoes": "O candidato deve demonstrar senso crítico, capacidade de argumentação, conhecimento sobre os Direitos Humanos e engajamento na defesa da liberdade de expressão e da educação para a cidadania",
-          "data_criacao": "2023-11-07",
-          "data_ultima_edicao": "2023-11-07",
-          "recorte_tematico": "A liberdade de pensamento como um direito fundamental e a importância da educação em Direitos Humanos para a formação de cidadãos críticos e conscientes",
-          "enunciado": {
-            "situacao_inicial": "Você é um(a) estudante do Ensino Médio na rede pública estadual e soube de um acontecimento revoltante na sua escola: sua professora de Filosofia recebeu ofensas e ameaças anônimas por suposta tentativa de doutrinação política, ao ter iniciado o curso sobre as origens da Cidadania e dos Direitos Humanos modernos com o texto a seguir:\n\nTeócrito e o pensamento\nA ninguém, nem aos deuses nem aos demônios, nem às tiranias da terra nem às tiranias do céu, foi dado o poder de impedir aos homens o exercício daquele que é o primeiro e o maior de seus atributos: o exercício do pensamento. Podem amarrar as mãos de um homem, impedindo-lhe o gesto. Podem atar-lhe os pés, impedindo-lhe o andar. Podem vazar-lhe os olhos, impedindo a vista. Podem cortar-lhe a língua, impedindo a fala. O direito de pensar, o poder de pensar, porém, estão acima de todas as violências e de todas as repressões, que nada podem contra seu exercício. (...) Parece claro que não há abuso mais abominável que o de tentar impor limitações ao pensamento de qualquer pessoa.\nPretender suprimir o pensamento de quem quer que seja é o maior dos crimes. Pois não é apenas um crime contra uma pessoa, mas contra a própria espécie humana, uma vez que o pensamento é o atributo que distingue o ser humano dos demais seres criados sobre a face da terra. (...)\nNa vida na cidade, se um homem neutraliza dentro de si o direito de pensar, a cidade pode ser tomada e dominada pela ferocidade de um tirano, cujo despotismo levará o povo à morte pela fome, pela crueldade ou por outras formas de injustiça e prepotência. E se não o povo todo, pelo menos uma parte do povo, certamente, será arrastada à opressão, à tortura, ao cárcere ou a qualquer outra forma de perdição. Os tiranos não gostam que as pessoas pensem. (Teócrito de Corinto, filósofo grego, século II d.C.)\n\nA direção da escola ainda não se manifestou publicamente sobre o episódio.",
-            "tarefa": {
-              "texto": "Indignado(a) com a tentativa de censura que a professora sofreu por propor aos alunos reflexões fundamentais à formação cidadã, você decidiu escrever o texto de um abaixo-assinado encaminhado à direção da escola, em nome dos estudantes, no qual deve:",
-              "itens": [
-                {
-                  "item": "**a**",
-                  "texto": "reivindicar que a escola se posicione publicamente em defesa da professora;"
-                },
-                {
-                  "item": "**b**",
-                  "texto": "reivindicar a manutenção de aulas de Filosofia que tematizem os Direitos Humanos; e"
-                },
-                {
-                  "item": "**c**",
-                  "texto": "justificar suas reivindicações."
-                }
-              ],
-              "instrucoes_adicionais": "Para tanto, você deve levar em conta tanto o texto acima quanto os excertos abaixo."
-            }
-          },
-          "coletanea": [
-            {
-              "numero": 1,
-              "genero": "Artigo da Declaração Universal dos Direitos Humanos",
-              "autor": "ONU",
-              "data_acesso": "1948",
-              "disponibilidade": "Declaração Universal dos Direitos Humanos",
-              "tipo_texto": "Expositivo",
-              "palavras_chave": [
-                "direitos humanos",
-                "educação",
-                "desenvolvimento humano",
-                "tolerância",
-                "paz"
-              ],
-              "conteudo_textual": "A instrução será orientada no sentido do pleno desenvolvimento da personalidade humana e do fortalecimento do respeito pelos direitos humanos e pelas liberdades fundamentais. A instrução promoverá a compreensão, a tolerância e a amizade entre todas as nações e grupos raciais ou religiosos, e coadjuvará as atividades das Nações Unidas em prol da manutenção da paz."
-            },
-            {
-              "numero": 2,
-              "genero": "História em Quadrinhos (tirinha)",
-              "autor": "Alexandre Beck",
-              "data_acesso": "24/11/2018",
-              "disponibilidade": "pa.unicamp.br/direitos-humanos-armandinho-na-upa",
-              "tipo_texto": "Narrativo",
-              "palavras_chave": [
-                "direitos humanos",
-                "educação",
-                "cidadania"
-              ],
-              "conteudo_imagens": [
-                {
-                  "imagem": 1,
-                  "posicao": "primeiro quadrinho",
-                  "descricao": "Uma criança assiste a um telejornal que mostra imagens de violência e destruição, com a legenda 'POR QUE TUDO ISSO?!'"
-                },
-                {
-                  "imagem": 2,
-                  "posicao": "segundo quadrinho",
-                  "descricao": "A mesma criança, com expressão assustada, expressa sua dúvida: 'OS PROFESSORES SÃO ASSIM TÃO PERIGOSOS!!' Um adulto atrás da criança comenta: 'PARA ALGUNS, SÃO SIM...'"
-                },
-                {
-                  "imagem": 3,
-                  "posicao": "terceiro quadrinho",
-                  "descricao": "A criança, agora pensativa, ouve o adulto dizer: 'ELES PODEM ENSINAR O POVO A PENSAR...' O sapo observa a cena."
-                }
-              ]
-            },
-            {
-              "numero": 3,
-              "genero": "Trecho de artigo acadêmico",
-              "autor": "Celso Lafer",
-              "data_acesso": "maio/ago. 1997",
-              "disponibilidade": "Estudos Avançados",
-              "tipo_texto": "Expositivo e argumentativo",
-              "palavras_chave": [
-                "direitos humanos",
-                "Hannah Arendt",
-                "totalitarismo",
-                "liberdade",
-                "pluralidade"
-              ],
-              "conteudo_textual": "No que toca aos direitos humanos, a filósofa Hannah Arendt identificou na ruptura trazida pela experiência totalitária do nazismo e do stalinismo a inauguração do tudo é possível, que levou pessoas a serem tratadas como supérfluas e descartáveis. Tal fato contrariou os valores consagrados da Justiça e do Direito, voltados a evitar a punição desproporcional e a distribuição não equitativa de bens e situações. Arendt propõe assegurar um mundo comum, marcado pela pluralidade e pela diversidade, o qual, através do exercício da liberdade, impediria o ressurgimento de um novo estado totalitário de natureza. No mundo contemporâneo, continuam a persistir situações sociais, políticas e econômicas que, mesmo depois do término dos regimes totalitários, contribuem para tornar os homens supérfluos e sem lugar num mundo comum, como a ubiquidade da pobreza e da miséria, a ameaça do holocausto nuclear, a irrupção da violência, os surtos terroristas, a limpeza étnica, os fundamentalismos excludentes e intolerantes."
-            },
-            {
-              "numero": 4,
-              "genero": "Artigo de opinião",
-              "autor": "Leonardo Sakamoto",
-              "data_acesso": "05/07/2018",
-              "disponibilidade": "https://blogdosakamoto.blogosfera.uol.com.br",
-              "tipo_texto": "Argumentativo",
-              "palavras_chave": [
-                "educação",
-                "doutrinação",
-                "pluralidade",
-                "diversidade",
-                "Paulo Freire"
-              ],
-              "conteudo_textual": "O bicho está pegando na educação. Fico pensando em que mundo vivem os que acham que as escolas brasileiras sofrem de “contaminação político-ideológica” comandada por “um exército organizado de militantes travestidos de professores”. É uma baita contradição para quem diz defender a “pluralidade”, e é o caminho oposto dos países de alto desempenho em educação: Estados Unidos (em que alguns Estados oferecem educação sexual desde o século XIX), Nova Zelândia, Suécia, Finlândia e França. No Brasil, querem interditar o debate. Mesma coisa com os estudos indígenas e africanos, classificados aqui como porta de entrada para favorecer “movimentos sociais”. Já na Noruega, o currículo é generoso com o povo sami, habitantes originais do norte da Escandinávia. “Doutrinação”, por lá, chama-se respeito à diversidade e às raízes da história do país. Para piorar, o principal evangelista dessa “Bíblia do Mal” seria Paulo Freire. Justo ele, pacifista convicto e obcecado ideia de que as pessoas deveriam pensar livremente. Presos na cortina de fumaça da suposta doutrinação, empobrecemos um pouco mais o debate sobre educação."
-            }
-          ],
-          "expectativa_banca": "A primeira proposta de redação apresenta aos candidatos e às candidatas uma  situação semelhante a algo que, nos últimos anos, tem acontecido no Brasil: uma  professora de Filosofia do Ensino Médio de uma escola da rede pública estadual de  ensino foi acusada de doutrinação política por ter apresentado aos seus alunos o texto  de um filósofo grego da Antiguidade nas aulas sobre as origens da Cidadania e dos  Direitos Humanos. A professora recebeu ofensas e ameaças anônimas e a direção da  escola não se manifestou em sua defesa. A docente foi, portanto, duplamente  atingida: pela tentativa de censura anônima e pela omissão da direção da escola. Já os  alunos se sentiram lesados pelo risco de perder as aulas de filosofia, fundamentais  para sua formação. A prova de redação propõe então aos(às) candidatos(as) a escrita  de um abaixo-assinado no qual deveriam se colocar no lugar dos estudantes dessa  escola que, indignados com a situação, reivindicam junto à direção um posicionamento  institucional em defesa da liberdade de cátedra da professora e a manutenção de  aulas que tematizem os Direitos Humanos.\nDefinidos o gênero discursivo, os interlocutores e a situação de produção  escrita, cabe aos(às) candidatos(as) lerem com atenção os textos disponibilizados na  prova em busca de argumentos que justifiquem suas reivindicações. Dentre eles, o  texto Teócrito e o pensamento, motivo da acusação de doutrinação política e parte da  situação de produção. Nele, o filósofo grego defende a liberdade irrestrita do exercício  do pensamento e denomina crime a tentativa de impedir o direito de pensar,  concluindo que “os tiranos não gostam que as pessoas pensem”. Esse texto dialoga  diretamente com o texto 2, tirinha de Alexandre Beck, em que as personagens  sugerem que os professores são perigosos porque “podem ensinar o povo a pensar”.\nO texto do filósofo grego dialoga também com o texto 3, de Celso Lafer, no qual  o autor apresenta as reflexões de Hannah Arendt sobre as experiências desastrosas de  regimes totalitários. A filósofa temia que, mesmo com o fim do nazismo e do  stalinismo, persistissem no mundo contemporâneo a pobreza, a miséria, o perigo de  um holocausto nuclear, a violência, os surtos terroristas, a limpeza étnica, os  fundamentalismos excludentes e intolerantes. O temor de Teócrito de Corinto frente à  tirania dos déspotas da Antiguidade (que levariam o povo à fome, à injustiça, à  opressão, à tortura, ao cárcere, à perdição) foram atualizados por Hannah Arendt.  Como se depreende da leitura desses textos, a ideia do totalitarismo e a ameaça da  tirania continuam ecoando ao longo dos séculos.\nA situação vivida pela professora na escola pode ser tomada como uma arena  desse impasse: por um lado, a instrução deve promover “a compreensão, a tolerância  e a amizade entre todas as nações e grupos raciais ou religiosos, em prol da  manutenção da paz”, como propõe a Declaração Universal dos Direitos Humanos (texto 1); por outro, a professora, ao tematizar justamente Cidadania e Direitos  Humanos em seu curso, sofre represálias e uma tentativa de silenciamento. Tal incoerência é tratada de modo irônico por Sakamoto (texto 4) que, em um  tom bastante informal (o que o distingue de outros excertos da proposta), ridiculariza  esse tipo de acusação aos professores (“militantes que visam doutrinar político ideologicamente os seus alunos”). O autor critica parte da população brasileira que  alega defender a pluralidade de pensamento, porém busca interditar debates em  torno da educação sexual e excluir dos currículos questões que envolvem Direitos  Humanos – caminho oposto ao de países de alto desempenho em educação. Por fim,  conclui Sakamoto, acusam erroneamente Paulo Freire de mentor dessa “doutrinação”,  o que só reforçaria a ignorância acerca da contribuição desse educador – pacifista e  defensor do livre pensar – quando o assunto é educação no Brasil. Para cumprir a primeira tarefa (reivindicar que a escola defenda a liberdade de  cátedra da professora), os(as) candidatos(as) podem, por exemplo, mobilizar o texto  de Teócrito de Corinto, a tirinha do Armandinho e o excerto do Sakamoto, que  argumentam em favor da pluralidade de pensamentos, necessária em toda instituição  de ensino, desconstruindo assim a falsa ideia de “doutrinação político-ideológica”.  Para cumprir a segunda tarefa (reivindicar a manutenção de aulas de Filosofia que  tematizem os Direitos Humanos), os(as) candidatos(as) têm a possibilidade de recorrer  às reflexões de Hannah Arendt e de Teócrito de Corinto para apontar os regimes  totalitários como responsáveis por atos de barbárie, e concluir que os Direitos  Humanos são imprescindíveis aos regimes democráticos. Podem, ainda, defender uma  educação fundamentada nos Direitos Humanos e, para tanto, recorrer ao Artigo da  Declaração Universal dos Direitos Humanos, o qual determina que a instrução deva ser  orientada no sentido de fortalecer e respeitar esses direitos. Mais especificamente,  podem aproveitar exemplos citados por Sakamoto de países que são referência  mundial em educação e cujos currículos valorizam os Direitos Humanos.  Espera-se que os(as) candidatos(as) construam uma “máscara discursiva” que  se aproxime da situação de produção e da interlocução referidas e apresentem  explicitamente as reivindicações indicadas, articulando as informações trazidas pelos  textos da coletânea e outras que julgar pertinentes.",
-          "ano_2019_proposta_1_descricao": "Texto 1 da prova de redação",
-          "ano_2019_proposta_1_estatisticas": {
-            "estatisticas_gerais": {
-              "media_notas": 7.4,
-              "desvio_padrao_notas": 2,
-              "quartil_1": 6,
-              "mediana": 7.5,
-              "quartil_3": 9,
-              "minimo": 0,
-              "maximo": 12
-            },
-            "distribuicao_notas": {
-              "descricao": "Histograma da Figura 8",
-              "formato": "A distribuição das notas brutas do texto 1 é assimétrica à direita, com a maioria das notas concentradas na faixa de 6 a 9 pontos."
-            },
-            "classificacao_notas_brutas": {
-              "abaixo_da_media": {
-                "inicio": 1,
-                "fim": 6
+        "interlocutores": {
+          "enunciador_i": "Estudante do Ensino Médio na rede pública estadual",
+          "interlocutor_i": "Direção da escola",
+          "mascara_discursiva_i": "Estudante indignado com a censura à professora de Filosofia e defensor da liberdade de pensamento e dos Direitos Humanos"
+        },
+        "situacao_problema_s": "Ofensas e ameaças anônimas à professora de Filosofia por abordar a temática dos Direitos Humanos em sala de aula",
+        "tema": "Liberdade de pensamento e a importância da educação em Direitos Humanos",
+        "genero_g": "Abaixo-assinado",
+        "construcao_composicional": "Introdução com apresentação do problema e identificação dos signatários, desenvolvimento com argumentos que defendam a liberdade de pensamento da professora e a importância da educação em Direitos Humanos, conclusão com as reivindicações e solicitação de providências à direção da escola",
+        "tipologia_textual": "Predominantemente argumentativa, com elementos expositivos e narrativos",
+        "projeto_texto": "Reivindicar que a escola se posicione em defesa da professora de Filosofia, defender a manutenção de aulas sobre Direitos Humanos e justificar essas reivindicações com base na liberdade de pensamento e na importância da educação para a cidadania",
+        "leitura_textos_coletanea": "O candidato deve utilizar os textos da coletânea para compreender o conceito de Direitos Humanos, a importância da liberdade de pensamento e os riscos da censura e do totalitarismo",
+        "escolhas_lexicais_sintaticas": "Adequação ao registro formal de um abaixo-assinado, com vocabulário preciso e que demonstre conhecimento sobre o tema",
+        "recursos_coesivos": "Uso de conectivos e recursos de sequenciação para articular os argumentos e organizar o texto",
+        "norma_culta": "Domínio da norma culta contemporânea",
+        "estilo": "Formal, crítico, persuasivo e que demonstre a indignação e a mobilização dos estudantes",
+        "originalidade": "O candidato deve apresentar argumentos originais e bem fundamentados",
+        "pertinencia": "Os argumentos devem ser pertinentes ao tema da liberdade de pensamento e da educação em Direitos Humanos",
+        "observacoes": "O candidato deve demonstrar senso crítico, capacidade de argumentação, conhecimento sobre os Direitos Humanos e engajamento na defesa da liberdade de expressão e da educação para a cidadania",
+        "data_criacao": "2023-11-07",
+        "data_ultima_edicao": "2023-11-07",
+        "recorte_tematico": "A liberdade de pensamento como um direito fundamental e a importância da educação em Direitos Humanos para a formação de cidadãos críticos e conscientes",
+        "enunciado": {
+          "situacao_inicial": "Você é um(a) estudante do Ensino Médio na rede pública estadual e soube de um acontecimento revoltante na sua escola: sua professora de Filosofia recebeu ofensas e ameaças anônimas por suposta tentativa de doutrinação política, ao ter iniciado o curso sobre as origens da Cidadania e dos Direitos Humanos modernos com o texto a seguir:\n\nTeócrito e o pensamento\nA ninguém, nem aos deuses nem aos demônios, nem às tiranias da terra nem às tiranias do céu, foi dado o poder de impedir aos homens o exercício daquele que é o primeiro e o maior de seus atributos: o exercício do pensamento. Podem amarrar as mãos de um homem, impedindo-lhe o gesto. Podem atar-lhe os pés, impedindo-lhe o andar. Podem vazar-lhe os olhos, impedindo a vista. Podem cortar-lhe a língua, impedindo a fala. O direito de pensar, o poder de pensar, porém, estão acima de todas as violências e de todas as repressões, que nada podem contra seu exercício. (...) Parece claro que não há abuso mais abominável que o de tentar impor limitações ao pensamento de qualquer pessoa.\nPretender suprimir o pensamento de quem quer que seja é o maior dos crimes. Pois não é apenas um crime contra uma pessoa, mas contra a própria espécie humana, uma vez que o pensamento é o atributo que distingue o ser humano dos demais seres criados sobre a face da terra. (...)\nNa vida na cidade, se um homem neutraliza dentro de si o direito de pensar, a cidade pode ser tomada e dominada pela ferocidade de um tirano, cujo despotismo levará o povo à morte pela fome, pela crueldade ou por outras formas de injustiça e prepotência. E se não o povo todo, pelo menos uma parte do povo, certamente, será arrastada à opressão, à tortura, ao cárcere ou a qualquer outra forma de perdição. Os tiranos não gostam que as pessoas pensem. (Teócrito de Corinto, filósofo grego, século II d.C.)\n\nA direção da escola ainda não se manifestou publicamente sobre o episódio.",
+          "tarefa": {
+            "texto": "Indignado(a) com a tentativa de censura que a professora sofreu por propor aos alunos reflexões fundamentais à formação cidadã, você decidiu escrever o texto de um abaixo-assinado encaminhado à direção da escola, em nome dos estudantes, no qual deve:",
+            "itens": [
+              {
+                "item": "**a**",
+                "texto": "reivindicar que a escola se posicione publicamente em defesa da professora;"
               },
-              "na_media": {
-                "inicio": 6,
-                "fim": 9
+              {
+                "item": "**b**",
+                "texto": "reivindicar a manutenção de aulas de Filosofia que tematizem os Direitos Humanos; e"
               },
-              "acima_da_media": {
-                "inicio": 9,
-                "fim": 12
+              {
+                "item": "**c**",
+                "texto": "justificar suas reivindicações."
               }
+            ],
+            "instrucoes_adicionais": "Para tanto, você deve levar em conta tanto o texto acima quanto os excertos abaixo."
+          }
+        },
+        "coletanea": [
+          {
+            "numero": 1,
+            "genero": "Artigo da Declaração Universal dos Direitos Humanos",
+            "autor": "ONU",
+            "data_acesso": "1948",
+            "disponibilidade": "Declaração Universal dos Direitos Humanos",
+            "tipo_texto": "Expositivo",
+            "palavras_chave": [
+              "direitos humanos",
+              "educação",
+              "desenvolvimento humano",
+              "tolerância",
+              "paz"
+            ],
+            "conteudo_textual": "A instrução será orientada no sentido do pleno desenvolvimento da personalidade humana e do fortalecimento do respeito pelos direitos humanos e pelas liberdades fundamentais. A instrução promoverá a compreensão, a tolerância e a amizade entre todas as nações e grupos raciais ou religiosos, e coadjuvará as atividades das Nações Unidas em prol da manutenção da paz."
+          },
+          {
+            "numero": 2,
+            "genero": "História em Quadrinhos (tirinha)",
+            "autor": "Alexandre Beck",
+            "data_acesso": "24/11/2018",
+            "disponibilidade": "pa.unicamp.br/direitos-humanos-armandinho-na-upa",
+            "tipo_texto": "Narrativo",
+            "palavras_chave": [
+              "direitos humanos",
+              "educação",
+              "cidadania"
+            ],
+            "conteudo_imagens": [
+              {
+                "imagem": 1,
+                "posicao": "primeiro quadrinho",
+                "descricao": "Uma criança assiste a um telejornal que mostra imagens de violência e destruição, com a legenda 'POR QUE TUDO ISSO?!'"
+              },
+              {
+                "imagem": 2,
+                "posicao": "segundo quadrinho",
+                "descricao": "A mesma criança, com expressão assustada, expressa sua dúvida: 'OS PROFESSORES SÃO ASSIM TÃO PERIGOSOS!!' Um adulto atrás da criança comenta: 'PARA ALGUNS, SÃO SIM...'"
+              },
+              {
+                "imagem": 3,
+                "posicao": "terceiro quadrinho",
+                "descricao": "A criança, agora pensativa, ouve o adulto dizer: 'ELES PODEM ENSINAR O POVO A PENSAR...' O sapo observa a cena."
+              }
+            ]
+          },
+          {
+            "numero": 3,
+            "genero": "Trecho de artigo acadêmico",
+            "autor": "Celso Lafer",
+            "data_acesso": "maio/ago. 1997",
+            "disponibilidade": "Estudos Avançados",
+            "tipo_texto": "Expositivo e argumentativo",
+            "palavras_chave": [
+              "direitos humanos",
+              "Hannah Arendt",
+              "totalitarismo",
+              "liberdade",
+              "pluralidade"
+            ],
+            "conteudo_textual": "No que toca aos direitos humanos, a filósofa Hannah Arendt identificou na ruptura trazida pela experiência totalitária do nazismo e do stalinismo a inauguração do tudo é possível, que levou pessoas a serem tratadas como supérfluas e descartáveis. Tal fato contrariou os valores consagrados da Justiça e do Direito, voltados a evitar a punição desproporcional e a distribuição não equitativa de bens e situações. Arendt propõe assegurar um mundo comum, marcado pela pluralidade e pela diversidade, o qual, através do exercício da liberdade, impediria o ressurgimento de um novo estado totalitário de natureza. No mundo contemporâneo, continuam a persistir situações sociais, políticas e econômicas que, mesmo depois do término dos regimes totalitários, contribuem para tornar os homens supérfluos e sem lugar num mundo comum, como a ubiquidade da pobreza e da miséria, a ameaça do holocausto nuclear, a irrupção da violência, os surtos terroristas, a limpeza étnica, os fundamentalismos excludentes e intolerantes."
+          },
+          {
+            "numero": 4,
+            "genero": "Artigo de opinião",
+            "autor": "Leonardo Sakamoto",
+            "data_acesso": "05/07/2018",
+            "disponibilidade": "https://blogdosakamoto.blogosfera.uol.com.br",
+            "tipo_texto": "Argumentativo",
+            "palavras_chave": [
+              "educação",
+              "doutrinação",
+              "pluralidade",
+              "diversidade",
+              "Paulo Freire"
+            ],
+            "conteudo_textual": "O bicho está pegando na educação. Fico pensando em que mundo vivem os que acham que as escolas brasileiras sofrem de “contaminação político-ideológica” comandada por “um exército organizado de militantes travestidos de professores”. É uma baita contradição para quem diz defender a “pluralidade”, e é o caminho oposto dos países de alto desempenho em educação: Estados Unidos (em que alguns Estados oferecem educação sexual desde o século XIX), Nova Zelândia, Suécia, Finlândia e França. No Brasil, querem interditar o debate. Mesma coisa com os estudos indígenas e africanos, classificados aqui como porta de entrada para favorecer “movimentos sociais”. Já na Noruega, o currículo é generoso com o povo sami, habitantes originais do norte da Escandinávia. “Doutrinação”, por lá, chama-se respeito à diversidade e às raízes da história do país. Para piorar, o principal evangelista dessa “Bíblia do Mal” seria Paulo Freire. Justo ele, pacifista convicto e obcecado ideia de que as pessoas deveriam pensar livremente. Presos na cortina de fumaça da suposta doutrinação, empobrecemos um pouco mais o debate sobre educação."
+          }
+        ],
+        "expectativa_banca": "A primeira proposta de redação apresenta aos candidatos e às candidatas uma  situação semelhante a algo que, nos últimos anos, tem acontecido no Brasil: uma  professora de Filosofia do Ensino Médio de uma escola da rede pública estadual de  ensino foi acusada de doutrinação política por ter apresentado aos seus alunos o texto  de um filósofo grego da Antiguidade nas aulas sobre as origens da Cidadania e dos  Direitos Humanos. A professora recebeu ofensas e ameaças anônimas e a direção da  escola não se manifestou em sua defesa. A docente foi, portanto, duplamente  atingida: pela tentativa de censura anônima e pela omissão da direção da escola. Já os  alunos se sentiram lesados pelo risco de perder as aulas de filosofia, fundamentais  para sua formação. A prova de redação propõe então aos(às) candidatos(as) a escrita  de um abaixo-assinado no qual deveriam se colocar no lugar dos estudantes dessa  escola que, indignados com a situação, reivindicam junto à direção um posicionamento  institucional em defesa da liberdade de cátedra da professora e a manutenção de  aulas que tematizem os Direitos Humanos.\nDefinidos o gênero discursivo, os interlocutores e a situação de produção  escrita, cabe aos(às) candidatos(as) lerem com atenção os textos disponibilizados na  prova em busca de argumentos que justifiquem suas reivindicações. Dentre eles, o  texto Teócrito e o pensamento, motivo da acusação de doutrinação política e parte da  situação de produção. Nele, o filósofo grego defende a liberdade irrestrita do exercício  do pensamento e denomina crime a tentativa de impedir o direito de pensar,  concluindo que “os tiranos não gostam que as pessoas pensem”. Esse texto dialoga  diretamente com o texto 2, tirinha de Alexandre Beck, em que as personagens  sugerem que os professores são perigosos porque “podem ensinar o povo a pensar”.\nO texto do filósofo grego dialoga também com o texto 3, de Celso Lafer, no qual  o autor apresenta as reflexões de Hannah Arendt sobre as experiências desastrosas de  regimes totalitários. A filósofa temia que, mesmo com o fim do nazismo e do  stalinismo, persistissem no mundo contemporâneo a pobreza, a miséria, o perigo de  um holocausto nuclear, a violência, os surtos terroristas, a limpeza étnica, os  fundamentalismos excludentes e intolerantes. O temor de Teócrito de Corinto frente à  tirania dos déspotas da Antiguidade (que levariam o povo à fome, à injustiça, à  opressão, à tortura, ao cárcere, à perdição) foram atualizados por Hannah Arendt.  Como se depreende da leitura desses textos, a ideia do totalitarismo e a ameaça da  tirania continuam ecoando ao longo dos séculos.\nA situação vivida pela professora na escola pode ser tomada como uma arena  desse impasse: por um lado, a instrução deve promover “a compreensão, a tolerância  e a amizade entre todas as nações e grupos raciais ou religiosos, em prol da  manutenção da paz”, como propõe a Declaração Universal dos Direitos Humanos (texto 1); por outro, a professora, ao tematizar justamente Cidadania e Direitos  Humanos em seu curso, sofre represálias e uma tentativa de silenciamento. Tal incoerência é tratada de modo irônico por Sakamoto (texto 4) que, em um  tom bastante informal (o que o distingue de outros excertos da proposta), ridiculariza  esse tipo de acusação aos professores (“militantes que visam doutrinar político ideologicamente os seus alunos”). O autor critica parte da população brasileira que  alega defender a pluralidade de pensamento, porém busca interditar debates em  torno da educação sexual e excluir dos currículos questões que envolvem Direitos  Humanos – caminho oposto ao de países de alto desempenho em educação. Por fim,  conclui Sakamoto, acusam erroneamente Paulo Freire de mentor dessa “doutrinação”,  o que só reforçaria a ignorância acerca da contribuição desse educador – pacifista e  defensor do livre pensar – quando o assunto é educação no Brasil. Para cumprir a primeira tarefa (reivindicar que a escola defenda a liberdade de  cátedra da professora), os(as) candidatos(as) podem, por exemplo, mobilizar o texto  de Teócrito de Corinto, a tirinha do Armandinho e o excerto do Sakamoto, que  argumentam em favor da pluralidade de pensamentos, necessária em toda instituição  de ensino, desconstruindo assim a falsa ideia de “doutrinação político-ideológica”.  Para cumprir a segunda tarefa (reivindicar a manutenção de aulas de Filosofia que  tematizem os Direitos Humanos), os(as) candidatos(as) têm a possibilidade de recorrer  às reflexões de Hannah Arendt e de Teócrito de Corinto para apontar os regimes  totalitários como responsáveis por atos de barbárie, e concluir que os Direitos  Humanos são imprescindíveis aos regimes democráticos. Podem, ainda, defender uma  educação fundamentada nos Direitos Humanos e, para tanto, recorrer ao Artigo da  Declaração Universal dos Direitos Humanos, o qual determina que a instrução deva ser  orientada no sentido de fortalecer e respeitar esses direitos. Mais especificamente,  podem aproveitar exemplos citados por Sakamoto de países que são referência  mundial em educação e cujos currículos valorizam os Direitos Humanos.  Espera-se que os(as) candidatos(as) construam uma “máscara discursiva” que  se aproxime da situação de produção e da interlocução referidas e apresentem  explicitamente as reivindicações indicadas, articulando as informações trazidas pelos  textos da coletânea e outras que julgar pertinentes.",
+        "ano_2019_proposta_1_descricao": "Texto 1 da prova de redação",
+        "ano_2019_proposta_1_estatisticas": {
+          "estatisticas_gerais": {
+            "media_notas": 7.4,
+            "desvio_padrao_notas": 2,
+            "quartil_1": 6,
+            "mediana": 7.5,
+            "quartil_3": 9,
+            "minimo": 0,
+            "maximo": 12
+          },
+          "distribuicao_notas": {
+            "descricao": "Histograma da Figura 8",
+            "formato": "A distribuição das notas brutas do texto 1 é assimétrica à direita, com a maioria das notas concentradas na faixa de 6 a 9 pontos."
+          },
+          "classificacao_notas_brutas": {
+            "abaixo_da_media": {
+              "inicio": 1,
+              "fim": 6
+            },
+            "na_media": {
+              "inicio": 6,
+              "fim": 9
+            },
+            "acima_da_media": {
+              "inicio": 9,
+              "fim": 12
             }
-        },
-        "exemplos_com_nota": {
-          "acima_media": {
-
-          },
-          "mediana": {
-
-          },
-          "abaixo_media": {
-
-          },
-          "anulada": {
-
           }
-        },
-        "exemplos_sem_nota": {
-          "acima_media": {
-
-          },
-          "mediana": {
-
-          },
-          "abaixo_media": {
-
-          },
-          "anulada": {
-
-          }
-        }
+      }
       },
       "ano_2019_proposta_2": {
         "id": 12,
