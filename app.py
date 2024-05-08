@@ -81,8 +81,6 @@ def maybe_st_initialize_state():
 
         logger.info("Setting persona settings path to: %s", st.session_state["persona_settings_path"])
 
-    return create_chat_connector()
-
 
 def get_ai_chat():
     creativity_level = 1.0
@@ -98,7 +96,7 @@ def get_ai_chat():
         llm_family = LLMMockFamily()
         logger.info("Using LLMMockFamily")
 
-    llm_model_name = st.session_state.get("LLM_MODEL", llm_model_default_name)
+    llm_model_name = st.session_state.get("llm_model_name", llm_model_default_name)
 
     persona_name = st.session_state.get("persona_name", "Zoid")
     thought_process = st.session_state.get("thought_process", thought_process)
@@ -196,9 +194,9 @@ def chat_messages(chat_connector, user_input_message, user_uploaded_files):
 
     info_columns = st.columns(2)
     info_columns[0].info(f"""🤖 **Nome:** {persona.name}\n
-💡 **Processo de pensamento:** {persona.thought_process}\n\n""")
+💡 **Pensamento:** {persona.thought_process}\n\n""")
     info_columns[1].info(f"""🎨 **Criatividade:** {persona.creativity_level}\n
-📃 **Concisão do discurso:** ~{4 * persona.speech_conciseness} letras por resposta\n\n""")
+📃 **Concisão:** ~{4 * persona.speech_conciseness} letras / resposta\n\n""")
 
     # Display past messages from chat history
     if chat_history:
@@ -300,55 +298,95 @@ def file_uploader_fragment(user_input_message):
     return processed_files
 
 def model_settings():
+    if "api_token_value" not in st.session_state:
+        st.session_state["api_token_value"] = None
+
+        if "GOOGLE_DEV" in st.secrets:
+            st.session_state["thought_process"] = "Racional"
+            st.session_state["speech_conciseness"] = 8192 * 4
+            st.session_state["api_token_value"] = st.secrets["GOOGLE_DEV"]["GOOGLE_API_KEY"]
+
+    if "creativity_level" not in st.session_state:
+        st.session_state["creativity_level"] = 0.1
+
+    if "speech_conciseness" not in st.session_state:
+        st.session_state["speech_conciseness"] = 2048 * 4
+
+    if "thought_process" not in st.session_state:
+        st.session_state["thought_process"] = "Intuitivo"
+
     with st.sidebar:
-        with st.form("api_token_form"):
+        default_api_key = st.session_state["api_token_value"]
+        default_creativity_level = st.session_state["creativity_level"]
+        default_simple_llm_model_name = st.session_state["thought_process"]
+        
+        with st.container():
             st.session_state["LLM_FAMILY"] = "GeminiDevFamily"
 
             gemini_models = {
                 "Intuitivo": "GeminiDevModelPro1_0",
                 "Racional": "GeminiDevModelPro1_5",
             }
+            gemini_models_list = list(gemini_models.keys())
+            default_gemini_models_idx = gemini_models_list.index(default_simple_llm_model_name)
+
+            def update_speech_conciseness(conciseness):
+                model_name = st.session_state["selectbox_llm_model_name"]
+
+                if model_name == "Intuitivo":
+                    conciseness[0] = 0 * 4
+                    conciseness[1] = 2048 * 4
+                elif model_name == "Racional":
+                    conciseness[0] = 0 * 4
+                    conciseness[1] = 8192 * 4
+
+                conciseness[2] = conciseness[1]
+
+            conciseness = [0, 0, 0]
 
             simple_llm_model_name = st.selectbox(
                 "Processo de pensamento",
-                list(gemini_models.keys())
+                gemini_models_list,
+                index=default_gemini_models_idx,
+                on_change=update_speech_conciseness,
+                key="selectbox_llm_model_name",
+                args=(conciseness, )
             )
-
-            if simple_llm_model_name == "Intuitivo":
-                min_conciseness = 0 * 4
-                max_conciseness = 4096 * 4
-            elif simple_llm_model_name == "Racional":
-                min_conciseness = 0 * 4
-                max_conciseness = 8192 * 4
+            update_speech_conciseness(conciseness)
 
             speech_conciseness = st.slider(
-                "Concisão do discurso (letras por resposta)",
-                min_value=min_conciseness,
-                max_value=max_conciseness,
-                value=max_conciseness,
+                "Concisão (letras por resposta)",
+                min_value=conciseness[0],
+                max_value=conciseness[1],
+                value=conciseness[2],
                 step=128 * 4,
-                help=f"Utilize valores próximos de {min_conciseness} para respostas mais curtas ou próximos de {max_conciseness} para respostas mais longas."
+                help=f"Utilize valores próximos de {conciseness[0]} para respostas mais curtas ou próximos de {conciseness[1]} para respostas mais longas."
             )
 
             creativity_level = st.slider(
                 "Nível de criatividade",
                 min_value=0.0,
                 max_value=1.0,
-                value=1.0,
+                value=default_creativity_level,
                 step=0.1,
                 help="Utilize valores próximos de 0 para respostas mais diretas ou próximos de 1 para respostas mais criativas."
             )
 
             llm_model = gemini_models[simple_llm_model_name]
 
-            api_key = st.text_input("API Token", key="api_token", type="password")
-            api_buttom = st.form_submit_button("Salvar")
+            api_key = st.text_input(
+                "API Token",
+                key="api_token",
+                type="password",
+                value=default_api_key
+            )
+            api_buttom = st.button("Atualizar")
 
         if api_buttom:
             if len(api_key) > 0:
                 st.session_state["api_token_value"] = api_key
 
-            st.session_state["LLM_MODEL"] = llm_model
+            st.session_state["llm_model_name"] = llm_model
             st.session_state["creativity_level"] = creativity_level
             st.session_state["thought_process"] = simple_llm_model_name
             st.session_state["speech_conciseness"] = speech_conciseness
@@ -359,15 +397,11 @@ def model_settings():
             st.rerun()
 
 def main():
-    if "api_token_value" not in st.session_state:
-        st.session_state["api_token_value"] = None
-
-        # if "GOOGLE_DEV" in st.secrets:
-        #     st.session_state["api_token_value"] = st.secrets["GOOGLE_DEV"]["GOOGLE_API_KEY"]
+    maybe_st_initialize_state()
+    chat_connector = create_chat_connector()
 
     model_settings()
 
-    chat_connector = maybe_st_initialize_state()
     genai.configure(api_key=st.session_state["api_token_value"])
 
     with stylable_container(key="main_container", css_styles="""

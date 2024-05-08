@@ -11,7 +11,14 @@ class GeminiDevBaseModel(LLMBaseModel):
 
     def initialize_model(self, system_instruction=[], temperature=None, max_output_tokens=None):
         self._model_chats = {}
-        self._model_instance = genai.GenerativeModel(self.name)
+        self._model_instance = genai.GenerativeModel(
+            self.name,
+            generation_config=genai.types.GenerationConfig(
+                candidate_count=1,
+                temperature=temperature,
+                max_output_tokens=max_output_tokens,
+            )
+        )
 
     def check_chat_session_exists(self, session_id):
         return session_id in self._model_chats
@@ -60,15 +67,15 @@ class GeminiDevBaseModel(LLMBaseModel):
 
         ai_response_stream = self._model_chats[session_id].send_message(messages, stream=True)
 
-        return self.process_ai_response_stream(ai_response_stream)
+        return self.process_ai_response_stream(session_id, ai_response_stream)
 
     def send_stream_single_message(self, message, system_message=None, files=[]):
         messages = self.create_llm_request(message, system_message, files)
 
         ai_response_stream = self._model_instance.generate_content(messages, stream=True)
-        return self.process_ai_response_stream(ai_response_stream)
+        return self.process_ai_response_stream(None, ai_response_stream)
 
-    def process_ai_response_stream(self, responses):
+    def process_ai_response_stream(self, session_id, responses):
         new_ai_message_args = {}
 
         try:
@@ -84,7 +91,14 @@ class GeminiDevBaseModel(LLMBaseModel):
 
                 yield text_message, new_ai_message_args
         except Exception as e:
-            text_message = f":red[Erro ao processar a mensagem: {e}]"
+            last_message = ""
+
+            if session_id:
+                chat = self._model_chats[session_id]
+                last_message = chat.last
+                chat.rewind()
+
+            text_message = f":red[Última mensagem: {last_message}\n\nErro ao processar a mensagem: {e}]"
             yield text_message, new_ai_message_args
 
 class GeminiDevModelPro1_0(GeminiDevBaseModel):
