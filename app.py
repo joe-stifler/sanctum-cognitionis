@@ -111,7 +111,7 @@ def get_ai_chat():
     persona = Persona(
         name=persona_name,
         creativity_level=creativity_level,
-        speech_conciseness=speech_conciseness // 4,
+        speech_conciseness=speech_conciseness,
         persona_description="",
         thought_process=thought_process,
     )
@@ -193,10 +193,8 @@ def chat_messages(chat_connector, user_input_message, user_uploaded_files):
         return
 
     info_columns = st.columns(2)
-    info_columns[0].info(f"""🤖 **Nome:** {persona.name}\n
-💡 **Pensamento:** {persona.thought_process}\n\n""")
-    info_columns[1].info(f"""🎨 **Criatividade:** {persona.creativity_level}\n
-📃 **Concisão:** ~{4 * persona.speech_conciseness} letras / resposta\n\n""")
+    info_columns[0].info(f"""🤖 **Nome:** {persona.name}\n\n""")
+    info_columns[1].info(f"""**Pensamento:** {persona.thought_process}\n\n""")
 
     # Display past messages from chat history
     if chat_history:
@@ -284,7 +282,7 @@ def file_uploader_fragment(user_input_message):
 
     processed_files = []
 
-    if user_input_message and len(user_input_message) > 0:
+    if user_input_message and len(user_input_message) > 0: # TextFile
         # Convert the uploaded files to a standard format
         file_handler = StreamlitFileHandler(old_user_uploaded_files)
         processed_files = file_handler.process_files()
@@ -303,14 +301,14 @@ def model_settings():
 
         if "GOOGLE_DEV" in st.secrets:
             st.session_state["thought_process"] = "Racional"
-            st.session_state["speech_conciseness"] = 8192 * 4
+            st.session_state["speech_conciseness"] = 8192
             st.session_state["api_token_value"] = st.secrets["GOOGLE_DEV"]["GOOGLE_API_KEY"]
 
     if "creativity_level" not in st.session_state:
-        st.session_state["creativity_level"] = 0.1
+        st.session_state["creativity_level"] = 1.0
 
     if "speech_conciseness" not in st.session_state:
-        st.session_state["speech_conciseness"] = 2048 * 4
+        st.session_state["speech_conciseness"] = 2048
 
     if "thought_process" not in st.session_state:
         st.session_state["thought_process"] = "Intuitivo"
@@ -320,85 +318,142 @@ def model_settings():
         default_creativity_level = st.session_state["creativity_level"]
         default_simple_llm_model_name = st.session_state["thought_process"]
         
-        with st.container():
-            st.session_state["LLM_FAMILY"] = "GeminiDevFamily"
+        with st.expander("Configurações do modelo"):
+            with st.container():
+                st.session_state["LLM_FAMILY"] = "GeminiDevFamily"
 
-            gemini_models = {
-                "Intuitivo": "GeminiDevModelPro1_0",
-                "Racional": "GeminiDevModelPro1_5",
-            }
-            gemini_models_list = list(gemini_models.keys())
-            default_gemini_models_idx = gemini_models_list.index(default_simple_llm_model_name)
+                gemini_models = {
+                    "Intuitivo": "GeminiDevModelPro1_0",
+                    "Racional": "GeminiDevModelPro1_5",
+                }
+                gemini_models_list = list(gemini_models.keys())
+                default_gemini_models_idx = gemini_models_list.index(default_simple_llm_model_name)
 
-            def update_speech_conciseness(conciseness):
-                model_name = st.session_state["selectbox_llm_model_name"]
+                def update_speech_conciseness(conciseness):
+                    model_name = st.session_state["selectbox_llm_model_name"]
 
-                if model_name == "Intuitivo":
-                    conciseness[0] = 0 * 4
-                    conciseness[1] = 2048 * 4
-                elif model_name == "Racional":
-                    conciseness[0] = 0 * 4
-                    conciseness[1] = 8192 * 4
+                    if model_name == "Intuitivo":
+                        conciseness[0] = 0
+                        conciseness[1] = 2048
+                    elif model_name == "Racional":
+                        conciseness[0] = 0
+                        conciseness[1] = 8192
 
-                conciseness[2] = conciseness[1]
+                    conciseness[2] = conciseness[1]
 
-            conciseness = [0, 0, 0]
+                conciseness = [0, 0, 0]
 
-            simple_llm_model_name = st.selectbox(
-                "Processo de pensamento",
-                gemini_models_list,
-                index=default_gemini_models_idx,
-                on_change=update_speech_conciseness,
-                key="selectbox_llm_model_name",
-                args=(conciseness, )
-            )
-            update_speech_conciseness(conciseness)
+                simple_llm_model_name = st.selectbox(
+                    "Processo de pensamento",
+                    gemini_models_list,
+                    index=default_gemini_models_idx,
+                    on_change=update_speech_conciseness,
+                    key="selectbox_llm_model_name",
+                    args=(conciseness, )
+                )
+                update_speech_conciseness(conciseness)
 
-            speech_conciseness = st.slider(
-                "Concisão (letras por resposta)",
-                min_value=conciseness[0],
-                max_value=conciseness[1],
-                value=conciseness[2],
-                step=128 * 4,
-                help=f"Utilize valores próximos de {conciseness[0]} para respostas mais curtas ou próximos de {conciseness[1]} para respostas mais longas."
-            )
+                speech_conciseness = st.slider(
+                    "Concisão (letras por resposta)",
+                    min_value=conciseness[0],
+                    max_value=conciseness[1],
+                    value=conciseness[2],
+                    step=128 * 4,
+                    help=f"Utilize valores próximos de {conciseness[0]} para respostas mais curtas ou próximos de {conciseness[1]} para respostas mais longas."
+                )
 
-            creativity_level = st.slider(
-                "Nível de criatividade",
-                min_value=0.0,
-                max_value=1.0,
-                value=default_creativity_level,
-                step=0.1,
-                help="Utilize valores próximos de 0 para respostas mais diretas ou próximos de 1 para respostas mais criativas."
-            )
+                creativity_level = st.slider(
+                    "Nível de criatividade",
+                    min_value=0.0,
+                    max_value=1.0,
+                    value=default_creativity_level,
+                    step=0.1,
+                    help="Utilize valores próximos de 0 para respostas mais diretas ou próximos de 1 para respostas mais criativas."
+                )
 
-            llm_model = gemini_models[simple_llm_model_name]
+                llm_model = gemini_models[simple_llm_model_name]
 
-            api_key = st.text_input(
-                "API Token",
-                key="api_token",
-                type="password",
-                value=default_api_key
-            )
-            api_buttom = st.button("Atualizar")
+                api_key = st.text_input(
+                    "API Token",
+                    key="api_token",
+                    type="password",
+                    value=default_api_key
+                )
+                api_buttom = st.button("Atualizar")
 
-        if api_buttom:
-            if len(api_key) > 0:
-                st.session_state["api_token_value"] = api_key
+            if api_buttom:
+                if len(api_key) > 0:
+                    st.session_state["api_token_value"] = api_key
 
-            st.session_state["llm_model_name"] = llm_model
-            st.session_state["creativity_level"] = creativity_level
-            st.session_state["thought_process"] = simple_llm_model_name
-            st.session_state["speech_conciseness"] = speech_conciseness
+                st.session_state["llm_model_name"] = llm_model
+                st.session_state["creativity_level"] = creativity_level
+                st.session_state["thought_process"] = simple_llm_model_name
+                st.session_state["speech_conciseness"] = speech_conciseness
 
-            if "session_id" in st.session_state:
-                del st.session_state["session_id"]
+                if "session_id" in st.session_state:
+                    del st.session_state["session_id"]
 
-            st.rerun()
+                st.rerun()
+
+def setup_notion_indexing():
+    with st.sidebar:
+        notion_url = st.text_input("Sua URL do Notion")
+
+        with st.expander("Configurações do Notion", expanded=False):
+            profundidade = st.number_input("Profundidade", min_value=-1, max_value=10, value=1)
+            numero_paginas = st.number_input("Número de páginas", min_value=-1, max_value=100, value=-1)
+            filtros = st.text_input("Filtros", value="")
+            ordenacao = st.text_input("Ordenação", value="")
+
+        if "notion_api_token" not in st.session_state:
+            st.session_state["notion_api_token"] = None
+
+            if "NOTION" in st.secrets:
+                st.session_state["notion_api_token"] = st.secrets["NOTION"]["NOTION_API_KEY"]
+
+        default_api_key = st.session_state["notion_api_token"]
+        api_notion_key = st.text_input(
+            "Token da API do Notion",
+            key="ti_notion_api_token",
+            type="password",
+            value=default_api_key
+        )
+
+        indexar_notion = st.button("Indexar Notion")
+
+        if indexar_notion:
+            st.session_state["notion_api_token"] = api_notion_key
+
+            with st.spinner("Indexando Notion..."):
+                from notion_indexer.notion_reader import NotionReader
+
+                kwargs = {}
+                if profundidade != -1:
+                    kwargs["max_depth"] = profundidade
+                if numero_paginas != -1:
+                    kwargs["page_size"] = numero_paginas
+                if filtros:
+                    kwargs["filter"] = filtros
+                if ordenacao:
+                    kwargs["sorts"] = ordenacao
+
+                notion_reader = NotionReader(integration_token=api_notion_key)
+                notion_node = notion_reader.load_data(
+                    notion_url,
+                    **kwargs
+                )
+
+                conteudo_notion = notion_node.to_markdown()
+                st.download_button("Baixar arquivo markdown", conteudo_notion)
+
+                return notion_url, notion_node
+    return None, None
 
 def main():
     maybe_st_initialize_state()
     chat_connector = create_chat_connector()
+
+    notion_url, notion_node = setup_notion_indexing()
 
     model_settings()
 
@@ -447,6 +502,17 @@ def main():
 
             with rows_popover:
                 user_uploaded_files = file_uploader_fragment(user_input_message)
+
+            if notion_node:
+                user_input_message = f"O arquivo de texto acima foi extraído a partir da seguinte URL do Notion: {notion_url}"
+
+                from notion_indexer.database_node import DatabaseNode
+                if isinstance(notion_node, DatabaseNode):
+                    user_uploaded_files.append(
+                        PandasFile("NotionDatabase", notion_node.to_dataframe())
+                    )
+                else:
+                    user_uploaded_files.extend([TextFile("NotionContent", notion_node.to_markdown(), "md")])
 
         with parent_chat_container:
             with st.container(height=10000, border=False):
