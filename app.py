@@ -268,10 +268,10 @@ def chat_messages(chat_connector, user_input_message, user_uploaded_files):
 
 
 def file_uploader_fragment(user_input_message):
-    if "counter" not in st.session_state:
-        st.session_state["counter"] = 0
+    if "file_uploader_counter" not in st.session_state:
+        st.session_state["file_uploader_counter"] = 0
 
-    old_input_counter = st.session_state["counter"]
+    old_input_counter = st.session_state["file_uploader_counter"]
     files_container = st.empty()
 
     def create_file_uploader(file_uploader_id):
@@ -286,21 +286,19 @@ def file_uploader_fragment(user_input_message):
         )
 
     old_user_uploaded_files = create_file_uploader(old_input_counter)
-    
+
     if len(old_user_uploaded_files) > 0:
         old_user_uploaded_files.append(old_user_uploaded_files[-1])
 
     processed_files = []
 
-    if user_input_message and len(user_input_message) > 0: # TextFile
+    if user_input_message and len(user_input_message) > 0:
         # Convert the uploaded files to a standard format
         file_handler = StreamlitFileHandler(old_user_uploaded_files)
         processed_files = file_handler.process_files()
 
-        # Update the counter to ensure that
-        # files there are cleaned up
-        st.session_state["counter"] += 1
-        new_input_counter = st.session_state["counter"]
+        st.session_state["file_uploader_counter"] += 1
+        new_input_counter = st.session_state["file_uploader_counter"]
         create_file_uploader(new_input_counter)
 
     return processed_files
@@ -419,8 +417,6 @@ def setup_notion_indexing():
                     st.session_state["notion_api_token"] = st.secrets["NOTION"]["NOTION_API_KEY"]
 
             default_api_key = st.session_state["notion_api_token"]
-            filtros_notion_atual = st.session_state["notion_filtros"]
-            ordenacao_notion_atual = st.session_state["notion_ordenacao"]
             profundidade_notion_atual = st.session_state["notion_profundidade"]
             numero_paginas_notion_atual = st.session_state["notion_numero_paginas"]
 
@@ -452,9 +448,13 @@ def setup_notion_indexing():
                 st.session_state["notion_numero_paginas"] = numero_paginas
     return None, None
 
-def notion_search_and_select():
-    with st.container():
+def notion_search_and_select(user_input_message):
+    if "notion_uploader_counter" not in st.session_state:
+        st.session_state["notion_uploader_counter"] = 0
 
+    old_notion_counter = st.session_state["notion_uploader_counter"]
+
+    with st.container():
         with st.form(key="notion_search_form", clear_on_submit=True, border=False):
             col1, col2 = st.columns([2, 1])
 
@@ -479,14 +479,18 @@ def notion_search_and_select():
         numero_paginas = st.session_state.get("notion_numero_paginas", -1)
 
         with col1:
-            selected_nodes = st.multiselect(
-                "Urls do notion indexadas",
-                options=list(notion_nodes.items()),
-                default=list(notion_nodes.items()),
-                key="selected_node_urls",
-                label_visibility='collapsed',
-                format_func=lambda x: x[1].object + ": " + x[0],
-            )
+            notion_container = st.empty()
+        
+            def create_multiselect(notion_multiselect_id):
+                return notion_container.multiselect(
+                    "Urls do notion indexadas",
+                    options=list(notion_nodes.items()),
+                    default=list(notion_nodes.items()),
+                    key="selected_node_urls_" + str(notion_multiselect_id),
+                    label_visibility='collapsed',
+                    format_func=lambda x: x[1].object + ": " + x[0],
+                )
+            selected_nodes = create_multiselect(old_notion_counter)
 
         with col2:
             file_data = ""
@@ -564,7 +568,17 @@ def notion_search_and_select():
                 st.rerun()
             else:
                 st.toast("⚠️ Por favor, insira uma URL do Notion. ⚠️")
-        return selected_nodes
+
+    if user_input_message and len(user_input_message) > 0 and len(selected_nodes) > 0:
+        # remove the selected_nodes from st.session_state["notion_nodes"]
+        for url, _ in selected_nodes:
+            del st.session_state["notion_nodes"][url]
+
+        st.session_state["notion_uploader_counter"] += 1
+        new_input_counter = st.session_state["notion_uploader_counter"]
+        create_multiselect(new_input_counter)
+
+    return selected_nodes
 
 def main():
     maybe_st_initialize_state()
@@ -619,26 +633,26 @@ def main():
 
             files_popover = columns[1].popover("📎", use_container_width=True)
 
-            with notion_popover:
-                notion_search_and_select()
-
             with columns[2]:
                 user_input_message = st.chat_input("Digite sua mensagem aqui...")
+
+            with notion_popover:
+                selected_nodes = notion_search_and_select(user_input_message)
 
             with files_popover:
                 user_uploaded_files = file_uploader_fragment(user_input_message)
 
-            if notion_node:
-                user_input_message = f"O arquivo de texto acima foi extraído a partir da seguinte URL do Notion: {notion_url}"
+            if selected_nodes:
+                transformed_notion_files = []
+                for url, notion_node in selected_nodes:
+                    if isinstance(notion_node, DatabaseNode):
+                        transformed_notion_files.append(
+                            PandasFile("NotionDatabase", notion_node.to_dataframe())
+                        )
+                    else:
+                        transformed_notion_files.extend([TextFile("NotionContent", notion_node.to_markdown(), "md")])
 
-                from notion_indexer.database_node import DatabaseNode
-
-                if isinstance(notion_node, DatabaseNode):
-                    user_uploaded_files.append(
-                        PandasFile("NotionDatabase", notion_node.to_dataframe())
-                    )
-                else:
-                    user_uploaded_files.extend([TextFile("NotionContent", notion_node.to_markdown(), "md")])
+                user_uploaded_files.extend(transformed_notion_files)
 
         with parent_chat_container:
             with st.container(height=10000, border=False):
