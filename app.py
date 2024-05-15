@@ -12,10 +12,16 @@ from servitium_cognitionis.llms.mock import LLMMockFamily
 from servitium_cognitionis.llms.gemini import GeminiDevFamily
 from servitium_cognitionis.personas.persona_base import Persona
 
+# module imports from the notion_indexer
+from notion_indexer.database_node import DatabaseNode
+from notion_indexer.notion_reader import NotionReader
+
 # module imports from the standard python environment
 import os
+import io
 import time
 import uuid
+import zipfile
 import logging
 import datetime
 import traceback
@@ -86,7 +92,7 @@ def get_ai_chat():
     creativity_level = 1.0
     speech_conciseness = 2048
     thought_process = "Intuitivo"
-    llm_model_default_name = "GeminiDevModelPro1_0"
+    llm_model_default_name = "GeminiDevModelPro1_5"
     llm_family_name = st.session_state.get("LLM_FAMILY", "GeminiDevFamily")
 
     if llm_family_name == "GeminiDevFamily":
@@ -260,6 +266,7 @@ def chat_messages(chat_connector, user_input_message, user_uploaded_files):
             else:
                 st.error(f"Erro: {error_str}\nDetails: {error_details}")
 
+
 def file_uploader_fragment(user_input_message):
     if "counter" not in st.session_state:
         st.session_state["counter"] = 0
@@ -279,6 +286,9 @@ def file_uploader_fragment(user_input_message):
         )
 
     old_user_uploaded_files = create_file_uploader(old_input_counter)
+    
+    if len(old_user_uploaded_files) > 0:
+        old_user_uploaded_files.append(old_user_uploaded_files[-1])
 
     processed_files = []
 
@@ -397,57 +407,164 @@ def model_settings():
 
 def setup_notion_indexing():
     with st.sidebar:
-        notion_url = st.text_input("Sua URL do Notion")
+        with st.expander("Configuração do Notion"):
+            if "notion_api_token" not in st.session_state:
+                st.session_state["notion_api_token"] = None
+                st.session_state["notion_profundidade"] = 1
+                st.session_state["notion_numero_paginas"] = -1
+                st.session_state["notion_filtros"] = ""
+                st.session_state["notion_ordenacao"] = ""
 
-        with st.expander("Configurações do Notion", expanded=False):
-            profundidade = st.number_input("Profundidade", min_value=-1, max_value=10, value=1)
-            numero_paginas = st.number_input("Número de páginas", min_value=-1, max_value=100, value=-1)
-            filtros = st.text_input("Filtros", value="")
-            ordenacao = st.text_input("Ordenação", value="")
+                if "NOTION" in st.secrets:
+                    st.session_state["notion_api_token"] = st.secrets["NOTION"]["NOTION_API_KEY"]
 
-        if "notion_api_token" not in st.session_state:
-            st.session_state["notion_api_token"] = None
+            default_api_key = st.session_state["notion_api_token"]
+            filtros_notion_atual = st.session_state["notion_filtros"]
+            ordenacao_notion_atual = st.session_state["notion_ordenacao"]
+            profundidade_notion_atual = st.session_state["notion_profundidade"]
+            numero_paginas_notion_atual = st.session_state["notion_numero_paginas"]
 
-            if "NOTION" in st.secrets:
-                st.session_state["notion_api_token"] = st.secrets["NOTION"]["NOTION_API_KEY"]
+            profundidade = st.number_input(
+                "Profundidade",
+                min_value=-1,
+                max_value=10,
+                value=profundidade_notion_atual
+            )
+            numero_paginas = st.number_input(
+                "Número de páginas",
+                min_value=-1,
+                max_value=100,
+                value=numero_paginas_notion_atual
+            )
 
-        default_api_key = st.session_state["notion_api_token"]
-        api_notion_key = st.text_input(
-            "Token da API do Notion",
-            key="ti_notion_api_token",
-            type="password",
-            value=default_api_key
-        )
+            api_notion_key = st.text_input(
+                "Token da API do Notion",
+                key="ti_notion_api_token",
+                type="password",
+                value=default_api_key
+            )
 
-        indexar_notion = st.button("Indexar Notion")
+            indexar_notion = st.button("Atualizar Configurações Notion")
 
-        if indexar_notion:
-            st.session_state["notion_api_token"] = api_notion_key
+            if indexar_notion:
+                st.session_state["notion_api_token"] = api_notion_key
+                st.session_state["notion_profundidade"] = profundidade
+                st.session_state["notion_numero_paginas"] = numero_paginas
+    return None, None
 
-            with st.spinner("Indexando Notion..."):
-                from notion_indexer.notion_reader import NotionReader
+def notion_search_and_select():
+    with st.container():
+
+        with st.form(key="notion_search_form", clear_on_submit=True, border=False):
+            col1, col2 = st.columns([2, 1])
+
+            # Input URL and Button
+            with col1:
+                notion_url = st.text_input(
+                    "Sua URL do Notion",
+                    key="notion_url",
+                    label_visibility='collapsed',
+                    placeholder='Notion URL',
+                    autocomplete="off"
+                )
+            with col2:
+                buscar_notion = st.form_submit_button("Buscar", use_container_width=True)
+
+        col1, col2 = st.columns([2, 1])
+
+        # Multiselect
+        notion_nodes = st.session_state.get("notion_nodes", {})
+
+        profundidade = str(st.session_state.get("notion_profundidade", 1))
+        numero_paginas = st.session_state.get("notion_numero_paginas", -1)
+
+        with col1:
+            selected_nodes = st.multiselect(
+                "Urls do notion indexadas",
+                options=list(notion_nodes.items()),
+                default=list(notion_nodes.items()),
+                key="selected_node_urls",
+                label_visibility='collapsed',
+                format_func=lambda x: x[1].object + ": " + x[0],
+            )
+
+        with col2:
+            file_data = ""
+            file_name = ""
+            mime = "text/plain"
+
+            if len(selected_nodes) > 1:
+                zip_buffer = io.BytesIO()
+                with zipfile.ZipFile(zip_buffer, mode="a", compression=zipfile.ZIP_STORED, allowZip64=True) as zip_file:
+                    for url, node in selected_nodes:
+                        # conver the url to a valid file name
+                        file_url = url.replace("/", "_").replace(":", "_").replace(".", "_")
+
+                        if isinstance(node, DatabaseNode):
+                            zip_file.writestr(f"{file_url}.csv", node.to_dataframe().to_csv().encode('utf-8'))
+                        else:
+                            zip_file.writestr(f"{file_url}.md", node.to_markdown())
+
+                zip_buffer.seek(0)
+
+                mime = "application/zip"
+                file_data = zip_buffer.getvalue()
+                file_name = f"notion_nodes_{datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.zip"
+            elif len(selected_nodes) == 1:
+                url = selected_nodes[0][0]
+                node = selected_nodes[0][1]
+
+                if isinstance(node, DatabaseNode):
+                    file_data = node.to_dataframe().to_csv().encode('utf-8')
+                    file_name = f"{url}_{datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.csv"
+                else:
+                    file_data = node.to_markdown()
+                    file_name = f"{url}_{datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.md"
+
+            # download selected nodes
+            st.download_button(
+                label="Download",
+                data=file_data,
+                file_name=file_name,
+                mime=mime,
+                use_container_width=True,
+            )
+
+        if buscar_notion:
+            if notion_url:
+                # verify if notion_url is already in the notion_nodes. If so, toast a warning
+                if notion_url in notion_nodes:
+                    # TODO: verify the whole notion graph to check if the URL is already indexed
+                    st.toast("🚨 Esta URL do Notion já foi indexada. 🚨")
+                    return
 
                 kwargs = {}
                 if profundidade != -1:
-                    kwargs["max_depth"] = profundidade
+                    kwargs["max_depth"] = int(profundidade)
                 if numero_paginas != -1:
-                    kwargs["page_size"] = numero_paginas
-                if filtros:
-                    kwargs["filter"] = filtros
-                if ordenacao:
-                    kwargs["sorts"] = ordenacao
+                    kwargs["page_size"] = int(numero_paginas)
 
-                notion_reader = NotionReader(integration_token=api_notion_key)
-                notion_node = notion_reader.load_data(
-                    notion_url,
-                    **kwargs
-                )
+                with st.status("Indexando Notion..."):
+                    try:
+                        api_notion_key = st.session_state["notion_api_token"]
+                        notion_reader = NotionReader(integration_token=api_notion_key)
+                        notion_node = notion_reader.load_data(
+                            notion_url,
+                            **kwargs
+                        )
+                        notion_nodes[notion_url] = notion_node
 
-                conteudo_notion = notion_node.to_markdown()
-                st.download_button("Baixar arquivo markdown", conteudo_notion)
+                        # Update the session state with the fetched nodes
+                        st.session_state["notion_nodes"] = notion_nodes
+                    except Exception as e:
+                        st.toast("❌ Erro ao indexar o Notion. Verifique a URL e o token da API: " + str(e))
+                        return
 
-                return notion_url, notion_node
-    return None, None
+                # Update the multiselect options by rerun
+                st.rerun()
+            else:
+                st.toast("⚠️ Por favor, insira uma URL do Notion. ⚠️")
+        return selected_nodes
 
 def main():
     maybe_st_initialize_state()
@@ -491,22 +608,31 @@ def main():
                     min-width: 50px;
                     max-width: 7vw;
                 }
+                div[data-baseweb="popover"] > div {
+                    min-width: 40vw;
+                }
             """
         ):
-            columns = st.columns([1, 10])
+            columns = st.columns([1, 1, 8])
 
-            rows_popover = columns[0].popover("📎", use_container_width=True)
+            notion_popover = columns[0].popover("📝", use_container_width=True)
 
-            with columns[1]:
+            files_popover = columns[1].popover("📎", use_container_width=True)
+
+            with notion_popover:
+                notion_search_and_select()
+
+            with columns[2]:
                 user_input_message = st.chat_input("Digite sua mensagem aqui...")
 
-            with rows_popover:
+            with files_popover:
                 user_uploaded_files = file_uploader_fragment(user_input_message)
 
             if notion_node:
                 user_input_message = f"O arquivo de texto acima foi extraído a partir da seguinte URL do Notion: {notion_url}"
 
                 from notion_indexer.database_node import DatabaseNode
+
                 if isinstance(notion_node, DatabaseNode):
                     user_uploaded_files.append(
                         PandasFile("NotionDatabase", notion_node.to_dataframe())
