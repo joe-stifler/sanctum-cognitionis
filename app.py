@@ -8,7 +8,6 @@ from praesentatio_cognitionis.header import show_header
 show_header(0)
 
 # module imports from the servitium_cognitionis package
-from servitium_cognitionis.llms.mock import LLMMockFamily
 from servitium_cognitionis.llms.gemini import GeminiDevFamily
 from servitium_cognitionis.personas.persona_base import Persona
 
@@ -19,15 +18,14 @@ from notion_indexer.notion_reader import NotionReader
 # module imports from the standard python environment
 import os
 import io
-import time
 import uuid
+import json
 import zipfile
 import logging
 import datetime
 import traceback
 import streamlit as st
 import google.generativeai as genai
-from streamlit_extras.row import row
 from streamlit_pdf_viewer import pdf_viewer
 from streamlit_feedback import streamlit_feedback
 from streamlit_extras.stylable_container import stylable_container
@@ -79,50 +77,18 @@ sbc = st.get_option('theme.secondaryBackgroundColor')
 tc = st.get_option('theme.textColor')
 
 ################################################################################
-
-def maybe_st_initialize_state():
-    if "persona_settings_path" not in st.session_state:
-        # st.session_state["persona_settings_path"] = "dados/personas/professores/redacao/dani-stella/persona_config.json"
-        st.session_state["persona_settings_path"] = "dados/personas/empty/persona_config.json"
-
-        logger.info("Setting persona settings path to: %s", st.session_state["persona_settings_path"])
-
-
 def get_ai_chat():
-    creativity_level = 1.0
-    speech_conciseness = 2048
-    thought_process = "Intuitivo"
+    llm_family = GeminiDevFamily()
     llm_model_default_name = "GeminiDevModelPro1_5"
-    llm_family_name = st.session_state.get("LLM_FAMILY", "GeminiDevFamily")
 
-    if llm_family_name == "GeminiDevFamily":
-        llm_family = GeminiDevFamily()
-        logger.info("Using GeminiDevFamily")
-    elif llm_family_name == "LLMMockFamily":
-        llm_family = LLMMockFamily()
-        logger.info("Using LLMMockFamily")
+    persona_file = "dados/personas/professores/redacao/dani-stella/persona_config.json"
 
-    llm_model_name = st.session_state.get("llm_model_name", llm_model_default_name)
+    # load persona_file file content into a python dictionary
+    with open(persona_file, 'r', encoding='utf-8') as file:
+        persona_data = json.load(file)
+        persona = Persona(**persona_data)
 
-    persona_name = st.session_state.get("persona_name", "Zoid")
-    thought_process = st.session_state.get("thought_process", thought_process)
-    creativity_level = st.session_state.get("creativity_level", creativity_level)
-    speech_conciseness = st.session_state.get("speech_conciseness", speech_conciseness)
-
-    # change llm_family to LLMMockFamily in case FORCE_LLM_MOCK_FAMILY is set in the env var
-    if os.environ.get("FORCE_LLM_MOCK_FAMILY"):
-        llm_family = LLMMockFamily()
-        logger.info("Using LLMMockFamily as the LLM family due to the FORCE_LLM_MOCK_FAMILY env var.")
-
-    persona = Persona(
-        name=persona_name,
-        creativity_level=creativity_level,
-        speech_conciseness=speech_conciseness,
-        persona_description="",
-        thought_process=thought_process,
-    )
-
-    llm_model = llm_family.get_model(llm_model_name)
+    llm_model = llm_family.get_model(llm_model_default_name)
 
     return llm_model, persona
 
@@ -131,6 +97,7 @@ def create_chat_connector():
     logger.info("Creating chat connector")
     return ChatConnector()
 
+@st.experimental_fragment
 def write_medatada_chat_message(role, files):
     if len(files) == 0:
         return
@@ -160,7 +127,9 @@ def write_medatada_chat_message(role, files):
             if isinstance(file, ImageFile):
                 st.image(file.content, caption=file.name)
             elif isinstance(file, PDFFile):
-                pdf_viewer(file.content, height=600, key=f"pdf_{st.session_state['counter']}_{idx}")
+                all_counter = st.session_state.get('pdf_counter', 0)
+                pdf_viewer(file.content, height=600, key=f"pdf_{all_counter}_{idx}")
+                st.session_state['pdf_counter'] = all_counter + 1
             elif isinstance(file, TextFile):
                 st.markdown(file.content)
             elif isinstance(file, AudioFile):
@@ -176,12 +145,14 @@ def write_medatada_chat_message(role, files):
             else:
                 st.error(f"Arquivo não suportado: {file.name}")
 
+@st.experimental_fragment
 def chat_messages(chat_connector, user_input_message, user_uploaded_files):
     # Initialize or fetch existing chat history
     if "session_id" not in st.session_state:
         llm_model, persona = get_ai_chat()
         logger.info("Chosen Persona: %s", persona)
         logger.info("Chosen LLM Model: %s", llm_model)
+        logger.info("Persona presenting yourself:\n\n%s", persona.present_yourself())
         chat_history = chat_connector.create_chat_history()
         chat_history.initialize_chat_message(llm_model, persona)
         logger.info("Creating chat history with session_id: %s", chat_history.session_id)
@@ -198,10 +169,6 @@ def chat_messages(chat_connector, user_input_message, user_uploaded_files):
         st.toast(warning_message)
         return
 
-    info_columns = st.columns(2)
-    info_columns[0].info(f"""🤖 **Nome:** {persona.name}\n\n""")
-    info_columns[1].info(f"""**Pensamento:** {persona.thought_process}\n\n""")
-
     # Display past messages from chat history
     if chat_history:
         for chat_message in chat_history.chat_messages:
@@ -210,7 +177,7 @@ def chat_messages(chat_connector, user_input_message, user_uploaded_files):
                 st.write(chat_message.user_message)
                 write_medatada_chat_message("user", chat_message.user_uploaded_files)
 
-            with st.chat_message("assistant", avatar="🤖"):
+            with st.chat_message("assistant", avatar="👩🏻‍🏫"):
                 st.write(f":red[{chat_message.ai_name}]")
                 st.write(''.join(chat_message.ai_messages))
 
@@ -222,6 +189,8 @@ def chat_messages(chat_connector, user_input_message, user_uploaded_files):
             if not st.session_state["api_token_value"]:
                 st.warning(warning_message)
                 return
+
+            st.session_state["start_new_conversation"] = True
 
             # Display User Message
             with st.chat_message("user", avatar="👩🏾‍🎓"):
@@ -238,10 +207,11 @@ def chat_messages(chat_connector, user_input_message, user_uploaded_files):
                     user_input_message, user_uploaded_files
                 )
 
-                with st.chat_message("assistant", avatar="🤖"):
+                with st.chat_message("assistant", avatar="👩🏻‍🏫"):
                     st.write(f":red[{chat_history.get_persona().name}]")
 
                     st.write_stream(new_chat_message.process_ai_messages())
+
                     logger.debug(f"AI new messages: \n\n{new_chat_message.ai_extra_args}")
                     logger.debug(f"\n\nAI new message kwargs: \n\n{new_chat_message.ai_extra_args}")
                     write_medatada_chat_message("assistant", new_chat_message.ai_extra_args)
@@ -251,6 +221,8 @@ def chat_messages(chat_connector, user_input_message, user_uploaded_files):
                 #     optional_text_label="[Opcional] Por favor, forneça um feedback",
                 #     align="flex-start",
                 # )
+
+            st.session_state["start_new_conversation"] = False
 
         except FileNotFoundError as e:
             logger.error("Erro ao inicializar a persona: %s", str(e))
@@ -266,6 +238,8 @@ def chat_messages(chat_connector, user_input_message, user_uploaded_files):
             else:
                 st.error(f"Erro: {error_str}\nDetails: {error_details}")
 
+    if len(chat_history.chat_messages) == 0:
+        st.info(f"""Dani Stella está pronta para falar contigo!\n\n""")
 
 def file_uploader_fragment(user_input_message):
     if "file_uploader_counter" not in st.session_state:
@@ -273,7 +247,8 @@ def file_uploader_fragment(user_input_message):
 
     old_input_counter = st.session_state["file_uploader_counter"]
     files_container = st.empty()
-
+    
+    @st.experimental_fragment
     def create_file_uploader(file_uploader_id):
         file_uploader_key = f"file_uploader_{file_uploader_id}"
 
@@ -286,9 +261,6 @@ def file_uploader_fragment(user_input_message):
         )
 
     old_user_uploaded_files = create_file_uploader(old_input_counter)
-
-    if len(old_user_uploaded_files) > 0:
-        old_user_uploaded_files.append(old_user_uploaded_files[-1])
 
     processed_files = []
 
@@ -308,146 +280,61 @@ def model_settings():
         st.session_state["api_token_value"] = None
 
         if "GOOGLE_DEV" in st.secrets:
-            st.session_state["thought_process"] = "Racional"
-            st.session_state["speech_conciseness"] = 8192
             st.session_state["api_token_value"] = st.secrets["GOOGLE_DEV"]["GOOGLE_API_KEY"]
-
-    if "creativity_level" not in st.session_state:
-        st.session_state["creativity_level"] = 1.0
-
-    if "speech_conciseness" not in st.session_state:
-        st.session_state["speech_conciseness"] = 2048
-
-    if "thought_process" not in st.session_state:
-        st.session_state["thought_process"] = "Intuitivo"
 
     with st.sidebar:
         default_api_key = st.session_state["api_token_value"]
-        default_creativity_level = st.session_state["creativity_level"]
-        default_simple_llm_model_name = st.session_state["thought_process"]
-        
-        with st.expander("Configurações do modelo"):
-            with st.container():
-                st.session_state["LLM_FAMILY"] = "GeminiDevFamily"
-
-                gemini_models = {
-                    "Intuitivo": "GeminiDevModelPro1_0",
-                    "Racional": "GeminiDevModelPro1_5",
-                }
-                gemini_models_list = list(gemini_models.keys())
-                default_gemini_models_idx = gemini_models_list.index(default_simple_llm_model_name)
-
-                def update_speech_conciseness(conciseness):
-                    model_name = st.session_state["selectbox_llm_model_name"]
-
-                    if model_name == "Intuitivo":
-                        conciseness[0] = 0
-                        conciseness[1] = 2048
-                    elif model_name == "Racional":
-                        conciseness[0] = 0
-                        conciseness[1] = 8192
-
-                    conciseness[2] = conciseness[1]
-
-                conciseness = [0, 0, 0]
-
-                simple_llm_model_name = st.selectbox(
-                    "Processo de pensamento",
-                    gemini_models_list,
-                    index=default_gemini_models_idx,
-                    on_change=update_speech_conciseness,
-                    key="selectbox_llm_model_name",
-                    args=(conciseness, )
-                )
-                update_speech_conciseness(conciseness)
-
-                speech_conciseness = st.slider(
-                    "Concisão (letras por resposta)",
-                    min_value=conciseness[0],
-                    max_value=conciseness[1],
-                    value=conciseness[2],
-                    step=128 * 4,
-                    help=f"Utilize valores próximos de {conciseness[0]} para respostas mais curtas ou próximos de {conciseness[1]} para respostas mais longas."
-                )
-
-                creativity_level = st.slider(
-                    "Nível de criatividade",
-                    min_value=0.0,
-                    max_value=1.0,
-                    value=default_creativity_level,
-                    step=0.1,
-                    help="Utilize valores próximos de 0 para respostas mais diretas ou próximos de 1 para respostas mais criativas."
-                )
-
-                llm_model = gemini_models[simple_llm_model_name]
-
-                api_key = st.text_input(
-                    "API Token",
-                    key="api_token",
-                    type="password",
-                    value=default_api_key
-                )
-                api_buttom = st.button("Atualizar")
-
-            if api_buttom:
-                if len(api_key) > 0:
-                    st.session_state["api_token_value"] = api_key
-
-                st.session_state["llm_model_name"] = llm_model
-                st.session_state["creativity_level"] = creativity_level
-                st.session_state["thought_process"] = simple_llm_model_name
-                st.session_state["speech_conciseness"] = speech_conciseness
-
-                if "session_id" in st.session_state:
-                    del st.session_state["session_id"]
-
-                st.rerun()
-
-def setup_notion_indexing():
-    with st.sidebar:
-        with st.expander("Configuração do Notion"):
-            if "notion_api_token" not in st.session_state:
-                st.session_state["notion_api_token"] = None
-                st.session_state["notion_profundidade"] = 1
-                st.session_state["notion_numero_paginas"] = -1
-                st.session_state["notion_filtros"] = ""
-                st.session_state["notion_ordenacao"] = ""
-
-                if "NOTION" in st.secrets:
-                    st.session_state["notion_api_token"] = st.secrets["NOTION"]["NOTION_API_KEY"]
-
-            default_api_key = st.session_state["notion_api_token"]
-            profundidade_notion_atual = st.session_state["notion_profundidade"]
-            numero_paginas_notion_atual = st.session_state["notion_numero_paginas"]
-
-            profundidade = st.number_input(
-                "Profundidade",
-                min_value=-1,
-                max_value=10,
-                value=profundidade_notion_atual
-            )
-            numero_paginas = st.number_input(
-                "Número de páginas",
-                min_value=-1,
-                max_value=100,
-                value=numero_paginas_notion_atual
-            )
-
-            api_notion_key = st.text_input(
-                "Token da API do Notion",
-                key="ti_notion_api_token",
+        with st.container():
+            api_key = st.text_input(
+                "API Token",
+                key="api_token",
                 type="password",
                 value=default_api_key
             )
+            api_buttom = st.button("Atualizar")
 
-            indexar_notion = st.button("Atualizar Configurações Notion")
+        if api_buttom:
+            if len(api_key) > 0:
+                st.session_state["api_token_value"] = api_key
 
-            if indexar_notion:
-                st.session_state["notion_api_token"] = api_notion_key
-                st.session_state["notion_profundidade"] = profundidade
-                st.session_state["notion_numero_paginas"] = numero_paginas
-    return None, None
+            if "session_id" in st.session_state:
+                del st.session_state["session_id"]
 
+            st.rerun()
+
+def setup_notion_indexing():
+    with st.sidebar:
+        if "notion_api_token" not in st.session_state:
+            st.session_state["notion_api_token"] = None
+            st.session_state["notion_profundidade"] = 1
+
+            if "NOTION" in st.secrets:
+                st.session_state["notion_api_token"] = st.secrets["NOTION"]["NOTION_API_KEY"]
+
+        default_api_key = st.session_state["notion_api_token"]
+        profundidade_notion_atual = st.session_state["notion_profundidade"]
+
+        profundidade = st.number_input(
+            "Profundidade",
+            min_value=-1,
+            max_value=10,
+            value=profundidade_notion_atual
+        )
+
+        api_notion_key = st.text_input(
+            "Token da API do Notion",
+            key="ti_notion_api_token",
+            type="password",
+            value=default_api_key
+        )
+
+        indexar_notion = st.button("Atualizar Configurações Notion")
+
+        if indexar_notion:
+            st.session_state["notion_api_token"] = api_notion_key
+            st.session_state["notion_profundidade"] = profundidade
+
+@st.experimental_fragment
 def notion_search_and_select(user_input_message):
     if "notion_uploader_counter" not in st.session_state:
         st.session_state["notion_uploader_counter"] = 0
@@ -472,15 +359,12 @@ def notion_search_and_select(user_input_message):
 
         col1, col2 = st.columns([2, 1])
 
-        # Multiselect
         notion_nodes = st.session_state.get("notion_nodes", {})
-
         profundidade = str(st.session_state.get("notion_profundidade", 1))
-        numero_paginas = st.session_state.get("notion_numero_paginas", -1)
 
         with col1:
             notion_container = st.empty()
-        
+
             def create_multiselect(notion_multiselect_id):
                 return notion_container.multiselect(
                     "Urls do notion indexadas",
@@ -545,8 +429,6 @@ def notion_search_and_select(user_input_message):
                 kwargs = {}
                 if profundidade != -1:
                     kwargs["max_depth"] = int(profundidade)
-                if numero_paginas != -1:
-                    kwargs["page_size"] = int(numero_paginas)
 
                 with st.status("Indexando Notion..."):
                     try:
@@ -581,10 +463,12 @@ def notion_search_and_select(user_input_message):
     return selected_nodes
 
 def main():
-    maybe_st_initialize_state()
     chat_connector = create_chat_connector()
 
-    notion_url, notion_node = setup_notion_indexing()
+    if "start_new_conversation" not in st.session_state:
+        st.session_state["start_new_conversation"] = False
+
+    setup_notion_indexing()
 
     model_settings()
 
@@ -628,22 +512,19 @@ def main():
             """
         ):
             columns = st.columns([1, 1, 8])
-
             notion_popover = columns[0].popover("📝", use_container_width=True)
-
             files_popover = columns[1].popover("📎", use_container_width=True)
 
             with columns[2]:
                 user_input_message = st.chat_input("Digite sua mensagem aqui...")
-
             with notion_popover:
                 selected_nodes = notion_search_and_select(user_input_message)
-
             with files_popover:
                 user_uploaded_files = file_uploader_fragment(user_input_message)
 
             if selected_nodes:
                 transformed_notion_files = []
+
                 for url, notion_node in selected_nodes:
                     if isinstance(notion_node, DatabaseNode):
                         transformed_notion_files.append(
@@ -656,6 +537,9 @@ def main():
 
         with parent_chat_container:
             with st.container(height=10000, border=False):
-                chat_messages(chat_connector, user_input_message, user_uploaded_files)
+                if st.session_state["start_new_conversation"] == False:
+                    chat_messages(chat_connector, user_input_message, user_uploaded_files)
+                elif user_input_message:
+                    st.toast("⚠️ Por favor, aguarde. Estou processando sua mensagem... ⚠️")
 
 main()

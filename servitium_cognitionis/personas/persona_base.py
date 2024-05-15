@@ -11,7 +11,7 @@ class Persona:
         self._creativity_level = kwargs.get('creativity_level', None)
         self._speech_conciseness = kwargs.get('speech_conciseness', None)
         self._persona_description = kwargs.get('persona_description', '')
-        self._persona_description_file = kwargs.get('persona_description', '')
+        self._persona_description_file = kwargs.get('persona_description_file', '')
 
     @property
     def name(self):
@@ -69,7 +69,7 @@ class Persona:
 
     def present_yourself(self):
         files_str = self.convert_files_to_str()
-        return f"{files_str}\n---\n\n{self.persona_description}"
+        return f"{files_str}\n---\n\n{self.read_description()}"
 
     def __str__(self):
         return (

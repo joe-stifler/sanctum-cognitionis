@@ -1,6 +1,18 @@
 import json
+import fitz  # PyMuPDF
 from io import BytesIO
+from PIL import Image
+import io
 from abc import ABC, abstractmethod
+
+
+def pdf_to_text(pdf_bytes):
+    pdf_document = fitz.open(stream=pdf_bytes, filetype="pdf")
+    text = ""
+    for page_num in range(len(pdf_document)):
+        page = pdf_document.load_page(page_num)
+        text += page.get_text()
+    return text
 
 class BaseFile(ABC):
     """Abstract base class for processed files."""
@@ -37,6 +49,15 @@ class BaseFile(ABC):
         """Returns the content as bytes (abstract method)."""
         pass
 
+    def metadata_header(self):
+        return f"`{self.name}`:\n\n"
+
+    def begin_delimiter_content(self):
+        return f"```{self.media_type}\n"
+
+    def end_delimiter_content(self):
+        return "\n```\n\n"
+
 class PandasFile(BaseFile):
     """Represents a Pandas DataFrame file."""
     SUPPORTED_TYPES = {
@@ -56,10 +77,13 @@ class PDFFile(BaseFile):
     }
 
     def __init__(self, name, content):
-        super().__init__(name, content, "application/pdf", "pdf")
+        # Note: PDFs are converted to images because Gemini in lib
+        # version 0.5.3 yields error 500 when PDFs are sent as blobs.
+        # Check discussion here: https://www.googlecloudcommunity.com/gc/AI-ML/pdf-analysis-using-gemini-1-5-pro/td-p/737171
+        super().__init__(name, content, "text/plain", "text")
 
     def get_content_as_bytes(self):
-        return self.content
+        return pdf_to_text(self.content).encode('utf-8')
 
 class ImageFile(BaseFile):
     """Represents an image file."""

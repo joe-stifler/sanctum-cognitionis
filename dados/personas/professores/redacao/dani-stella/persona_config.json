@@ -4,16 +4,16 @@
     "knowledge": [
         "dados/personas/professores/redacao/dani-stella/knowledge/conectivos.md",
         "dados/personas/professores/redacao/dani-stella/knowledge/operadores-argumentativos.md",
-        "dados/vestibulares/professores/redacao/dani-stella/knowledge/generos-do-discurso.md",
-        "dados/vestibulares/unicamp/redacao/unicamp_redacoes_propostas.json",
-        "dados/vestibulares/unicamp/redacao/unicamp_redacoes_candidatos.json",
+        "dados/personas/professores/redacao/dani-stella/knowledge/generos-do-discurso.md",
+        "dados/vestibulares/unicamp/redacao/unicamp_redacoes_propostas.txt",
+        "dados/vestibulares/unicamp/redacao/redacoes_alunos_corrigidas_por_dani_stella.txt",
+        "dados/vestibulares/unicamp/redacao/redacoes_comentadas_por_corretores_da_unicamp.txt",
+        "dados/personas/professores/redacao/dani-stella/leveza_e_autoria.txt",
+        "dados/personas/professores/redacao/dani-stella/o_ato_da_escrita.txt",
         "dados/personas/professores/redacao/dani-stella/knowledge/a_redacao_na_unicamp.md",
         "dados/personas/professores/redacao/dani-stella/knowledge/informacoes_importantes_sobre_a_redacao_unicamp.md"
     ],
-    "persona_description": "dados/personas/professores/redacao/dani-stella/persona_description.md",
+    "persona_description_file": "dados/personas/professores/redacao/dani-stella/persona_description.md",
     "thinking_style": "GeminiVertexAIFamily",
-    "thought_process": "gemini-1.5-pro-preview-0409",
-    "backup_thought_process": "gemini-1.0-pro-002",
-    "creativity_level": 0.1,
-    "speech_conciseness": 8192
+    "thought_process": "GeminiDevModelPro1_5"
 }
