@@ -23,6 +23,17 @@ def notion_search_and_select(user_input_message):
     old_notion_counter = st.session_state["notion_uploader_counter"]
 
     with st.container():
+        if "NOTION" in st.secrets:
+            default_notion_api_key = st.secrets["NOTION"]["NOTION_API_KEY"]
+            st.session_state["notion_api_token"] = default_notion_api_key
+
+        notion_api_key = st.text_input(
+            "Token do Notion",
+            key="ti_notion_api_token",
+            type="password",
+            value=st.session_state.get("notion_api_token", '')
+        )
+
         with st.form(key="notion_search_form", clear_on_submit=True, border=False):
             notion_url = st.text_input(
                 "URL do Notion",
@@ -121,8 +132,8 @@ def notion_search_and_select(user_input_message):
 
                 with st.status("Indexando Notion..."):
                     try:
-                        api_notion_key = st.session_state["notion_api_token"]
-                        notion_reader = NotionReader(integration_token=api_notion_key)
+                        st.session_state["notion_api_key"] = notion_api_key
+                        notion_reader = NotionReader(integration_token=notion_api_key)
                         notion_node = notion_reader.load_data(
                             notion_url,
                             **kwargs

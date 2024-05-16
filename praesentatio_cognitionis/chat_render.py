@@ -79,4 +79,4 @@ def chat_messages(chat_history, user_input_message, user_uploaded_files, logger)
                 st.error(f"Erro: {error_str}\nDetails: {error_details}")
 
     if len(chat_history.chat_messages) == 0:
-        st.info(f"""{persona.name} está pronto(a) para falar contigo!\n\n""")
+        st.info(f"""`{persona.name}` está esperando para lhe ajudar. Não seja tímido! Dê o primeiro passo e incie a conversa abaixo 🙂\n\n""")

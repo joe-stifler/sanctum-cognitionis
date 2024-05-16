@@ -25,7 +25,7 @@ def get_persona(persona_file):
 
     return persona
 
-def set_model(persona_name, persona_file, chat_connector, logger, google_api_key=None, notion_api_key=None):
+def set_model(persona_name, persona_file, chat_connector, logger, google_api_key=None):
     if "session_id" in st.session_state:
         chat_connector.delete_chat_history(st.session_state["session_id"])
         del st.session_state["session_id"]
@@ -33,8 +33,6 @@ def set_model(persona_name, persona_file, chat_connector, logger, google_api_key
     if google_api_key:
         genai.configure(api_key=google_api_key)
         st.session_state["google_api_key"] = google_api_key
-
-    st.session_state["notion_api_token"] = notion_api_key
 
     # Initialize or fetch existing chat history
     persona = get_persona(persona_file)
@@ -57,17 +55,13 @@ def set_model(persona_name, persona_file, chat_connector, logger, google_api_key
 
 def model_settings(chat_connector, logger):
     available_personas = {
-        "Pensador Profundo": "dados/personas/persador_profundo/persona_config.json",
         "Gemini 1.5 Pro": "dados/personas/gemini-1_5/persona_config_pro.json",
         "Gemini 1.5 Flash": "dados/personas/gemini-1_5/persona_config_flash.json",
+        "Pensador Profundo": "dados/personas/persador_profundo/persona_config.json",
         "Dani Stella: Professora de Literatura e Redação Apaixonada por Educar e Inspirar": "dados/personas/professores/redacao/dani-stella/persona_config.json",
     }
 
     if "session_id" not in st.session_state:
-        notion_api_key = None
-        if "NOTION" in st.secrets:
-            notion_api_key = st.secrets["NOTION"]["NOTION_API_KEY"]
-
         google_api_key = None
         if "GOOGLE_DEV" in st.secrets:
             google_api_key = st.secrets["GOOGLE_DEV"]["GOOGLE_API_KEY"]
@@ -79,7 +73,6 @@ def model_settings(chat_connector, logger):
             persona_file=available_personas[persona_name],
             chat_connector=chat_connector,
             logger=logger,
-            notion_api_key=notion_api_key,
             google_api_key=google_api_key
         )
 
@@ -89,13 +82,6 @@ def model_settings(chat_connector, logger):
             "Qual persona você gostaria de usar?",
             available_persona_names,
             index=available_persona_names.index(st.session_state.get("persona_name", "Gemini"))
-        )
-
-        notion_api_key = st.text_input(
-            "Token do Notion",
-            key="ti_notion_api_token",
-            type="password",
-            value=st.session_state.get("notion_api_token", '')
         )
 
         google_api_key = st.text_input(
@@ -112,8 +98,7 @@ def model_settings(chat_connector, logger):
                 persona_file=available_personas[persona_name],
                 chat_connector=chat_connector,
                 logger=logger,
-                google_api_key=google_api_key,
-                notion_api_key=notion_api_key
+                google_api_key=google_api_key
             )
 
     if "google_api_key" not in st.session_state:
