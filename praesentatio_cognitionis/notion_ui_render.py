@@ -120,12 +120,6 @@ def notion_search_and_select(user_input_message):
             if notion_url:
                 st.session_state["profundidade_notion"] = profundidade
 
-                # verify if notion_url is already in the notion_nodes. If so, toast a warning
-                if notion_url in notion_nodes:
-                    # TODO: verify the whole notion graph to check if the URL is already indexed
-                    st.toast("🚨 Esta URL do Notion já foi indexada. 🚨")
-                    return
-
                 kwargs = {}
                 if profundidade != -1:
                     kwargs["max_depth"] = int(profundidade)

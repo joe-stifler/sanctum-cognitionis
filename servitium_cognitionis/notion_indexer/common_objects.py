@@ -105,7 +105,11 @@ class PageProperty(BaseModel):
         elif property_type == "number":
             return float(self.number) if isinstance(self.number, dict) else self.number
         elif property_type == "people":
-            return [person.get("id") for person in self.people] if isinstance(self.people, dict) else self.people
+            if isinstance(self.people, dict):
+                return []
+            
+            # else it's a list of personuser
+            return [person.id for person in self.people]
         elif property_type == "phone_number":
             return self.phone_number.phone_number.get("phone_number", None) if isinstance(self.phone_number, dict) else self.phone_number
         elif property_type == "relation":
