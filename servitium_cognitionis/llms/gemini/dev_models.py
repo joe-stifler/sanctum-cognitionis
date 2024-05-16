@@ -136,7 +136,7 @@ class GeminiDevModelPro1_0(GeminiDevBaseModel):
         )
 
 class GeminiDevModelPro1_0Vision(GeminiDevBaseModel):
-    def __init__(self, temperature=0.1, max_output_tokens=4096):
+    def __init__(self, temperature=1, max_output_tokens=4096):
         super().__init__(
             model_name="gemini-pro-vision",
             temperature=temperature,
@@ -146,7 +146,7 @@ class GeminiDevModelPro1_0Vision(GeminiDevBaseModel):
         )
 
 class GeminiDevModelPro1_5(GeminiDevBaseModel):
-    def __init__(self, temperature=0.1, max_output_tokens=8192):
+    def __init__(self, temperature=1, max_output_tokens=8192):
         super().__init__(
             model_name="gemini-1.5-pro-latest",
             temperature=temperature,
@@ -157,7 +157,7 @@ class GeminiDevModelPro1_5(GeminiDevBaseModel):
 
 
 class GeminiDevModelPro1_5_Flash(GeminiDevBaseModel):
-    def __init__(self, temperature=0.1, max_output_tokens=8192):
+    def __init__(self, temperature=1, max_output_tokens=8192):
         super().__init__(
             model_name="gemini-1.5-flash-latest",
             temperature=temperature,

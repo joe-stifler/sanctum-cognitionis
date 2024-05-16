@@ -3,7 +3,8 @@ from servitium_cognitionis.llms.gemini import (
     GeminiDevBaseModel,
     GeminiDevModelPro1_0,
     GeminiDevModelPro1_0Vision,
-    GeminiDevModelPro1_5
+    GeminiDevModelPro1_5,
+    GeminiDevModelPro1_5_Flash
 )
 
 from typing import List
@@ -15,7 +16,8 @@ class GeminiDevFamily(LLMBaseFamily):
         available_models = [
             GeminiDevModelPro1_0(),
             GeminiDevModelPro1_0Vision(),
-            GeminiDevModelPro1_5()
+            GeminiDevModelPro1_5(),
+            GeminiDevModelPro1_5_Flash()
         ]
 
         self._available_models = {
