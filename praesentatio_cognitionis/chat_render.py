@@ -14,25 +14,28 @@ import streamlit as st
 @st.experimental_fragment
 def render_chat_history(chat_connector, logger):
     chat_history = chat_connector.fetch_chat_history(st.session_state["session_id"])
+    persona = chat_history.get_persona()
 
     # Display past messages from chat history
-    if chat_history:
-        for chat_message in chat_history.chat_messages:
-            with st.chat_message("user", avatar="👩🏾‍🎓"):
-                st.write(":blue[Usuário]")
-                st.write(chat_message.user_message)
-                write_medatada_chat_message("user", chat_message.user_uploaded_files)
+    for chat_message in chat_history.chat_messages:
+        with st.chat_message("user", avatar="👩🏾‍🎓"):
+            st.write(":blue[Usuário]")
+            st.write(chat_message.user_message)
+            write_medatada_chat_message("user", chat_message.user_uploaded_files)
 
-            with st.chat_message("assistant", avatar="👩🏻‍🏫"):
-                st.write(f":red[{chat_message.ai_name}]")
-                st.write(''.join(chat_message.ai_messages))
+        with st.chat_message("assistant", avatar=persona.avatar):
+            st.write(f":red[{chat_message.ai_name}]")
+            st.write(''.join(chat_message.ai_messages))
 
-                # if os.environ.get("FORCE_LLM_MOCK_FAMILY"):
-                write_medatada_chat_message("assistant", chat_message.ai_extra_args)
+            # if os.environ.get("FORCE_LLM_MOCK_FAMILY"):
+            write_medatada_chat_message("assistant", chat_message.ai_extra_args)
+
     return chat_history
 
 # @st.experimental_fragment
 def chat_messages(chat_history, user_input_message, user_uploaded_files, logger):
+    persona = chat_history.get_persona()
+
     if user_input_message:
         try:
             st.session_state["start_new_conversation"] = True
@@ -48,7 +51,7 @@ def chat_messages(chat_history, user_input_message, user_uploaded_files, logger)
             logger.debug("Sending user message:\n\n```text\n%s\n```", user_input_message)
 
             # Display AI responses
-            with st.chat_message("assistant", avatar="👩🏻‍🏫"):
+            with st.chat_message("assistant", avatar=persona.avatar):
                 st.write(f":red[{chat_history.get_persona().name}]")
                 new_ai_message = st.empty()
                 with st.spinner("Estou processando sua mensagem..."):
@@ -76,39 +79,4 @@ def chat_messages(chat_history, user_input_message, user_uploaded_files, logger)
                 st.error(f"Erro: {error_str}\nDetails: {error_details}")
 
     if len(chat_history.chat_messages) == 0:
-        persona = chat_history.get_persona()
-        st.info(f"""{persona.name} está pronta para falar contigo!\n\n""")
-
-def file_uploader_fragment(user_input_message):
-    if "file_uploader_counter" not in st.session_state:
-        st.session_state["file_uploader_counter"] = 0
-
-    old_input_counter = st.session_state["file_uploader_counter"]
-    files_container = st.empty()
-
-    @st.experimental_fragment
-    def create_file_uploader(file_uploader_id):
-        file_uploader_key = f"file_uploader_{file_uploader_id}"
-
-        return files_container.file_uploader(
-            "Upload de arquivos",
-            accept_multiple_files=True,
-            key=file_uploader_key,
-            label_visibility='collapsed',
-            type=StreamlitFileHandler.SUPPORTED_FILE_TYPES,
-        )
-
-    old_user_uploaded_files = create_file_uploader(old_input_counter)
-
-    processed_files = []
-
-    if user_input_message and len(user_input_message) > 0:
-        # Convert the uploaded files to a standard format
-        file_handler = StreamlitFileHandler(old_user_uploaded_files)
-        processed_files = file_handler.process_files()
-
-        st.session_state["file_uploader_counter"] += 1
-        new_input_counter = st.session_state["file_uploader_counter"]
-        create_file_uploader(new_input_counter)
-
-    return processed_files
+        st.info(f"""{persona.name} está pronto(a) para falar contigo!\n\n""")

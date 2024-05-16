@@ -1,5 +1,6 @@
 {
     "name": "Dani Stella",
+    "avatar": "👩🏻‍🏫",
     "full_knowledge": [],
     "knowledge": [
         "dados/personas/professores/redacao/dani-stella/knowledge/conectivos.md",
@@ -13,7 +14,5 @@
         "dados/personas/professores/redacao/dani-stella/knowledge/a_redacao_na_unicamp.md",
         "dados/personas/professores/redacao/dani-stella/knowledge/informacoes_importantes_sobre_a_redacao_unicamp.md"
     ],
-    "persona_description_file": "dados/personas/professores/redacao/dani-stella/persona_description.md",
-    "thinking_style": "GeminiVertexAIFamily",
-    "thought_process": "GeminiDevModelPro1_5"
+    "persona_description_file": "dados/personas/professores/redacao/dani-stella/persona_description.md"
 }

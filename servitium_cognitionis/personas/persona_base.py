@@ -4,13 +4,9 @@ from datetime import datetime
 class Persona:
     def __init__(self, **kwargs):
         self._name = kwargs.get('name', '')
-        self._avatar = "🤖"
+        self._avatar = kwargs.get('avatar', '🤖')
         self._knowledge_files = kwargs.get('knowledge', [])
-        self._full_knowledge = kwargs.get('full_knowledge', False)
-        self._thought_process = kwargs.get('thought_process', None)
-        self._creativity_level = kwargs.get('creativity_level', None)
         self._speech_conciseness = kwargs.get('speech_conciseness', None)
-        self._persona_description = kwargs.get('persona_description', '')
         self._persona_description_file = kwargs.get('persona_description_file', '')
 
     @property
@@ -28,18 +24,6 @@ class Persona:
     @property
     def knowledge_files(self):
         return self._knowledge_files
-
-    @property
-    def creativity_level(self):
-        return self._creativity_level
-
-    @property
-    def thought_process(self):
-        return self._thought_process
-
-    @property
-    def persona_description(self):
-        return self._persona_description
 
     def convert_files_to_str(self):
         if len(self._knowledge_files) == 0:
@@ -75,10 +59,7 @@ class Persona:
         return (
             f"Name: {self._name}\n"
             f"Avatar: {self._avatar}\n"
-            f"Speech Conciseness: {self._speech_conciseness}\n"
             f"Knowledge Files: {self._knowledge_files}\n"
-            f"Creativity Level: {self._creativity_level}\n"
-            f"Persona Description: {self._persona_description}\n"
             f"Persona Description File: {self._persona_description_file}"
         )
 

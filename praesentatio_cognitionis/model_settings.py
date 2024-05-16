@@ -25,7 +25,7 @@ def get_persona(persona_file):
 
     return persona
 
-def set_model(model_name, chat_connector, logger, google_api_key=None, notion_api_key=None):
+def set_model(model_name, persona_name, persona_file, chat_connector, logger, google_api_key=None, notion_api_key=None):
     if "session_id" in st.session_state:
         chat_connector.delete_chat_history(st.session_state["session_id"])
         del st.session_state["session_id"]
@@ -37,7 +37,6 @@ def set_model(model_name, chat_connector, logger, google_api_key=None, notion_ap
     st.session_state["notion_api_token"] = notion_api_key
 
     # Initialize or fetch existing chat history
-    persona_file = "dados/personas/professores/redacao/dani-stella/persona_config.json"
     persona = get_persona(persona_file)
     llm_model = get_llm_model(model_name)
 
@@ -48,15 +47,21 @@ def set_model(model_name, chat_connector, logger, google_api_key=None, notion_ap
     chat_history.initialize_chat_message(llm_model, persona)
     logger.info("Creating chat history with session_id: %s", chat_history.session_id)
 
-
+    st.session_state["model_name"] = model_name
+    st.session_state["persona_name"] = persona_name
+    st.session_state["persona_file"] = persona_file
     st.session_state["session_id"] = chat_history.session_id
-
 
     st.toast("Modelo e Persona configurados com sucesso!")
     st.rerun()
 
 def model_settings(chat_connector, logger):
     available_llms = ("GeminiDevModelPro1_5", "GeminiDevModelPro1_5_Flash")
+
+    available_personas = {
+        "Pensador Profundo": "dados/personas/gemini/persona_config.json",
+        "Dani Stella: Professora de Literatura e Redação Apaixonada por Educar e Inspirar": "dados/personas/professores/redacao/dani-stella/persona_config.json",
+    }
 
     if "session_id" not in st.session_state:
         notion_api_key = None
@@ -67,8 +72,12 @@ def model_settings(chat_connector, logger):
         if "GOOGLE_DEV" in st.secrets:
             google_api_key = st.secrets["GOOGLE_DEV"]["GOOGLE_API_KEY"]
 
+        persona_name = "Pensador Profundo"
+
         set_model(
-            model_name=available_llms[1],
+            model_name=available_llms[0],
+            persona_name=persona_name,
+            persona_file=available_personas[persona_name],
             chat_connector=chat_connector,
             logger=logger,
             notion_api_key=notion_api_key,
@@ -77,9 +86,16 @@ def model_settings(chat_connector, logger):
 
     with st.expander("Configurações do Modelo", expanded=False):
         model_name = st.selectbox(
-            "Which model would you like to use?",
+            "Qual modelo você gostaria de utilizar?",
             available_llms,
-            index=available_llms.index(st.session_state.get("model_name", available_llms[1]))
+            index=available_llms.index(st.session_state.get("model_name", available_llms[0]))
+        )
+
+        available_persona_names = list(available_personas.keys())
+        persona_name = st.selectbox(
+            "Qual persona você gostaria de usar?",
+            available_persona_names,
+            index=available_persona_names.index(st.session_state.get("persona_name", "Gemini"))
         )
 
         notion_api_key = st.text_input(
@@ -100,6 +116,8 @@ def model_settings(chat_connector, logger):
         if atualizar_configuracoes:
             set_model(
                 model_name=model_name,
+                persona_name=persona_name,
+                persona_file=available_personas[persona_name],
                 chat_connector=chat_connector,
                 logger=logger,
                 google_api_key=google_api_key,
