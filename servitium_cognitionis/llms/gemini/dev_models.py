@@ -14,16 +14,17 @@ class GeminiDevBaseModel(LLMBaseModel):
         self._model_chats = {}
         self._model_instance = genai.GenerativeModel(
             self.name,
+            system_instruction=system_instruction,
             generation_config=genai.types.GenerationConfig(
                 # candidate_count=1,
                 # temperature=temperature,
                 # max_output_tokens=max_output_tokens,
             ),
             safety_settings={
-                'harassment': 'block_none',
-                'hate_speech': 'block_none',
-                'sexual': 'block_none',
-                'dangerous': 'block_none',
+                'harassment': 'block_only_high',
+                'hate_speech': 'block_only_high',
+                'sexual': 'block_only_high',
+                'dangerous': 'block_only_high',
             }
         )
 

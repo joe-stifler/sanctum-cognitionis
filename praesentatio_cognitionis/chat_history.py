@@ -25,7 +25,9 @@ class ChatHistory:
         self.persona = persona
         self.llm_model = llm_model
 
-        self.llm_model.initialize_model()
+        self.llm_model.initialize_model(
+            system_instruction=self.persona.present_yourself() + "\n---\n---\n"
+        )
         self.llm_model.create_chat(self.session_id)
 
     def create_new_message(self, user_message="", user_uploaded_files=None):
@@ -43,9 +45,9 @@ class ChatHistory:
     def send_ai_message(self, user_message, user_uploaded_files=None):
         """Send AI response for a given chat message."""
         system_message = None
-        if self.set_system_message is False:
-            self.set_system_message = True
-            system_message = self.persona.present_yourself() + "\n---\n---\n"
+        # if self.set_system_message is False:
+        #     self.set_system_message = True
+        #     system_message = self.persona.present_yourself() + "\n---\n---\n"
 
         ai_response_stream = self.llm_model.send_stream_chat_message(
             self.session_id,

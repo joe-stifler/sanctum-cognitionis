@@ -12,12 +12,14 @@ from servitium_cognitionis.llms.gemini import GeminiDevFamily
 from servitium_cognitionis.personas.persona_base import Persona
 
 # module imports from the notion_indexer
+from notion_indexer.page_node import PageNode
 from notion_indexer.database_node import DatabaseNode
 from notion_indexer.notion_reader import NotionReader
 
 # module imports from the standard python environment
 import os
 import io
+import time
 import uuid
 import json
 import zipfile
@@ -123,27 +125,28 @@ def write_medatada_chat_message(role, files):
         return
 
     for idx, file in enumerate(files):
-        with st.expander(f"**{file.name}:**", expanded=False):
-            if isinstance(file, ImageFile):
-                st.image(file.content, caption=file.name)
-            elif isinstance(file, PDFFile):
-                all_counter = st.session_state.get('pdf_counter', 0)
-                pdf_viewer(file.content, height=600, key=f"pdf_{all_counter}_{idx}")
-                st.session_state['pdf_counter'] = all_counter + 1
-            elif isinstance(file, TextFile):
-                st.markdown(file.content)
-            elif isinstance(file, AudioFile):
-                st.audio(file.content, format=file.mime_type)
-            elif isinstance(file, JsonFile):
-                st.json(file.content)
-            elif isinstance(file, PandasFile):
-                st.dataframe(file.content)
-            elif isinstance(file, CodeFile):
-                st.code(file.content, language="python")
-            elif isinstance(file, VideoFile):
-                st.video(file.content, format=file.mime_type)
-            else:
-                st.error(f"Arquivo não suportado: {file.name}")
+        with st.expander(f"**{file.name}**", expanded=False):
+            with st.container(height=450, border=False):
+                if isinstance(file, ImageFile):
+                    st.image(file.content, caption=file.name)
+                elif isinstance(file, PDFFile):
+                    all_counter = st.session_state.get('pdf_counter', 0)
+                    pdf_viewer(file.content, height=600, key=f"pdf_{all_counter}_{idx}")
+                    st.session_state['pdf_counter'] = all_counter + 1
+                elif isinstance(file, TextFile):
+                    st.markdown(file.content)
+                elif isinstance(file, AudioFile):
+                    st.audio(file.content, format=file.mime_type)
+                elif isinstance(file, JsonFile):
+                    st.json(file.content)
+                elif isinstance(file, PandasFile):
+                    st.dataframe(file.content)
+                elif isinstance(file, CodeFile):
+                    st.code(file.content, language="python")
+                elif isinstance(file, VideoFile):
+                    st.video(file.content, format=file.mime_type)
+                else:
+                    st.error(f"Arquivo não suportado: {file.name}")
 
 @st.experimental_fragment
 def render_chat_history(chat_connector):
@@ -181,8 +184,8 @@ def render_chat_history(chat_connector):
                 st.write(f":red[{chat_message.ai_name}]")
                 st.write(''.join(chat_message.ai_messages))
 
-                if os.environ.get("FORCE_LLM_MOCK_FAMILY"):
-                    write_medatada_chat_message("assistant", chat_message.ai_extra_args)
+                # if os.environ.get("FORCE_LLM_MOCK_FAMILY"):
+                write_medatada_chat_message("assistant", chat_message.ai_extra_args)
     return chat_history
 
 # @st.experimental_fragment
@@ -201,8 +204,9 @@ def chat_messages(chat_history, user_input_message, user_uploaded_files):
             with st.chat_message("user", avatar="👩🏾‍🎓"):
                 st.write(f":blue[Usuário]")
                 st.write(user_input_message)
-                logger.info("user input: %s", user_input_message)
-                write_medatada_chat_message("usuario", user_uploaded_files)
+                logger.debug("user input: %s", user_input_message)
+                with st.spinner("Processsando arquivos do usuário..."):
+                    write_medatada_chat_message("usuario", user_uploaded_files)
 
             logger.debug("Sending user message:\n\n```text\n%s\n```", user_input_message)
 
@@ -211,23 +215,12 @@ def chat_messages(chat_history, user_input_message, user_uploaded_files):
                 st.write(f":red[{chat_history.get_persona().name}]")
                 new_ai_message = st.empty()
                 with st.spinner("Estou processando sua mensagem..."):
-                    # Send user message to AI inference
                     new_chat_message = chat_history.send_ai_message(
                         user_input_message, user_uploaded_files
                     )
-
                     new_ai_message.write_stream(new_chat_message.process_ai_messages())
-
                     logger.debug(f"AI new messages: \n\n{new_chat_message.ai_messages}")
                     logger.debug(f"\n\nAI new message kwargs: \n\n{new_chat_message.ai_extra_args}")
-
-                    write_medatada_chat_message("assistant", new_chat_message.ai_extra_args)
-
-                # feedback = streamlit_feedback(
-                #     feedback_type="thumbs",
-                #     optional_text_label="[Opcional] Por favor, forneça um feedback",
-                #     align="flex-start",
-                # )
 
             st.session_state["start_new_conversation"] = False
 
@@ -246,7 +239,8 @@ def chat_messages(chat_history, user_input_message, user_uploaded_files):
                 st.error(f"Erro: {error_str}\nDetails: {error_details}")
 
     if len(chat_history.chat_messages) == 0:
-        st.info(f"""Dani Stella está pronta para falar contigo!\n\n""")
+        persona = chat_history.get_persona()
+        st.info(f"""{persona.name} está pronta para falar contigo!\n\n""")
 
 def file_uploader_fragment(user_input_message):
     if "file_uploader_counter" not in st.session_state:
@@ -291,6 +285,7 @@ def model_settings():
 
     with st.sidebar:
         default_api_key = st.session_state["api_token_value"]
+
         with st.container():
             api_key = st.text_input(
                 "API Token",
@@ -313,20 +308,11 @@ def setup_notion_indexing():
     with st.sidebar:
         if "notion_api_token" not in st.session_state:
             st.session_state["notion_api_token"] = None
-            st.session_state["notion_profundidade"] = 1
 
             if "NOTION" in st.secrets:
                 st.session_state["notion_api_token"] = st.secrets["NOTION"]["NOTION_API_KEY"]
 
         default_api_key = st.session_state["notion_api_token"]
-        profundidade_notion_atual = st.session_state["notion_profundidade"]
-
-        profundidade = st.number_input(
-            "Profundidade",
-            min_value=-1,
-            max_value=10,
-            value=profundidade_notion_atual
-        )
 
         api_notion_key = st.text_input(
             "Token da API do Notion",
@@ -339,7 +325,6 @@ def setup_notion_indexing():
 
         if indexar_notion:
             st.session_state["notion_api_token"] = api_notion_key
-            st.session_state["notion_profundidade"] = profundidade
 
 @st.experimental_fragment
 def notion_search_and_select(user_input_message):
@@ -350,83 +335,91 @@ def notion_search_and_select(user_input_message):
 
     with st.container():
         with st.form(key="notion_search_form", clear_on_submit=True, border=False):
-            col1, col2 = st.columns([2, 1])
+            notion_url = st.text_input(
+                "URL do Notion",
+                key="notion_url",
+                placeholder='Notion URL',
+                autocomplete="off",
+                help="Copie e cole a URL do Notion aqui."
+            )
+
+            if "profundidade_notion" not in st.session_state:
+                st.session_state["profundidade_notion"] = 1
+
+            profundidade_notion_atual = st.session_state["profundidade_notion"]
+
+            profundidade = st.number_input(
+                "Profundidade",
+                min_value=-1,
+                max_value=10,
+                value=profundidade_notion_atual,
+                placeholder="Profundidade da busca no Notion. -1 para buscar até o fim.",
+                help="Profundidade da busca no Notion. -1 para buscar até o fim.",
+            )
 
             # Input URL and Button
-            with col1:
-                notion_url = st.text_input(
-                    "Sua URL do Notion",
-                    key="notion_url",
-                    label_visibility='collapsed',
-                    placeholder='Notion URL',
-                    autocomplete="off"
-                )
-            with col2:
-                buscar_notion = st.form_submit_button("Buscar", use_container_width=True)
-
-        col1, col2 = st.columns([2, 1])
+            buscar_notion = st.form_submit_button("Buscar", use_container_width=True)
 
         notion_nodes = st.session_state.get("notion_nodes", {})
-        profundidade = str(st.session_state.get("notion_profundidade", 1))
 
-        with col1:
-            notion_container = st.empty()
+        notion_container = st.empty()
 
-            def create_multiselect(notion_multiselect_id):
-                return notion_container.multiselect(
-                    "Urls do notion indexadas",
-                    options=list(notion_nodes.items()),
-                    default=list(notion_nodes.items()),
-                    key="selected_node_urls_" + str(notion_multiselect_id),
-                    label_visibility='collapsed',
-                    format_func=lambda x: x[1].object + ": " + x[0],
-                )
-            selected_nodes = create_multiselect(old_notion_counter)
-
-        with col2:
-            file_data = ""
-            file_name = ""
-            mime = "text/plain"
-
-            if len(selected_nodes) > 1:
-                zip_buffer = io.BytesIO()
-                with zipfile.ZipFile(zip_buffer, mode="a", compression=zipfile.ZIP_STORED, allowZip64=True) as zip_file:
-                    for url, node in selected_nodes:
-                        # conver the url to a valid file name
-                        file_url = url.replace("/", "_").replace(":", "_").replace(".", "_")
-
-                        if isinstance(node, DatabaseNode):
-                            zip_file.writestr(f"{file_url}.csv", node.to_dataframe().to_csv().encode('utf-8'))
-                        else:
-                            zip_file.writestr(f"{file_url}.md", node.to_markdown())
-
-                zip_buffer.seek(0)
-
-                mime = "application/zip"
-                file_data = zip_buffer.getvalue()
-                file_name = f"notion_nodes_{datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.zip"
-            elif len(selected_nodes) == 1:
-                url = selected_nodes[0][0]
-                node = selected_nodes[0][1]
-
-                if isinstance(node, DatabaseNode):
-                    file_data = node.to_dataframe().to_csv().encode('utf-8')
-                    file_name = f"{url}_{datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.csv"
-                else:
-                    file_data = node.to_markdown()
-                    file_name = f"{url}_{datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.md"
-
-            # download selected nodes
-            st.download_button(
-                label="Download",
-                data=file_data,
-                file_name=file_name,
-                mime=mime,
-                use_container_width=True,
+        def create_multiselect(notion_multiselect_id):
+            return notion_container.multiselect(
+                "Urls do notion indexadas:",
+                options=list(notion_nodes.items()),
+                default=list(notion_nodes.items()),
+                disabled=True,
+                key="selected_node_urls_" + str(notion_multiselect_id),
+                format_func=lambda x: x[1].object + ": " + x[0],
             )
+        selected_nodes = create_multiselect(old_notion_counter)
+
+        file_data = ""
+        file_name = ""
+        mime = "text/plain"
+
+        if len(selected_nodes) > 1:
+            zip_buffer = io.BytesIO()
+            with zipfile.ZipFile(zip_buffer, mode="a", compression=zipfile.ZIP_STORED, allowZip64=True) as zip_file:
+                for url, node in selected_nodes:
+                    # conver the url to a valid file name
+                    file_url = url.replace("/", "_").replace(":", "_").replace(".", "_")
+
+                    if isinstance(node, DatabaseNode):
+                        zip_file.writestr(f"{file_url}.csv", node.to_dataframe().to_csv().encode('utf-8'))
+                    else:
+                        zip_file.writestr(f"{file_url}.md", node.to_markdown())
+
+            zip_buffer.seek(0)
+
+            mime = "application/zip"
+            file_data = zip_buffer.getvalue()
+            file_name = f"notion_nodes_{datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.zip"
+        elif len(selected_nodes) == 1:
+            url = selected_nodes[0][0]
+            node = selected_nodes[0][1]
+
+            if isinstance(node, DatabaseNode):
+                file_data = node.to_dataframe().to_csv().encode('utf-8')
+                file_name = f"{url}_{datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.csv"
+            else:
+                file_data = node.to_markdown()
+                file_name = f"{url}_{datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.md"
+
+        # download selected nodes
+        st.download_button(
+            label="Download",
+            data=file_data,
+            file_name=file_name,
+            mime=mime,
+            use_container_width=True,
+        )
 
         if buscar_notion:
             if notion_url:
+                st.session_state["profundidade_notion"] = profundidade
+
                 # verify if notion_url is already in the notion_nodes. If so, toast a warning
                 if notion_url in notion_nodes:
                     # TODO: verify the whole notion graph to check if the URL is already indexed
@@ -449,12 +442,15 @@ def notion_search_and_select(user_input_message):
 
                         # Update the session state with the fetched nodes
                         st.session_state["notion_nodes"] = notion_nodes
+
+                        st.toast(f"🎉 Sucesso ao indexar a URL do Notion `{notion_url}`")
+
+                        time.sleep(2)
+                        st.rerun()
                     except Exception as e:
                         st.toast("❌ Erro ao indexar o Notion. Verifique a URL e o token da API: " + str(e))
                         return
 
-                # Update the multiselect options by rerun
-                st.rerun()
             else:
                 st.toast("⚠️ Por favor, insira uma URL do Notion. ⚠️")
 
@@ -473,10 +469,14 @@ def notion_search_and_select(user_input_message):
         for url, notion_node in selected_nodes:
             if isinstance(notion_node, DatabaseNode):
                 transformed_notion_files.append(
-                    PandasFile("NotionDatabase", notion_node.to_dataframe())
+                    PandasFile(f"Notion Database: {url}", notion_node.to_dataframe())
                 )
+            elif isinstance(notion_node, PageNode):
+                content = notion_node.to_markdown().encode("utf-8")
+                transformed_notion_files.extend([TextFile(f"Notion Page: {url}", notion_node.to_markdown(), "md")])
             else:
-                transformed_notion_files.extend([TextFile("NotionContent", notion_node.to_markdown(), "md")])
+                content = notion_node.to_markdown().encode("utf-8")
+                transformed_notion_files.extend([TextFile(f"Notion Block: {url}", content, "md")])
 
         return transformed_notion_files
 
@@ -526,8 +526,8 @@ def main():
                     min-width: 50px;
                     max-width: 7vw;
                 }
-                div[data-baseweb="popover"] > div {
-                    min-width: 40vw;
+                div[data-baseweb="popover"] {
+                    min-width: 35vw;
                 }
             """
         ):
