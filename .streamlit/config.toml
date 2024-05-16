@@ -4,3 +4,6 @@ backgroundColor="#0e1117"  # Deep dark blue-gray, providing a subtle, profession
 secondaryBackgroundColor="#1a1d23"  # Slightly lighter shade of dark gray to maintain depth
 textColor="#E0E0E0"  # Soft white, provides good readability without being too harsh
 font="sans serif"  # Continues with a modern and readable font choice
+
+[server]
+maxUploadSize = 2048
