@@ -4,9 +4,9 @@ from praesentatio_cognitionis.files import (
 )
 
 # module imports from the notion_indexer
-from notion_indexer.page_node import PageNode
-from notion_indexer.database_node import DatabaseNode
-from notion_indexer.notion_reader import NotionReader
+from servitium_cognitionis.notion_indexer.page_node import PageNode
+from servitium_cognitionis.notion_indexer.database_node import DatabaseNode
+from servitium_cognitionis.notion_indexer.notion_reader import NotionReader
 
 # module imports from the standard python environment
 import io

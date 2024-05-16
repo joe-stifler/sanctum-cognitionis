@@ -1,4 +1,4 @@
-from notion_indexer.notion_node import NotionNode
+from servitium_cognitionis.notion_indexer.notion_node import NotionNode
 
 from typing import Callable
 

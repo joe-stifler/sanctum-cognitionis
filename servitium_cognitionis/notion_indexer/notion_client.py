@@ -1,7 +1,7 @@
-from notion_indexer.page_node import PageNode
-from notion_indexer.notion_node import NotionNode
-from notion_indexer.database_node import DatabaseNode
-from notion_indexer.block_node import BlockNode, BlockFactory, ChildDatabaseBlock, ChildPageBlock
+from servitium_cognitionis.notion_indexer.page_node import PageNode
+from servitium_cognitionis.notion_indexer.notion_node import NotionNode
+from servitium_cognitionis.notion_indexer.database_node import DatabaseNode
+from servitium_cognitionis.notion_indexer.block_node import BlockNode, BlockFactory, ChildDatabaseBlock, ChildPageBlock
 
 from uuid import UUID
 from urllib.parse import urlparse

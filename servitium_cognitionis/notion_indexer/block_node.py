@@ -1,5 +1,5 @@
-from notion_indexer.notion_node import NotionNode
-from notion_indexer.common_objects import RichText, FileObject
+from servitium_cognitionis.notion_indexer.notion_node import NotionNode
+from servitium_cognitionis.notion_indexer.common_objects import RichText, FileObject
 
 from pydantic import BaseModel, Field
 from typing import List, Optional, Dict, Literal, Union, Any

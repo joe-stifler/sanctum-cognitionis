@@ -1,5 +1,5 @@
-from notion_indexer.notion_node import NotionNode
-from notion_indexer.common_objects import RichText, PageProperty
+from servitium_cognitionis.notion_indexer.notion_node import NotionNode
+from servitium_cognitionis.notion_indexer.common_objects import RichText, PageProperty
 
 import pandas as pd
 from pydantic import Field

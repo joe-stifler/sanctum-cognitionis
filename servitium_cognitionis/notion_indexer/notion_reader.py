@@ -1,5 +1,5 @@
-from notion_indexer.notion_client import NotionClient
-from notion_indexer.notion_traverser import NotionTraverser
+from servitium_cognitionis.notion_indexer.notion_client import NotionClient
+from servitium_cognitionis.notion_indexer.notion_traverser import NotionTraverser
 
 from typing import List, Optional, Any, Dict
 
