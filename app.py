@@ -146,7 +146,7 @@ def write_medatada_chat_message(role, files):
                 st.error(f"Arquivo não suportado: {file.name}")
 
 @st.experimental_fragment
-def chat_messages(chat_connector, user_input_message, user_uploaded_files):
+def render_chat_history(chat_connector):
     # Initialize or fetch existing chat history
     if "session_id" not in st.session_state:
         llm_model, persona = get_ai_chat()
@@ -183,9 +183,14 @@ def chat_messages(chat_connector, user_input_message, user_uploaded_files):
 
                 if os.environ.get("FORCE_LLM_MOCK_FAMILY"):
                     write_medatada_chat_message("assistant", chat_message.ai_extra_args)
+    return chat_history
 
+# @st.experimental_fragment
+def chat_messages(chat_history, user_input_message, user_uploaded_files):
     if user_input_message:
         try:
+            warning_message = "⚠️ Defina sua chave de API na barra lateral esquerda antes de iniciar a conversa."
+
             if not st.session_state["api_token_value"]:
                 st.warning(warning_message)
                 return
@@ -196,24 +201,26 @@ def chat_messages(chat_connector, user_input_message, user_uploaded_files):
             with st.chat_message("user", avatar="👩🏾‍🎓"):
                 st.write(f":blue[Usuário]")
                 st.write(user_input_message)
+                logger.info("user input: %s", user_input_message)
                 write_medatada_chat_message("usuario", user_uploaded_files)
 
             logger.debug("Sending user message:\n\n```text\n%s\n```", user_input_message)
 
             # Display AI responses
-            with st.spinner("Estou processando sua mensagem..."):
-                # Send user message to AI inference
-                new_chat_message = chat_history.send_ai_message(
-                    user_input_message, user_uploaded_files
-                )
+            with st.chat_message("assistant", avatar="👩🏻‍🏫"):
+                st.write(f":red[{chat_history.get_persona().name}]")
+                new_ai_message = st.empty()
+                with st.spinner("Estou processando sua mensagem..."):
+                    # Send user message to AI inference
+                    new_chat_message = chat_history.send_ai_message(
+                        user_input_message, user_uploaded_files
+                    )
 
-                with st.chat_message("assistant", avatar="👩🏻‍🏫"):
-                    st.write(f":red[{chat_history.get_persona().name}]")
+                    new_ai_message.write_stream(new_chat_message.process_ai_messages())
 
-                    st.write_stream(new_chat_message.process_ai_messages())
-
-                    logger.debug(f"AI new messages: \n\n{new_chat_message.ai_extra_args}")
+                    logger.debug(f"AI new messages: \n\n{new_chat_message.ai_messages}")
                     logger.debug(f"\n\nAI new message kwargs: \n\n{new_chat_message.ai_extra_args}")
+
                     write_medatada_chat_message("assistant", new_chat_message.ai_extra_args)
 
                 # feedback = streamlit_feedback(
@@ -247,7 +254,7 @@ def file_uploader_fragment(user_input_message):
 
     old_input_counter = st.session_state["file_uploader_counter"]
     files_container = st.empty()
-    
+
     @st.experimental_fragment
     def create_file_uploader(file_uploader_id):
         file_uploader_key = f"file_uploader_{file_uploader_id}"
@@ -460,7 +467,20 @@ def notion_search_and_select(user_input_message):
         new_input_counter = st.session_state["notion_uploader_counter"]
         create_multiselect(new_input_counter)
 
-    return selected_nodes
+    if selected_nodes:
+        transformed_notion_files = []
+
+        for url, notion_node in selected_nodes:
+            if isinstance(notion_node, DatabaseNode):
+                transformed_notion_files.append(
+                    PandasFile("NotionDatabase", notion_node.to_dataframe())
+                )
+            else:
+                transformed_notion_files.extend([TextFile("NotionContent", notion_node.to_markdown(), "md")])
+
+        return transformed_notion_files
+
+    return []
 
 def main():
     chat_connector = create_chat_connector()
@@ -517,29 +537,18 @@ def main():
 
             with columns[2]:
                 user_input_message = st.chat_input("Digite sua mensagem aqui...")
+
             with notion_popover:
                 selected_nodes = notion_search_and_select(user_input_message)
+
             with files_popover:
                 user_uploaded_files = file_uploader_fragment(user_input_message)
 
-            if selected_nodes:
-                transformed_notion_files = []
-
-                for url, notion_node in selected_nodes:
-                    if isinstance(notion_node, DatabaseNode):
-                        transformed_notion_files.append(
-                            PandasFile("NotionDatabase", notion_node.to_dataframe())
-                        )
-                    else:
-                        transformed_notion_files.extend([TextFile("NotionContent", notion_node.to_markdown(), "md")])
-
-                user_uploaded_files.extend(transformed_notion_files)
+            user_uploaded_files.extend(selected_nodes)
 
         with parent_chat_container:
             with st.container(height=10000, border=False):
-                if st.session_state["start_new_conversation"] == False:
-                    chat_messages(chat_connector, user_input_message, user_uploaded_files)
-                elif user_input_message:
-                    st.toast("⚠️ Por favor, aguarde. Estou processando sua mensagem... ⚠️")
+                chat_history = render_chat_history(chat_connector)
+                chat_messages(chat_history, user_input_message, user_uploaded_files)
 
 main()
