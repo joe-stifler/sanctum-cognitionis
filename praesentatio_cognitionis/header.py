@@ -3,9 +3,8 @@ import streamlit as st
 def show_header(page_idx):
     pages = [
         {
-            "title": "Redacoes",
-            "icon": "📚",
-            "file": "pages/redacoes.py",
+            "title": "Sanctum Cognitionis",
+            "icon": "🧠",
         },
     ]
 
@@ -15,8 +14,6 @@ def show_header(page_idx):
         layout="wide",
         initial_sidebar_state="collapsed",
         menu_items={
-            # 'Linkedin': 'https://www.linkedin.com/in/-jose-ribeiro-/',
-            # 'Github Contact': "https://github.com/joe-stifler",
             'About': """
 - [LinkedIn](https://www.linkedin.com/in/-jose-ribeiro-)
 - [GitHub](https://github.com/joe-stifler)
