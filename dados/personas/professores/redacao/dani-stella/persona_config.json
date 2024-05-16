@@ -14,5 +14,6 @@
         "dados/personas/professores/redacao/dani-stella/knowledge/a_redacao_na_unicamp.md",
         "dados/personas/professores/redacao/dani-stella/knowledge/informacoes_importantes_sobre_a_redacao_unicamp.md"
     ],
-    "persona_description_file": "dados/personas/professores/redacao/dani-stella/persona_description.md"
+    "persona_description_file": "dados/personas/professores/redacao/dani-stella/persona_description.md",
+    "thinking_process": "GeminiDevModelPro1_5"
 }

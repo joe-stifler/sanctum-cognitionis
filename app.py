@@ -74,10 +74,16 @@ def main():
             user_uploaded_files.extend(selected_nodes)
 
         with parent_chat_container:
-            model_settings(chat_connector, logger)
+            api_status = model_settings(chat_connector, logger)
 
             with st.container(height=10000, border=False):
-                chat_history = render_chat_history(chat_connector, logger)
-                chat_messages(chat_history, user_input_message, user_uploaded_files, logger)
+                if api_status:
+                    chat_history = render_chat_history(chat_connector, logger)
+                    chat_messages(chat_history, user_input_message, user_uploaded_files, logger)
+                else:
+                    warning_message = "⚠️ Defina acima a chave de acesso do Google. Caso não possua, siga as intruções no [site oficial do Google](https://makersuite.google.com/app/apikey)."
+                    st.warning(warning_message)
+                    st.toast(warning_message)
+
 
 main()

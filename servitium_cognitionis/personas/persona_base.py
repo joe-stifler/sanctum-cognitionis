@@ -6,12 +6,17 @@ class Persona:
         self._name = kwargs.get('name', '')
         self._avatar = kwargs.get('avatar', '🤖')
         self._knowledge_files = kwargs.get('knowledge', [])
+        self._thinking_process = kwargs.get('thinking_process', None)
         self._speech_conciseness = kwargs.get('speech_conciseness', None)
         self._persona_description_file = kwargs.get('persona_description_file', '')
 
     @property
     def name(self):
         return self._name
+
+    @property
+    def thinking_process(self):
+        return self._thinking_process
 
     @property
     def avatar(self):

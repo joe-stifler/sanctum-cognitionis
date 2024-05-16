@@ -25,7 +25,7 @@ def get_persona(persona_file):
 
     return persona
 
-def set_model(model_name, persona_name, persona_file, chat_connector, logger, google_api_key=None, notion_api_key=None):
+def set_model(persona_name, persona_file, chat_connector, logger, google_api_key=None, notion_api_key=None):
     if "session_id" in st.session_state:
         chat_connector.delete_chat_history(st.session_state["session_id"])
         del st.session_state["session_id"]
@@ -38,7 +38,7 @@ def set_model(model_name, persona_name, persona_file, chat_connector, logger, go
 
     # Initialize or fetch existing chat history
     persona = get_persona(persona_file)
-    llm_model = get_llm_model(model_name)
+    llm_model = get_llm_model(persona.thinking_process)
 
     logger.info("Chosen Persona: %s", persona)
     logger.info("Chosen LLM Model: %s", llm_model)
@@ -47,7 +47,7 @@ def set_model(model_name, persona_name, persona_file, chat_connector, logger, go
     chat_history.initialize_chat_message(llm_model, persona)
     logger.info("Creating chat history with session_id: %s", chat_history.session_id)
 
-    st.session_state["model_name"] = model_name
+    st.session_state["model_name"] = persona.thinking_process
     st.session_state["persona_name"] = persona_name
     st.session_state["persona_file"] = persona_file
     st.session_state["session_id"] = chat_history.session_id
@@ -56,10 +56,10 @@ def set_model(model_name, persona_name, persona_file, chat_connector, logger, go
     st.rerun()
 
 def model_settings(chat_connector, logger):
-    available_llms = ("GeminiDevModelPro1_5", "GeminiDevModelPro1_5_Flash")
-
     available_personas = {
-        "Pensador Profundo": "dados/personas/gemini/persona_config.json",
+        "Pensador Profundo": "dados/personas/persador_profundo/persona_config.json",
+        "Gemini 1.5 Pro": "dados/personas/gemini-1_5/persona_config_pro.json",
+        "Gemini 1.5 Flash": "dados/personas/gemini-1_5/persona_config_flash.json",
         "Dani Stella: Professora de Literatura e Redação Apaixonada por Educar e Inspirar": "dados/personas/professores/redacao/dani-stella/persona_config.json",
     }
 
@@ -72,10 +72,9 @@ def model_settings(chat_connector, logger):
         if "GOOGLE_DEV" in st.secrets:
             google_api_key = st.secrets["GOOGLE_DEV"]["GOOGLE_API_KEY"]
 
-        persona_name = "Pensador Profundo"
+        persona_name = "Gemini 1.5 Flash"
 
         set_model(
-            model_name=available_llms[0],
             persona_name=persona_name,
             persona_file=available_personas[persona_name],
             chat_connector=chat_connector,
@@ -85,12 +84,6 @@ def model_settings(chat_connector, logger):
         )
 
     with st.expander("Configurações do Modelo", expanded=False):
-        model_name = st.selectbox(
-            "Qual modelo você gostaria de utilizar?",
-            available_llms,
-            index=available_llms.index(st.session_state.get("model_name", available_llms[0]))
-        )
-
         available_persona_names = list(available_personas.keys())
         persona_name = st.selectbox(
             "Qual persona você gostaria de usar?",
@@ -115,7 +108,6 @@ def model_settings(chat_connector, logger):
 
         if atualizar_configuracoes:
             set_model(
-                model_name=model_name,
                 persona_name=persona_name,
                 persona_file=available_personas[persona_name],
                 chat_connector=chat_connector,
@@ -125,6 +117,6 @@ def model_settings(chat_connector, logger):
             )
 
     if "google_api_key" not in st.session_state:
-        warning_message = "⚠️ Defina sua chave de API acima antes de iniciar a conversa."
-        st.warning(warning_message)
-        st.toast(warning_message)
+        return False
+
+    return True
