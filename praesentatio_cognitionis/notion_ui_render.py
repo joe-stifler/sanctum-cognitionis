@@ -166,11 +166,9 @@ def notion_search_and_select(user_input_message):
                     PandasFile(f"Notion Database: {url}", notion_node.to_dataframe())
                 )
             elif isinstance(notion_node, PageNode):
-                content = notion_node.to_markdown().encode("utf-8")
                 transformed_notion_files.extend([TextFile(f"Notion Page: {url}", notion_node.to_markdown(), "md")])
             else:
-                content = notion_node.to_markdown().encode("utf-8")
-                transformed_notion_files.extend([TextFile(f"Notion Block: {url}", content.to_markdown(), "md")])
+                transformed_notion_files.extend([TextFile(f"Notion Block: {url}", notion_node.to_markdown(), "md")])
 
         return transformed_notion_files
 
