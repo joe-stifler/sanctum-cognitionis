@@ -23,7 +23,7 @@ deskew===1.5.1
 streamlit-chat===0.1.1
 streamlit-pdf-viewer===0.0.10
 openpyxl===3.1.2
-google-generativeai===0.5.3
+google-generativeai @ git+https://github.com/joe-stifler/generative-ai-python@d291b29d01d257e9d7079ef30d7bd43670b1a4ec
 pdf2image===1.17.0
 tabulate===0.9.0
 pydantic===2.7.1

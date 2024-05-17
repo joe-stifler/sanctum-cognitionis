@@ -92,7 +92,13 @@ class GeminiDevBaseModel(LLMBaseModel):
         if session_id not in self._model_chats:
             raise ValueError("Chat session does not exist. Call create_chat() first")
 
-        ai_response_stream = self._model_chats[session_id].send_message(messages, stream=True)
+        ai_response_stream = self._model_chats[session_id].send_message(
+            messages,
+            stream=True,
+            request_options={
+                "timeout": 60 * 4,
+            }
+        )
 
         return self.process_ai_response_stream(session_id, ai_response_stream)
 
