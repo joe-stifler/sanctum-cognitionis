@@ -44,11 +44,8 @@ def chat_messages(chat_history, user_input_message, user_uploaded_files, logger)
             with st.chat_message("user", avatar="👩🏾‍🎓"):
                 st.write(f":blue[Usuário]")
                 st.write(user_input_message)
-                logger.debug("user input: %s", user_input_message)
                 with st.spinner("Processsando arquivos do usuário..."):
                     write_medatada_chat_message("usuario", user_uploaded_files)
-
-            logger.debug("Sending user message:\n\n```text\n%s\n```", user_input_message)
 
             # Display AI responses
             with st.chat_message("assistant", avatar=persona.avatar):
@@ -59,7 +56,6 @@ def chat_messages(chat_history, user_input_message, user_uploaded_files, logger)
                         user_input_message, user_uploaded_files
                     )
                     new_ai_message.write_stream(new_chat_message.process_ai_messages())
-                    logger.debug(f"AI new messages: \n\n{new_chat_message.ai_messages}")
                     logger.debug(f"\n\nAI new message kwargs: \n\n{new_chat_message.ai_extra_args}")
 
             st.session_state["start_new_conversation"] = False
