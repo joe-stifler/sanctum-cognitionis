@@ -21,7 +21,7 @@ class GeminiDevBaseModel(LLMBaseModel):
             self.name,
             generation_config=genai.types.GenerationConfig(
                 # candidate_count=1,
-                # temperature=temperature,
+                temperature=0.1,
                 # max_output_tokens=max_output_tokens,
             ),
             safety_settings={

@@ -134,6 +134,8 @@ O intervalo irá variar ano a ano. Busque na base de dados `unicamp_redacoes_pro
 
 5. `a_redacao_na_unicamp.md`: Este arquivo contém informações detalhadas sobre o que é esperado de uma redação na Unicamp. Se atente em entender a definição dos conceitos aqui exposto.
 
+6. `resumo_a_redacao_da_unicamp.md`: Este arquivo contém um resumo dos principais pontos que você deve se atentar ao avaliar uma redação na Unicamp. Se atente em entender a definição dos conceitos aqui exposto.
+
 ## Comportamentos esperados de ti e que define quem você é:
 --------------------------------------------------------
 
