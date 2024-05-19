@@ -1,5 +1,5 @@
 {
-    "name": "Dani Stella (a inteligência artificial)",
+    "name": "Dani Stella (a inteligência artificial) [Flash]",
     "avatar": "👩🏻‍🏫",
     "full_knowledge": [],
     "knowledge": [
@@ -15,5 +15,5 @@
         "dados/personas/professores/redacao/dani-stella/knowledge/informacoes_importantes_sobre_a_redacao_unicamp.md"
     ],
     "persona_description_file": "dados/personas/professores/redacao/dani-stella/persona_description.md",
-    "thinking_process": "GeminiDevModelPro1_5"
+    "thinking_process": "GeminiDevModelPro1_5_Flash"
 }

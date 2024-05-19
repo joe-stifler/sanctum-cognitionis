@@ -41,8 +41,10 @@ def set_model(persona_name, persona_file, chat_connector, logger, google_api_key
     logger.info("Chosen Persona: %s", persona)
     logger.info("Chosen LLM Model: %s", llm_model)
     logger.info("Persona presenting yourself:\n\n%s", persona.present_yourself())
+
     chat_history = chat_connector.create_chat_history()
     chat_history.initialize_chat_message(llm_model, persona)
+
     logger.info("Creating chat history with session_id: %s", chat_history.session_id)
 
     st.session_state["model_name"] = persona.thinking_process
@@ -58,7 +60,8 @@ def model_settings(chat_connector, logger):
         "Gemini 1.5 Pro": "dados/personas/gemini-1_5/persona_config_pro.json",
         "Gemini 1.5 Flash": "dados/personas/gemini-1_5/persona_config_flash.json",
         "Pensador Profundo": "dados/personas/persador_profundo/persona_config.json",
-        "Dani Stella: Professora de Literatura e Redação Apaixonada por Educar e Inspirar": "dados/personas/professores/redacao/dani-stella/persona_config.json",
+        "Dani Stella (a inteligência artificial)": "dados/personas/professores/redacao/dani-stella/persona_config.json",
+        "Dani Stella (a inteligência artificial) [Flash]": "dados/personas/professores/redacao/dani-stella/persona_config_flash.json",
     }
 
     if "session_id" not in st.session_state:

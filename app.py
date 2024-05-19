@@ -47,7 +47,7 @@ def main():
             key="footer_container",
             css_styles="""
                 * {
-                    max-height: 100px;
+                    max-height: 200px;
                 }
                 div[data-testid="stPopover"] {
                     min-width: 50px;

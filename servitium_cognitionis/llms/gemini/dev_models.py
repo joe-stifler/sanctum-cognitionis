@@ -2,7 +2,6 @@ from servitium_cognitionis.llms.base import LLMBaseModel
 
 import google.generativeai as genai
 from google.ai.generativelanguage import Part, Blob
-from google.generativeai.types import HarmCategory, HarmBlockThreshold
 
 class GeminiDevBaseModel(LLMBaseModel):
     def __init__(self, **kwargs):
@@ -26,10 +25,10 @@ class GeminiDevBaseModel(LLMBaseModel):
                 # max_output_tokens=max_output_tokens,
             ),
             safety_settings={
-                'harassment': 'block_only_high',
-                'hate_speech': 'block_only_high',
-                'sexual': 'block_only_high',
-                'dangerous': 'block_only_high',
+                'harassment': 'block_none',
+                'hate_speech': 'block_none',
+                'sexual': 'block_none',
+                'dangerous': 'block_none',
             },
             **additional_args
         )

@@ -265,10 +265,6 @@ class ChatInterface:
                     user_message,
                     prefix_message_context=message_context
                 )
-
-            # with self.history:
-            #     if self.is_lazy_initial_message_set:
-            #         st.info("O seu professor(a) está pronto para lhe ajudar. Tome a iniciativa e comece a sua interação com ele(a).")
         except Exception as e:
             st.error(f"Erro ao executar a interface de chat: {e}")
             pass
