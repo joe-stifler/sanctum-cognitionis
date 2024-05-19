@@ -102,7 +102,7 @@ class GeminiDevBaseModel(LLMBaseModel):
             messages,
             stream=True,
             request_options={
-                "timeout": 60 * 10,
+                "timeout": 60 * 20,
             }
         )
 
