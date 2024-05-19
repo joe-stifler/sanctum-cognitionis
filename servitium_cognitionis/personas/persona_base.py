@@ -88,16 +88,6 @@ class Persona:
 
     @classmethod
     def from_json(cls, path):
-        try:
-            with open(path, 'r', encoding='utf-8') as file:
-                persona_data = json.load(file)
-                return cls(persona_data)
-        except FileNotFoundError:
-            print("The specified file was not found.")
-            return None
-        except json.JSONDecodeError:
-            print("Error decoding the JSON data.")
-            return None
-        except Exception as e:
-            print(f"An error occurred: {e}")
-            return None
+        with open(path, 'r', encoding='utf-8') as file:
+            persona_data = json.load(file)
+            return cls(persona_data)
