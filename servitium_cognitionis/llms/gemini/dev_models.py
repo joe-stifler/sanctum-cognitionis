@@ -11,10 +11,15 @@ class GeminiDevBaseModel(LLMBaseModel):
         self._model_chats = {}
 
     def initialize_model(self, system_instruction=[], temperature=None, max_output_tokens=None):
+        additional_args = {}
+        if len(system_instruction) > 0:
+            additional_args = {
+                'system_instruction': system_instruction,
+            }
+
         self._model_chats = {}
         self._model_instance = genai.GenerativeModel(
             self.name,
-            system_instruction=system_instruction,
             generation_config=genai.types.GenerationConfig(
                 # candidate_count=1,
                 # temperature=temperature,
@@ -25,7 +30,8 @@ class GeminiDevBaseModel(LLMBaseModel):
                 'hate_speech': 'block_only_high',
                 'sexual': 'block_only_high',
                 'dangerous': 'block_only_high',
-            }
+            },
+            **additional_args
         )
 
     def check_chat_session_exists(self, session_id):
