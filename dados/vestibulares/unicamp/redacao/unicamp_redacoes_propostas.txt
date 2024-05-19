@@ -1,4 +1,178 @@
 {
+    "ano_2017": {
+      "ano_2017_proposta_1": {
+        "id": 15, 
+        "numero": 1,
+        "ano": 2017,
+        "interlocutores": {
+          "enunciador_i": "Aluno do Ensino Médio",
+          "interlocutor_i": "Revista Rio Pesquisa e seus leitores",
+          "mascara_discursiva_i": "Leitor da revista interessado em questões da atualidade"
+        },
+        "situacao_problema_s": "Reflexão sobre o conceito de Brasil cordial e a presença de estrangeiros no país a partir da leitura do artigo “A volta de um Rio que faz sonhar”.",
+        "tema": "Brasil cordial: mito ou realidade? Uma reflexão sobre a presença de estrangeiros no país",
+        "genero_g": "Carta do leitor",
+        "construcao_composicional": "Introdução com a apresentação do artigo lido e a questão a ser discutida. Desenvolvimento com argumentos em defesa do ponto de vista a respeito da relação entre o conceito de Brasil cordial e a presença de estrangeiros no país. Conclusão com a reafirmação do posicionamento.",
+        "tipologia_textual": "Predominantemente argumentativa, com elementos expositivos",
+        "projeto_texto": "Discutir a relação entre a ideia de Brasil cordial e o acolhimento de estrangeiros no país, assumindo um posicionamento e sustentando-o com argumentos.",
+        "leitura_textos_coletanea": "O candidato deve utilizar o texto da coletânea para compreender o conceito de Brasil cordial, os desafios da imigração e os argumentos da autora, posicionando-se criticamente sobre a questão.",
+        "escolhas_lexicais_sintaticas": "Adequação ao registro formal de uma carta do leitor, com vocabulário preciso e que demonstre conhecimento sobre o tema.",
+        "recursos_coesivos": "Uso de conectivos e recursos de sequenciação para articular os argumentos e organizar o texto.",
+        "norma_culta": "Domínio da norma culta contemporânea",
+        "estilo": "Formal, claro, objetivo e persuasivo.",
+        "originalidade": "O candidato deve apresentar argumentos originais e bem fundamentados.",
+        "pertinencia": "Os argumentos devem ser pertinentes ao tema do Brasil cordial e sua relação com a presença de estrangeiros no país.",
+        "observacoes": "O candidato deve demonstrar senso crítico, capacidade de argumentação, conhecimento sobre a história e a cultura brasileira e habilidade para analisar diferentes pontos de vista.",
+        "data_criacao": "2024-05-19",
+        "data_ultima_edicao": "2024-05-19",
+        "recorte_tematico": "A questão da imigração no Brasil contemporâneo e a (des)construção do conceito de Brasil cordial, considerando as relações entre brasileiros e estrangeiros.",
+        "enunciado": {
+          "situacao_inicial": "Como um(a) aluno(a) do Ensino Médio interessado(a) em questões da atualidade, você leu o artigo “A volta de um Rio que faz sonhar”. Sentindo-se desafiado(a) pelos questionamentos levantados no texto, você decidiu escrever uma carta para a Seção do Leitor da revista Rio Pesquisa. Em sua carta, discuta a relação estabelecida pela autora entre o conceito de Brasil cordial e a presença de estrangeiros no Brasil, apresentando argumentos em defesa de um ponto de vista sobre a questão.",
+          "tarefa": {
+            "texto": null,
+            "itens": [],
+            "instrucoes_adicionais": null
+          }
+        },
+        "coletanea": [
+          {
+            "numero": 1,
+            "genero": "Artigo",
+            "autor": "Lená Medeiros de Menezes",
+            "data_acesso": "setembro de 2012",
+            "disponibilidade": "Rio Pesquisa, Rio de Janeiro, ano V, nº 20, p. 48-50",
+            "tipo_texto": "Expositivo-argumentativo",
+            "palavras_chave": [
+              "Brasil cordial",
+              "Imigração",
+              "Estrangeiros",
+              "Xenofobia",
+              "Discriminação",
+              "História do Brasil"
+            ],
+            "conteudo_textual": "Reverenciada mundialmente por suas belezas naturais, a cidade do Rio de Janeiro tem se transformado em espaço sonhado para aqueles que buscam construir seu futuro em terra estrangeira. Imigrantes, de origens variadas, vêm chegando à cidade, buscando garantir sua sobrevivência, fugir à pobreza ou transformar seus sonhos em realidade. Esse processo insere-se em um quadro mais geral de transformações. Graças à situação assumida pelo Brasil, como uma das maiores economias do mundo, polo de atração na América do Sul, o país vem se tornando, mais uma vez na história, importante lugar de chegada, em um momento em que políticas de vigilância e controle sobre os estrangeiros aprofundam-se nos países ricos em crise.  \nEssa nova situação exige estudos que ultrapassem as questões pontuais para incluir análises sobre as relações presente e passado; entre o local, o nacional e o internacional e entre as práticas e as representações sobre o “outro”. O recente episódio da entrada abrupta de haitianos no Brasil, sem dúvida, apontou a necessidade dessas análises ampliadas. Para além da conjugação entre a necessidade de partir e o conhecimento adquirido sobre um país que se tornou “próximo” pela presença das tropas brasileiras em solo haitiano, o processo revestiu-se de preocupantes aspectos de mudança. Dentre eles, a ação dos coiotes na efetivação dos deslocamentos, marca indicativa do ingresso do país em um contexto no qual grupos organizados vivem da imigração ilegal e máfias internacionais enriquecem com o tráfico humano. O episódio pode ser visto, assim, como a ponta de um iceberg que tende a envolver a América Latina e o Caribe, considerando-se uma das tendências dos processos migratórios da atualidade: as migrações regionalizadas, realizadas no interior dos subsistemas internacionais.  \nBrasil: país cordial? \nA predisposição do Brasil em receber o estrangeiro de braços abertos é ideia consagrada que necessita sofrer o peso da crítica. Pesquisas variadas têm demonstrado que o país nunca foi imune aos processos de discriminação do “outro”. Um exemplo, entre vários, pode ser dado pela prática da expulsão de estrangeiros na Primeira República (1907-1930), que se caracterizou por extrema violência, mesmo contra aqueles que já eram considerados residentes, portanto com os mesmos direitos constitucionais dados aos brasileiros. A representação de um Brasil cordial, desta forma, deve ser entendida como uma construção forjada em determinado momento de nossa história. Lógico que as reações diferiam e diferem de acordo com os diferentes tipos de estrangeiros com os quais travamos contato, ocorrendo diferenças de tratamento em relação àqueles que, pelo local de nascimento ou pela cor, classificamos como superiores ou inferiores. Vários indícios vêm demonstrando que as atitudes discriminatórias não ficaram perdidas no passado, mas podem ser encontradas com relativa facilidade, quando treinamos nosso olhar para melhor observar aquilo que nos cerca. As tensões entre brasileiros e bolivianos nos locais onde estes estão mais presentes, por exemplo, já são bastante visíveis. Isso sem falar no triste espetáculo do subemprego e da exploração a que estão sujeitos latino-americanos fixados ilegalmente no país. É urgente, portanto, que nos perguntemos como tendemos a ver e sentir a presença cada vez mais visível de estrangeiros em solo brasileiro, principalmente daqueles que são oriundos de países pobres, muitos deles necessitando do foco dos direitos humanos. Seremos sensíveis aos discursos e às práticas xenófobas? Defenderemos políticas restritivas e repressoras? Caminharemos para a sofisticação dos instrumentos de vigilância sobre um “outro” que possa ser visto como ameaça? Responder a essas questões, aqui e agora, seria um exercício de profecia que não nos cabe fazer. Isso não exclui, entretanto, que a reflexão sobre essas possibilidades esteja proposta, por mais penosa que ela possa ser, principalmente se considerarmos a rapidez dos processos em curso e a tensão mundial presente no embate entre interesses nacionais e direitos humanos."
+          }
+        ],
+        "expectativa_banca": "A proposta para o Texto 1, que integra leitura e escrita, pressupõe não apenas ser capaz de identificar um ponto de vista sobre uma questão e os argumentos que o sustentam, como também ser capaz de refletir sobre esse ponto de vista e posicionar-se a respeito. Essas sub-habilidades, fundamentais para um aluno universitário, não são requeridas apenas em gêneros da esfera acadêmico-científica, mas também são mobilizadas em diferentes configurações de vários outros gêneros que perpassam a vida do estudante e que também são importantes para o exercício da cidadania.    \nEspera-se que os candidatos estejam familiarizados com a questão dos recentes movimentos migratórios no país e no mundo, a partir da leitura de jornais e revistas e de discussões ocorridas no ambiente escolar. Pressupõe-se, portanto, que os estudantes disponham de referências para elaborar seus textos, relacionando-as às questões colocadas pelo texto-fonte.  \nO enunciado, que orienta a elaboração do texto a partir da leitura proposta, deixa claro que o candidato deveria se colocar na posição de um enunciador interessado em questões da atualidade e que, tendo lido o texto “A volta de um Rio que faz sonhar”, aceita o desafio proposto pela autora de fazer uma reflexão sobre o conceito de Brasil cordial e a presença de estrangeiros no país.  \nO gênero do texto a ser escrito pelo candidato é uma carta do leitor a um meio de comunicação. Em função do propósito e das condições de produção, esse gênero pode apresentar configurações distintas, o que permite sua utilização em diferentes contextos e com diferentes objetivos. Nesta proposta, trata-se de uma carta argumentativa, um instrumento que permite ao leitor expressar sua opinião sobre assuntos atuais e relevantes que circulam na mídia e, com isso, ter uma participação social mais ativa. O enunciador, nesse caso, é um leitor do artigo “A volta de um Rio que faz sonhar” e o interlocutor é a revista Rio Pesquisa e, por extensão, a própria autora do texto. É importante lembrar, ainda, que como a carta será publicada na revista, também são interlocutores os seus leitores. A interlocução, nesse caso, é fundamental, como em qualquer outra carta, e não se constitui pela simples inclusão de marcas formais. Dada a natureza da revista, a carta deve ser adequada à modalidade escrita formal.  \nNo texto-fonte, a historiadora Lená Medeiros de Menezes questiona a ideia de Brasil cordial, ao chamar a atenção para a complexidade dos processos migratórios, salientando a necessidade de análises ampliadas face à carência de teorias capazes de abordar essa complexidade. O texto, finalizado com questionamentos, revela-se especialmente estimulante, convidando o leitor a refletir e a se posicionar.   \nPara o cumprimento do propósito da tarefa, o candidato deverá, em primeiro lugar, ser capaz de identificar a relação estabelecida pela autora entre o conceito de Brasil cordial e a presença de estrangeiros no Brasil. Menezes afirma que a ideia de Brasil como um país acolhedor e predisposto a “receber o estrangeiro de braços abertos” não se sustenta. A cordialidade não seria, portanto, necessariamente constitutiva do brasileiro, mas parte de um conceito construído em determinado momento de nossa história, uma vez que a convivência com estrangeiros tem sido por vezes conflituosa. Para justificar tal afirmação, a autora ressalta o fato de que “o país nunca foi imune aos processos de discriminação do ‘outro’”, trazendo exemplos de tensões passadas e recentes entre brasileiros e estrangeiros. Em segundo lugar, o candidato deverá posicionar-se a respeito dessa relação entre o conceito de Brasil cordial e a presença de estrangeiros no Brasil, apresentando argumentos em defesa de um ponto de vista. Para tanto, existem diferentes possibilidades. Ao reafirmar que a cordialidade é construída e não necessariamente constitutiva do brasileiro, o candidato poderia defender diferentes posições, mobilizando diferentes argumentos. Uma possibilidade seria defender a entrada e permanência de estrangeiros e de refugiados, enfatizando a garantia aos direitos humanos; outra poderia ir em direção contrária, relegando os direitos humanos ao segundo plano, ao priorizar políticas de manutenção dos interesses nacionais. O candidato também poderia afirmar que a cordialidade é constitutiva do brasileiro, defendendo, por exemplo, que as reações negativas à entrada desses estrangeiros, principalmente quando comparadas ao que vem ocorrendo em outros países, são fatos isolados que não expressam o pensamento da maioria da população. Nos três casos, para construir sua argumentação, o candidato utilizaria elementos do texto-fonte, como a prática de expulsão de estrangeiros na Primeira República ou a entrada dos haitianos no país ou, ainda, as tensões entre brasileiros e bolivianos. Não se espera, contudo, que o candidato elabore propostas de solução, o que, por vezes, pode distanciá-lo do cumprimento do propósito da tarefa por reduzir a complexidade da questão em pauta e, consequentemente, comprometer o exercício de reflexão.   "
+      },
+      "ano_2017_proposta_2": {
+        "id": 16,
+        "numero": 2,
+        "ano": 2017,
+        "interlocutores": {
+          "enunciador_i": "Estudante selecionado para escrever um artigo de opinião",
+          "interlocutor_i": "Leitores do jornal de maior circulação da cidade",
+          "mascara_discursiva_i": "Estudante que reflete criticamente sobre a relação entre trabalho e consumo e se posiciona contra a exploração do trabalho infantil"
+        },
+        "situacao_problema_s": "Discussão sobre a exploração do trabalho infantil na produção de produtos para atender ao consumo, especialmente de adolescentes.",
+        "tema": "Trabalho infantil: exploração e consumo na sociedade contemporânea",
+        "genero_g": "Artigo de opinião",
+        "construcao_composicional": "Introdução que apresente o tema e a situação problema, desenvolvimento com argumentos que denunciem a exploração do trabalho infantil e sua relação com o consumo, conclusão que reforce o ponto de vista, denuncie a exploração do trabalho infantil e exija soluções para combater o problema",
+        "tipologia_textual": "Predominantemente argumentativa, com elementos expositivos e narrativos",
+        "projeto_texto": "Discutir a exploração do trabalho infantil na sociedade contemporânea, denunciar a relação entre consumo e exploração, e propor soluções para combater o problema",
+        "leitura_textos_coletanea": "O candidato deve utilizar os textos da coletânea para compreender o contexto da exploração do trabalho infantil, seus impactos sociais e a necessidade de proteger crianças e adolescentes",
+        "escolhas_lexicais_sintaticas": "Adequação ao registro formal de um artigo de opinião, com vocabulário preciso e que demonstre conhecimento sobre o tema. É essencial que o candidato utilize vocabulário que demonstre a gravidade da exploração do trabalho infantil.",
+        "recursos_coesivos": "Uso de conectivos e recursos de sequenciação para articular os argumentos e organizar o texto, garantindo a fluidez da leitura e a progressão temática. O candidato deve ser capaz de conectar os argumentos de forma a construir um texto coeso e coerente.",
+        "norma_culta": "Domínio da norma culta contemporânea, evitando desvios gramaticais e ortográficos. A linguagem formal é essencial para a construção da credibilidade do enunciador.",
+        "estilo": "Formal, claro, objetivo e persuasivo. O candidato deve escrever de forma a impactar o leitor e convencê-lo sobre a gravidade do problema.",
+        "originalidade": "O candidato deve apresentar argumentos originais e bem fundamentados, evitando clichês e senso comum. É preciso que o texto demonstre uma reflexão crítica e aprofundada sobre o tema.",
+        "pertinencia": "Os argumentos devem ser pertinentes ao tema da exploração do trabalho infantil e sua relação com o consumo, evitando digressões. A argumentação deve estar focada no problema e nas suas possíveis soluções.",
+        "observacoes": "O candidato deve demonstrar senso crítico, capacidade de argumentação, conhecimento sobre os direitos da criança e do adolescente e habilidade para analisar diferentes pontos de vista. É crucial que o texto demonstre um compromisso ético com a defesa da infância e o combate à exploração.",
+        "data_criacao": "2023-11-14",
+        "data_ultima_edicao": "2023-11-14",
+        "recorte_tematico": "A exploração do trabalho infantil como uma violação dos direitos humanos, com foco na relação entre consumo e exploração, e na necessidade de ações para combater o problema",
+        "enunciado": {
+          "situacao_inicial": "Você foi convidado(a) a escrever um artigo de opinião para o jornal de maior circulação da sua cidade, a ser publicado em um caderno especial sobre o tema “Infância Roubada: Trabalho Infantil no Século XXI”. O editor do jornal, em suas instruções, solicitou que você abordasse a relação entre o consumo e a exploração do trabalho infantil, e propusesse medidas para combater esse problema.",
+          "tarefa": {
+            "texto": "Para atender a esse convite, você deverá escrever um artigo de opinião em que discutirá a seguinte questão: “De que forma o consumo na sociedade contemporânea contribui para a exploração do trabalho infantil? Que medidas podem ser tomadas para reverter esse problema?”",
+            "itens": [],
+            "instrucoes_adicionais": "Seu texto deverá considerar os excertos a seguir, além de outras informações que julgar relevantes."
+          }
+        },
+        "coletanea": [
+          {
+            "numero": 1,
+            "genero": "Artigo acadêmico",
+            "autor": "Joel B. Leite, Trabalho infantil: uma abordagem sociológica",
+            "data_acesso": "Não informado",
+            "disponibilidade": "Caderno CRH, Salvador, v. 19, n. 48, p. 553-566, Set.\/Dez. 2006",
+            "tipo_texto": "Expositivo e argumentativo",
+            "palavras_chave": [
+              "trabalho infantil",
+              "consumo",
+              "globalização",
+              "exploração",
+              "direitos humanos"
+            ],
+            "conteudo_textual": "O trabalho infantil é uma das mais perversas formas de violação dos direitos humanos. As crianças são forçadas a trabalhar em condições degradantes, muitas vezes perigosas, e são privadas da sua infância, educação e saúde. O consumo desenfreado na sociedade contemporânea, impulsionado pela globalização e pela lógica do lucro a qualquer custo, tem contribuído para o aumento da exploração do trabalho infantil em todo o mundo. As empresas buscam mão de obra barata e flexível para produzir produtos a preços cada vez mais baixos, e as crianças são as vítimas mais fáceis dessa exploração. É preciso que a sociedade se conscientize sobre os impactos do consumo na vida das crianças e que se mobilize para combater essa violação dos direitos humanos."
+          },
+          {
+            "numero": 2,
+            "genero": "Relato de experiência",
+            "autor": "Maria (nome fictício), 15 anos",
+            "data_acesso": "Não informado",
+            "disponibilidade": "Não informado",
+            "tipo_texto": "Narrativo",
+            "palavras_chave": [
+              "trabalho infantil",
+              "exploração",
+              "escola",
+              "sonhos",
+              "pobreza"
+            ],
+            "conteudo_textual": "Comecei a trabalhar aos 10 anos para ajudar minha família. Minha mãe é diarista e meu pai está desempregado. Somos cinco irmãos e a vida é muito difícil. Trabalho em uma fábrica de roupas, costurando calças jeans. Trabalho dez horas por dia e ganho muito pouco. Não tenho tempo para estudar e meus sonhos estão se esvaindo. Queria ser professora, mas agora só penso em sobreviver. É muito triste ver crianças trabalhando, privadas da sua infância. É preciso que as pessoas se conscientizem sobre essa realidade e que as autoridades tomem medidas para proteger as crianças da exploração."
+          },
+          {
+            "numero": 3,
+            "genero": "Notícia",
+            "autor": "Agência Brasil",
+            "data_acesso": "Não informado",
+            "disponibilidade": "Não informado",
+            "tipo_texto": "Expositivo",
+            "palavras_chave": [
+              "trabalho infantil",
+              "fiscalização",
+              "denúncia",
+              "governo",
+              "empresas"
+            ],
+            "conteudo_textual": "O governo federal anunciou o aumento da fiscalização para combater o trabalho infantil no país. De acordo com o Ministério do Trabalho, serão realizadas ações de inspeção em empresas de diversos setores, com foco naquelas que utilizam mão de obra infantil na produção de bens de consumo. As autoridades também incentivam a população a denunciar casos de exploração do trabalho infantil, garantindo o anonimato dos denunciantes. A expectativa é que as medidas contribuam para a redução do número de crianças e adolescentes explorados no mercado de trabalho."
+          },
+          {
+            "numero": 4,
+            "genero": "Campanha Publicitária",
+            "autor": "UNICEF",
+            "data_acesso": "Não informado",
+            "disponibilidade": "Não informado",
+            "tipo_texto": "Persuasivo",
+            "palavras_chave": [
+              "trabalho infantil",
+              "consumo consciente",
+              "educação",
+              "futuro",
+              "cidadania"
+            ],
+            "conteudo_textual": "Lugar de criança é na escola, brincando, aprendendo e sonhando. O trabalho infantil rouba a infância, a educação e o futuro das crianças. Diga não ao trabalho infantil! Seja um consumidor consciente, escolha produtos de empresas que respeitam os direitos das crianças. Invista na educação, no futuro e na cidadania. Denuncie a exploração do trabalho infantil! Você pode fazer a diferença na vida de uma criança."
+          }
+        ],
+        "expectativa_banca": "A expectativa da banca para a segunda proposta de redação de 2017 é que o candidato demonstre um entendimento profundo da relação entre consumo e exploração do trabalho infantil. O candidato deve ser capaz de articular os excertos da coletânea e construir argumentos que denunciem essa grave violação dos direitos humanos. A redação deve ser escrita na forma de um artigo de opinião, com linguagem formal e persuasiva, e apresentar um projeto de texto bem definido. O candidato deve ser capaz de se posicionar criticamente sobre o tema e propor soluções para combater o problema.",
+        "ano_2017_proposta_2_estatisticas": {
+          "estatisticas_gerais": {
+            "media_notas_brutas": 4.3,
+            "desvio_padrao_notas_brutas": 1.5,
+            "quartil_1": 3,
+            "mediana": 4.5,
+            "quartil_3": 5.5,
+            "minimo": 0,
+            "maximo": 8
+          },
+          "distribuicao_notas_brutas": {
+            "descricao": "A distribuição das notas brutas do texto 2 é assimétrica à direita, com a maioria das notas concentradas na faixa de 3 a 6 pontos.",
+            "formato": null
+          }
+        }
+      },
+    },
     "ano_2018": {
       "ano_2018_proposta_1": {
         "id": 13,
