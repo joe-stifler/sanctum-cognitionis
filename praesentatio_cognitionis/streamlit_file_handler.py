@@ -47,7 +47,7 @@ class StreamlitFileHandler:
         elif suffix in AudioFile.SUPPORTED_TYPES:
             return AudioFile(file.name, file.getvalue(), suffix)
         elif suffix in JsonFile.SUPPORTED_TYPES:
-            return JsonFile(file.name, json.loads(file.getvalue().decode('utf-8')))
+            return TextFile(file.name, file.getvalue().decode('utf-8'), suffix)
         elif suffix in PandasFile.SUPPORTED_TYPES:
             return PandasFile(file.name, pd.read_csv(BytesIO(file.getvalue())))
         elif suffix in CodeFile.SUPPORTED_TYPES:

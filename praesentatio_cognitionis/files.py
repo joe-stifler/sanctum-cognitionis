@@ -109,6 +109,7 @@ class TextFile(BaseFile):
         "txt": "text/plain",
         "md": "text/markdown",
         "srt": "text/plain",
+        "json": "application/json",
     }
 
     def __init__(self, name, content, extension):
@@ -121,7 +122,7 @@ class TextFile(BaseFile):
 class JsonFile(BaseFile):
     """Represents a JSON file."""
     SUPPORTED_TYPES = {
-        "json": "application/json",
+        # "json": "application/json",
     }
 
     def __init__(self, name, content):

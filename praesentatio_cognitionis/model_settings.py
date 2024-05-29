@@ -60,8 +60,8 @@ def model_settings(chat_connector, logger):
         "Gemini 1.5 Pro": "dados/personas/gemini-1_5/persona_config_pro.json",
         "Gemini 1.5 Flash": "dados/personas/gemini-1_5/persona_config_flash.json",
         "Pensador Profundo": "dados/personas/persador_profundo/persona_config.json",
-        "Dani Stella (a inteligência artificial)": "dados/personas/professores/redacao/dani-stella/persona_config.json",
-        "Dani Stella (a inteligência artificial) [Flash]": "dados/personas/professores/redacao/dani-stella/persona_config_flash.json",
+        "Dani Stella (a inteligência artificial)": "dados/personas/dani-stella/persona_config.json",
+        "Dani Stella (a inteligência artificial) [Flash]": "dados/personas/dani-stella/persona_config_flash.json",
     }
 
     if "session_id" not in st.session_state:

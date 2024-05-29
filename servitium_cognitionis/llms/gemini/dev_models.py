@@ -25,10 +25,10 @@ class GeminiDevBaseModel(LLMBaseModel):
                 # max_output_tokens=max_output_tokens,
             ),
             safety_settings={
-                'harassment': 'block_none',
-                'hate_speech': 'block_none',
-                'sexual': 'block_none',
-                'dangerous': 'block_none',
+                'harassment': 'block_only_high',
+                'hate_speech': 'block_only_high',
+                'sexual': 'block_only_high',
+                'dangerous': 'block_only_high',
             },
             **additional_args
         )
@@ -147,7 +147,7 @@ class GeminiDevModelPro1_0(GeminiDevBaseModel):
         )
 
 class GeminiDevModelPro1_0Vision(GeminiDevBaseModel):
-    def __init__(self, temperature=1, max_output_tokens=4096):
+    def __init__(self, temperature=0.1, max_output_tokens=4096):
         super().__init__(
             model_name="gemini-pro-vision",
             temperature=temperature,
@@ -157,7 +157,7 @@ class GeminiDevModelPro1_0Vision(GeminiDevBaseModel):
         )
 
 class GeminiDevModelPro1_5(GeminiDevBaseModel):
-    def __init__(self, temperature=1, max_output_tokens=8192):
+    def __init__(self, temperature=0.1, max_output_tokens=8192):
         super().__init__(
             model_name="gemini-1.5-pro-latest",
             temperature=temperature,
@@ -168,7 +168,7 @@ class GeminiDevModelPro1_5(GeminiDevBaseModel):
 
 
 class GeminiDevModelPro1_5_Flash(GeminiDevBaseModel):
-    def __init__(self, temperature=1, max_output_tokens=8192):
+    def __init__(self, temperature=0.1, max_output_tokens=8192):
         super().__init__(
             model_name="gemini-1.5-flash-latest",
             temperature=temperature,

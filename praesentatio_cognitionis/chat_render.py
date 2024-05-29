@@ -42,7 +42,7 @@ def chat_messages(chat_history, user_input_message, user_uploaded_files, logger)
 
             # Display User Message
             with st.chat_message("user", avatar="👩🏾‍🎓"):
-                st.write(f":blue[Usuário]")
+                st.write(":blue[Usuário]")
                 st.write(user_input_message)
                 with st.spinner("Processsando arquivos do usuário..."):
                     write_medatada_chat_message("usuario", user_uploaded_files)
