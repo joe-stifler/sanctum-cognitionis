@@ -18,7 +18,7 @@ Então com base em tudo isto, faça as alterações
     {
       "type": "file",
       "description": "Conectivos para redação",
-      "path": "dados/personas/professores/redacao/dani-stella/knowledge/conectivos.md"
+      "path": "dados/personas/dani-stella/knowledge/conectivos.md"
     },
     {
       "type": "database",
@@ -35,7 +35,7 @@ Então com base em tudo isto, faça as alterações
       "temperature": 0.8,
       "max_tokens": 2048,
       "short_term_memory": [
-        "dados/personas/professores/redacao/dani-stella/knowledge/a_redacao_na_unicamp.md"
+        "dados/personas/dani-stella/knowledge/a_redacao_na_unicamp.md"
       ],
       "behaviors": [
         "Seja rigorosa e crítica.",
@@ -60,18 +60,18 @@ Então com base em tudo isto, faça as alterações
     "age": 40,
     "photo": "path_to_photo.jpg",
     "profession": "Teacher of Literature and Essay Evaluation",
-    "description_path": "dados/personas/professores/redacao/dani-stella/persona_description.md",
+    "description_path": "dados/personas/dani-stella/persona_description.md",
     "long_term_memory": [
       {
         "id": 1,
-        "file_path": "dados/personas/professores/redacao/dani-stella/knowledge/conectivos.md",
+        "file_path": "dados/personas/dani-stella/knowledge/conectivos.md",
         "description": "Guide to connectors used in essay writing.",
         "relevance": 0,
         "justification": "Essential for understanding cohesive writing."
       },
       {
         "id": 2,
-        "file_path": "dados/personas/professores/redacao/dani-stella/knowledge/operadores-argumentativos.md",
+        "file_path": "dados/personas/dani-stella/knowledge/operadores-argumentativos.md",
         "description": "List of argumentative operators for robust essay arguments.",
         "relevance": 1,
         "justification": "Useful for evaluating argumentative structure." 
