@@ -37,10 +37,10 @@ class ChatInterface:
         with st.container(border=True):
             self.history = st.container(border=False)
             st.markdown("---")
-            self.input_prompt = st.chat_input("O que gostaria de perguntar?")
+            self.input_prompt = st.chat_input("What would you like to ask?")
 
         self.layout_initialized = True
-        self.settings_container = st.expander("Configurações atuais do modelo de inteligência artificial", expanded=False)
+        self.settings_container = st.expander("Current settings for the artifial intelligence model", expanded=False)
         self.print_initial_model_settings()
 
     def reset_ai_chat(self, llm_family, user_name, user_avatar, persona_name, persona_description, persona_files, send_initial_message):
@@ -130,7 +130,7 @@ class ChatInterface:
                 st.markdown(user_message)
 
         if len(prefix_message_context) > 0:
-            message_context += "---\n\nContexto do input do estudante:\n\n" + prefix_message_context
+            message_context += "---\n\nInput context:\n\n" + prefix_message_context
 
         self.send_ai_message(message_context + message_content)
 
@@ -141,8 +141,8 @@ class ChatInterface:
         with self.history:
             outputs = []
 
-            with st.spinner("Seu professor(a) está processando sua mensagem..."):
-                with st.chat_message(self.ai_name, avatar=self.ai_avatar):
+            with st.chat_message(self.ai_name, avatar=self.ai_avatar):
+                with st.spinner("Your teacher(a) is searching for your answer..."):
                     try:
                         responses = self.ai_chat.send_message(message_content, stream=True)
 
@@ -167,8 +167,7 @@ class ChatInterface:
                                 context_error = "Isto pode ser um problema com o modelo de IA. Tente re-enviar sua mensagem ou mudar elementos de sua pergunta. E lembre-se: estes modelos de IA são muito recentes. Então apesar de não ser o ideal, erros assim acontecerão ocasionamente até que a tecnologia amadureça."
 
                                 if len(response.candidates) == 0:
-                                    print("A resposta está vazia.")
-                                    yield f":red[Erro: a resposta gerado pela está vazia. {context_error}]"
+                                    yield f":red[Error: the answer is empty. {context_error}]"
                                     continue
 
                                 candidate = response.candidates[0]
@@ -188,19 +187,15 @@ class ChatInterface:
                                 elif candidate.finish_reason == "FINISH_REASON_STOP":
                                     yield "\n\n"
                                 elif candidate.finish_reason == "FINISH_REASON_MAX_TOKENS":
-                                    yield candidate.text + "\n\n:yellow[Nota: Resposta truncada devido ao limite de tokens.]\n\n"
+                                    yield candidate.text + "\n\n:yellow[Nota: Truncated answer due to token limitations.]\n\n"
                                 elif candidate.finish_reason == "FINISH_REASON_SAFETY":
-                                    print("A resposta foi interrompida por motivos de segurança.")
-                                    yield ":red[Erro: A resposta contém conteúdo inapropriado.]\n\n"
+                                    yield ":red[Erro: The answer has something inappropriate.]\n\n"
                                 elif candidate.finish_reason == "FINISH_REASON_RECITATION":
-                                    print("A resposta foi interrompida devido a citações não autorizadas.")
-                                    yield ":red[Erro: A resposta contém citações não autorizadas.]\n\n"
+                                    yield ":red[Erro: The answer has invalid citations.]\n\n"
                                 elif candidate.finish_reason == "FINISH_REASON_UNSPECIFIED":
-                                    print("A resposta foi interrompida por um motivo não especificado.")
-                                    yield ":red[Erro: Motivo da interrupção não especificado.]\n\n"
+                                    yield ":red[Erro: Interruption meaning unspecified.]\n\n"
                                 else:
-                                    print(f"A resposta foi interrompida por um motivo desconhecido: {candidate.finish_reason}.")
-                                    yield f":red[Erro: Motivo da interrupção desconhecido ({candidate.finish_reason}). {context_error}]\n\n"
+                                    yield f":red[Erro: Unrecognized interruption ({candidate.finish_reason}). {context_error}]\n\n"
 
                                 print("-------------------------------------------------")
                         responses_generator = format_response(responses)
