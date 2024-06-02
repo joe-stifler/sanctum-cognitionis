@@ -60,7 +60,7 @@ def model_settings(chat_connector, logger):
         "IRP: Dani Stella (the artificial intelligence) [PRO] [ENGLISH]": "dados/personas/dani-stella/persona_config_pro_irp.json",
         "IRP: Dani Stella Flash (the artificial intelligence) [PRO] [CHINESE]": "dados/personas/dani-stella/persona_config_pro_chinese.json",
         "IRP: Dani Stella (the artificial intelligence) [FLASH] [ENGLISH]": "dados/personas/dani-stella/persona_config_flash_irp.json",
-        "IRP: Dani Stella Flash (the artificial intelligence) [FLASH] [CHINESE]": "dados/personas/dani-stella/persona_config_flash_flash_chinese.json",
+        "IRP: Dani Stella Flash (the artificial intelligence) [FLASH] [CHINESE]": "dados/personas/dani-stella/persona_config_flash_irp_chinese.json",
         "Gemini 1.5 Pro": "dados/personas/gemini-1_5/persona_config_pro.json",
         "Gemini 1.5 Flash": "dados/personas/gemini-1_5/persona_config_flash.json",
         "Pensador Profundo": "dados/personas/persador_profundo/persona_config.json",

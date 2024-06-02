@@ -27,7 +27,6 @@ def render_chat_history(chat_connector, logger):
             st.write(f":red[{chat_message.ai_name}]")
             st.write(''.join(chat_message.ai_messages))
 
-            # if os.environ.get("FORCE_LLM_MOCK_FAMILY"):
             write_medatada_chat_message("assistant", chat_message.ai_extra_args)
 
     return chat_history
@@ -48,8 +47,8 @@ def chat_messages(chat_history, user_input_message, user_uploaded_files, logger)
 
             # Display AI responses
             with st.chat_message("assistant", avatar=persona.avatar):
+                st.write(f":red[{chat_history.get_persona().name}]")
                 with st.spinner("I am processing your message..."):
-                    st.write(f":red[{chat_history.get_persona().name}]")
                     new_ai_message = st.empty()
                     new_chat_message = chat_history.send_ai_message(
                         user_input_message, user_uploaded_files
@@ -71,7 +70,7 @@ def chat_messages(chat_history, user_input_message, user_uploaded_files, logger)
             if "400 API key not valid" in error_str:
                 st.error("Error during chat initialization: invalid Google API key")
             else:
-                st.error(f"Erro: {error_str}\nDetails: {error_details}")
+                st.error(f"Error: {error_str}\nDetails: {error_details}")
 
     if len(chat_history.chat_messages) == 0:
         st.info(f"""`{persona.name}` is waiting to help you. Don't be shy! Take the initiave and ask for a critic.\n\n""")
