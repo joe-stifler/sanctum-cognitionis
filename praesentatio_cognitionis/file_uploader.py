@@ -4,6 +4,7 @@ from praesentatio_cognitionis.streamlit_file_handler import StreamlitFileHandler
 # module imports from the standard python environment
 import streamlit as st
 
+@st.experimental_fragment
 def file_uploader_fragment(user_input_message):
     if "file_uploader_counter" not in st.session_state:
         st.session_state["file_uploader_counter"] = 0
