@@ -19,7 +19,7 @@ def render_chat_history(chat_connector, logger):
     # Display past messages from chat history
     for chat_message in chat_history.chat_messages:
         with st.chat_message("user", avatar="👩🏾‍🎓"):
-            st.write(":blue[Usuário]")
+            st.write(":blue[User]")
             st.write(chat_message.user_message)
             write_medatada_chat_message("user", chat_message.user_uploaded_files)
 
@@ -32,7 +32,6 @@ def render_chat_history(chat_connector, logger):
 
     return chat_history
 
-# @st.experimental_fragment
 def chat_messages(chat_history, user_input_message, user_uploaded_files, logger):
     persona = chat_history.get_persona()
 
@@ -42,16 +41,16 @@ def chat_messages(chat_history, user_input_message, user_uploaded_files, logger)
 
             # Display User Message
             with st.chat_message("user", avatar="👩🏾‍🎓"):
-                st.write(":blue[Usuário]")
+                st.write(":blue[User]")
                 st.write(user_input_message)
-                with st.spinner("Processsando arquivos do usuário..."):
-                    write_medatada_chat_message("usuario", user_uploaded_files)
+                with st.spinner("Processing user files..."):
+                    write_medatada_chat_message("user", user_uploaded_files)
 
             # Display AI responses
             with st.chat_message("assistant", avatar=persona.avatar):
-                st.write(f":red[{chat_history.get_persona().name}]")
-                new_ai_message = st.empty()
-                with st.spinner("Estou processando sua mensagem..."):
+                with st.spinner("I am processing your message..."):
+                    st.write(f":red[{chat_history.get_persona().name}]")
+                    new_ai_message = st.empty()
                     new_chat_message = chat_history.send_ai_message(
                         user_input_message, user_uploaded_files
                     )
@@ -61,8 +60,8 @@ def chat_messages(chat_history, user_input_message, user_uploaded_files, logger)
             st.session_state["start_new_conversation"] = False
 
         except FileNotFoundError as e:
-            logger.error("Erro ao inicializar a persona: %s", str(e))
-            st.error(f"Erro ao inicializar a persona: {e}")
+            logger.error("Error during the persona initialization: %s", str(e))
+            st.error(f"Error during the persona initialization: {e}")
         except Exception as e:
             error_str = str(e)
 
@@ -70,9 +69,9 @@ def chat_messages(chat_history, user_input_message, user_uploaded_files, logger)
             logger.error(f"Error processing user input: %s\nDetails: %s", error_str, error_details)
 
             if "400 API key not valid" in error_str:
-                st.error("Erro ao inicializar o chat: API key inválida")
+                st.error("Error during chat initialization: invalid Google API key")
             else:
                 st.error(f"Erro: {error_str}\nDetails: {error_details}")
 
     if len(chat_history.chat_messages) == 0:
-        st.info(f"""`{persona.name}` está esperando para lhe ajudar. Não seja tímido! Dê o primeiro passo e incie a conversa abaixo 🙂\n\n""")
+        st.info(f"""`{persona.name}` is waiting to help you. Don't be shy! Take the initiave and ask for a critic.\n\n""")
