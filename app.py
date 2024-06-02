@@ -81,7 +81,7 @@ def main():
                     chat_history = render_chat_history(chat_connector, logger)
                     chat_messages(chat_history, user_input_message, user_uploaded_files, logger)
                 else:
-                    warning_message = "⚠️ Defina acima a chave de acesso do Google. Caso não possua, siga as intruções no [site oficial do Google](https://makersuite.google.com/app/apikey)."
+                    warning_message = "⚠️ Set your Google API token above. Follow the instructions in the [official website](https://makersuite.google.com/app/apikey) to create a new one."
                     st.warning(warning_message)
                     st.toast(warning_message)
 
