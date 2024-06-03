@@ -57,15 +57,23 @@ def set_model(persona_name, persona_file, chat_connector, logger, google_api_key
 
 def model_settings(chat_connector, logger):
     available_personas = {
-        "IRP: Dani Stella (the artificial intelligence) [PRO] [ENGLISH]": "dados/personas/dani-stella/persona_config_pro_irp.json",
-        "IRP: Dani Stella Flash (the artificial intelligence) [PRO] [CHINESE]": "dados/personas/dani-stella/persona_config_pro_chinese.json",
-        "IRP: Dani Stella (the artificial intelligence) [FLASH] [ENGLISH]": "dados/personas/dani-stella/persona_config_flash_irp.json",
-        "IRP: Dani Stella Flash (the artificial intelligence) [FLASH] [CHINESE]": "dados/personas/dani-stella/persona_config_flash_irp_chinese.json",
-        "Gemini 1.5 Pro": "dados/personas/gemini-1_5/persona_config_pro.json",
-        "Gemini 1.5 Flash": "dados/personas/gemini-1_5/persona_config_flash.json",
-        "Pensador Profundo": "dados/personas/persador_profundo/persona_config.json",
-        "Dani Stella (a inteligência artificial)": "dados/personas/dani-stella/persona_config.json",
-        "Dani Stella (a inteligência artificial) [Flash]": "dados/personas/dani-stella/persona_config_flash.json",
+        "Yixuan Jiang: the digital meeting assistant [Gemini 1.5 Pro] [English]": "dados/personas/yixuan-jiang-english/persona_config_pro.json",
+
+        "Yixuan Jiang: the digital meeting assistant [Gemini 1.5 Pro] [Chinese]": "dados/personas/yixuan-jiang-chinese/persona_config_pro.json",
+
+        "Yixuan Jiang: the digital meeting assistant [Gemini 1.5 Flash] [English]": "dados/personas/yixuan-jiang-english/persona_config_flash.json",
+
+        "Yixuan Jiang: the digital meeting assistant [Gemini 1.5 Flash] [Chinese]": "dados/personas/yixuan-jiang-chinese/persona_config_flash.json",
+
+        "Gemini 1.5  [Gemini 1.5 Pro] [Português]": "dados/personas/gemini-1_5/persona_config_pro.json",
+
+        "Gemini 1.5 [Gemini 1.5 Flash] [Português]": "dados/personas/gemini-1_5/persona_config_flash.json",
+
+        "Pensador Profundo  [Flash] [Português]": "dados/personas/persador_profundo/persona_config.json",
+
+        "Dani Stella (a inteligência artificial) [PRO] [Português]": "dados/personas/dani-stella/persona_config.json",
+
+        "Dani Stella (a inteligência artificial) [Flash] [Português]": "dados/personas/dani-stella/persona_config_flash.json",
     }
 
     if "session_id" not in st.session_state:
@@ -73,7 +81,7 @@ def model_settings(chat_connector, logger):
         if "GOOGLE_DEV" in st.secrets:
             google_api_key = st.secrets["GOOGLE_DEV"]["GOOGLE_API_KEY"]
 
-        persona_name = "IRP: Dani Stella (the artificial intelligence) [FLASH] [ENGLISH]"
+        persona_name = "Yixuan Jiang: the digital meeting assistant [Gemini 1.5 Pro] [English]"
 
         set_model(
             persona_name=persona_name,

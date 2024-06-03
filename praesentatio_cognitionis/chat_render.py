@@ -73,4 +73,4 @@ def chat_messages(chat_history, user_input_message, user_uploaded_files, logger)
                 st.error(f"Error: {error_str}\nDetails: {error_details}")
 
     if len(chat_history.chat_messages) == 0:
-        st.info(f"""`{persona.name}` is waiting to help you. Don't be shy! Take the initiave and ask for a critic.\n\n""")
+        st.info(f"""`{persona.name}` is waiting to help you. Don't be shy! Take the initiave and ask for help.\n\n""")
