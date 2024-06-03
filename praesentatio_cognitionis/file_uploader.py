@@ -17,7 +17,7 @@ def file_uploader_fragment(user_input_message):
         file_uploader_key = f"file_uploader_{file_uploader_id}"
 
         return files_container.file_uploader(
-            "Upload de arquivos",
+            "File Upload",
             accept_multiple_files=True,
             key=file_uploader_key,
             label_visibility='collapsed',

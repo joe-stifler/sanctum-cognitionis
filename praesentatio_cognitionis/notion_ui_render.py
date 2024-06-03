@@ -28,7 +28,7 @@ def notion_search_and_select(user_input_message):
             st.session_state["notion_api_token"] = default_notion_api_key
 
         notion_api_key = st.text_input(
-            "Token do Notion",
+            "Notion API Key",
             key="ti_notion_api_token",
             type="password",
             value=st.session_state.get("notion_api_token", '')
@@ -36,11 +36,11 @@ def notion_search_and_select(user_input_message):
 
         with st.form(key="notion_search_form", clear_on_submit=True, border=False):
             notion_url = st.text_input(
-                "URL do Notion",
+                "Notion URL",
                 key="notion_url",
-                placeholder='Notion URL',
+                placeholder='Copy and paste your Notion URL here',
                 autocomplete="off",
-                help="Copie e cole a URL do Notion aqui."
+                help="Copy and paste your Notion URL here."
             )
 
             if "profundidade_notion" not in st.session_state:
@@ -49,16 +49,16 @@ def notion_search_and_select(user_input_message):
             profundidade_notion_atual = st.session_state["profundidade_notion"]
 
             profundidade = st.number_input(
-                "Profundidade",
+                "Notion page depth",
                 min_value=-1,
                 max_value=10,
                 value=profundidade_notion_atual,
-                placeholder="Profundidade da busca no Notion. -1 para buscar até o fim.",
-                help="Profundidade da busca no Notion. -1 para buscar até o fim.",
+                placeholder="Depth of indexing. -1 to download all Notion pages reachable from URL root.",
+                help="Depth of indexing. -1 to download all Notion pages.",
             )
 
             # Input URL and Button
-            buscar_notion = st.form_submit_button("Buscar", use_container_width=True)
+            buscar_notion = st.form_submit_button("Search", use_container_width=True)
 
         notion_nodes = st.session_state.get("notion_nodes", {})
 
@@ -66,10 +66,9 @@ def notion_search_and_select(user_input_message):
 
         def create_multiselect(notion_multiselect_id):
             return notion_container.multiselect(
-                "Urls do notion indexadas:",
+                "Indexed Notion URLs:",
                 options=list(notion_nodes.items()),
                 default=list(notion_nodes.items()),
-                disabled=True,
                 key="selected_node_urls_" + str(notion_multiselect_id),
                 format_func=lambda x: x[1].object + ": " + x[0],
             )
@@ -137,16 +136,16 @@ def notion_search_and_select(user_input_message):
                         # Update the session state with the fetched nodes
                         st.session_state["notion_nodes"] = notion_nodes
 
-                        st.toast(f"🎉 Sucesso ao indexar a URL do Notion `{notion_url}`")
+                        st.toast(f"🎉 Success during the URL Notion Indexing `{notion_url}`")
 
                         time.sleep(2)
                         st.rerun()
                     except Exception as e:
-                        st.toast("❌ Erro ao indexar o Notion. Verifique a URL e o token da API: " + str(e))
+                        st.toast("❌ Error during the URL Notion Indexing. Please, check your URL and ensure it's properly connected with your Notion API Token: " + str(e))
                         return
 
             else:
-                st.toast("⚠️ Por favor, insira uma URL do Notion. ⚠️")
+                st.toast("⚠️ Please, update your Notion API Key. ⚠️")
 
     if user_input_message and len(user_input_message) > 0 and len(selected_nodes) > 0:
         # remove the selected_nodes from st.session_state["notion_nodes"]

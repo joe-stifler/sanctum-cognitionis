@@ -52,7 +52,6 @@ def set_model(persona_name, persona_file, chat_connector, logger, google_api_key
     st.session_state["persona_file"] = persona_file
     st.session_state["session_id"] = chat_history.session_id
 
-    st.toast("Modelo e Persona configurados com sucesso!")
     st.rerun()
 
 def model_settings(chat_connector, logger):
@@ -81,7 +80,7 @@ def model_settings(chat_connector, logger):
         if "GOOGLE_DEV" in st.secrets:
             google_api_key = st.secrets["GOOGLE_DEV"]["GOOGLE_API_KEY"]
 
-        persona_name = "Yixuan Jiang: the digital meeting assistant [Gemini 1.5 Pro] [English]"
+        persona_name = "Yixuan Jiang: the digital meeting assistant [Gemini 1.5 Flash] [English]"
 
         set_model(
             persona_name=persona_name,
@@ -94,15 +93,16 @@ def model_settings(chat_connector, logger):
     with st.expander("Model Settings", expanded=False):
         available_persona_names = list(available_personas.keys())
         persona_name = st.selectbox(
-            "Which one would you like to use?",
+            "Choose your preferred persona",
             available_persona_names,
             index=available_persona_names.index(st.session_state.get("persona_name", "Gemini"))
         )
 
         google_api_key = st.text_input(
-            "Google AI API Key",
+            "Set your Google Gemini API Key",
             key="api_token",
             type="password",
+            help="Follow the instructions in the [official website](https://makersuite.google.com/app/apikey) to create a new API Key",
             value=st.session_state.get("google_api_key", '')
         )
         atualizar_configuracoes = st.button("Update Settings")

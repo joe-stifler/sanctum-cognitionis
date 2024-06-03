@@ -32,12 +32,12 @@ def main():
                 overflow-x: hidden;
                 padding-left: 10vw;
                 padding-right: 10vw;
-                padding-bottom: 15px;
+                padding-bottom: 25px;
             }
     """):
         parent_chat_container = stylable_container(key="chat_container", css_styles="""
                 {
-                    min-height: 5vh;
+                    margin-top: 60px;
                     height: calc(100% - 90px);
                     max-height: calc(93vh - 90px);
                 }
@@ -63,7 +63,7 @@ def main():
             files_popover = columns[1].popover("📎", use_container_width=True)
 
             with columns[2]:
-                user_input_message = st.chat_input("Digite sua mensagem aqui...")
+                user_input_message = st.chat_input("Type your message here...")
 
             with notion_popover:
                 selected_nodes = notion_search_and_select(user_input_message)
@@ -81,9 +81,8 @@ def main():
                     chat_history = render_chat_history(chat_connector, logger)
                     chat_messages(chat_history, user_input_message, user_uploaded_files, logger)
                 else:
-                    warning_message = "⚠️ Set your Google API token above. Follow the instructions in the [official website](https://makersuite.google.com/app/apikey) to create a new one."
+                    warning_message = "⚠️ Set your Google API Key above. Follow the instructions in the [official website](https://makersuite.google.com/app/apikey) to create a new API Key."
                     st.warning(warning_message)
-                    st.toast(warning_message)
 
 
 main()
