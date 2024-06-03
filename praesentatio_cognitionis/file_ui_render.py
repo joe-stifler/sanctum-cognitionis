@@ -24,7 +24,7 @@ def write_medatada_chat_message(role, files):
         if not os.environ.get("FORCE_LLM_MOCK_FAMILY"):
             return
 
-        with st.expander("**Metadados da resposta**", expanded=False):
+        with st.expander("**Response metadata**", expanded=False):
             cols = st.columns(num_cols)
 
             for idx, arguments in enumerate(files):
@@ -39,6 +39,7 @@ def write_medatada_chat_message(role, files):
             with stylable_container(key="file_container", css_styles="""
                     {
                         max-height: 450px;
+                        overflow-y: auto;
                     }
             """):
                 if isinstance(file, ImageFile):
@@ -60,4 +61,4 @@ def write_medatada_chat_message(role, files):
                 elif isinstance(file, VideoFile):
                     st.video(file.content, format=file.mime_type)
                 else:
-                    st.error(f"Arquivo não suportado: {file.name}")
+                    st.error(f"File not supported: {file.name}")
