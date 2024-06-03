@@ -7,6 +7,7 @@ from praesentatio_cognitionis.files import (
 import os
 import streamlit as st
 from streamlit_pdf_viewer import pdf_viewer
+from streamlit_extras.stylable_container import stylable_container
 
 @st.experimental_fragment
 def write_medatada_chat_message(role, files):
@@ -35,12 +36,16 @@ def write_medatada_chat_message(role, files):
 
     for idx, file in enumerate(files):
         with st.expander(f"**{file.name}**", expanded=False):
-            with st.container(height=450, border=False):
+            with stylable_container(key="file_container", css_styles="""
+                    {
+                        max-height: 450px;
+                    }
+            """):
                 if isinstance(file, ImageFile):
                     st.image(file.content, caption=file.name)
                 elif isinstance(file, PDFFile):
                     all_counter = st.session_state.get('pdf_counter', 0)
-                    pdf_viewer(file.content, height=600, key=f"pdf_{all_counter}_{idx}")
+                    pdf_viewer(file.content, height=450, key=f"pdf_{all_counter}_{idx}")
                     st.session_state['pdf_counter'] = all_counter + 1
                 elif isinstance(file, TextFile):
                     st.markdown(file.content)

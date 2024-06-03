@@ -28,6 +28,9 @@ class FileObject(BaseModel):
     url: Optional[str] = None
     expiry_time: Optional[datetime] = None
 
+    def to_string(self):
+        return f"[{self.url}:expire_type:{self.expiry_time}]({self.url})"
+
 @dataclass
 class EmojiObject(BaseModel):
     type: Literal["emoji"]
@@ -86,7 +89,12 @@ class PageProperty(BaseModel):
         elif property_type == "email":
             return self.email.get("email", None) if isinstance(self.email, dict) else self.email
         elif property_type == "files":
-            return [file.get("file", {}).get("url", None) for file in self.files.get("files", [])] if isinstance(self.files, dict) else self.files
+            if isinstance(self.files, dict):
+                return [file.get("file", {}).get("url", None) for file in self.files.get("files", [])]
+            
+            if isinstance(self.files, list):
+                return [file.to_string() for file in self.files]
+
         elif property_type == "formula":
             formula_type = self.formula.get('type', None)
             return self.formula.get(formula_type, None) if formula_type else None
@@ -107,7 +115,7 @@ class PageProperty(BaseModel):
         elif property_type == "people":
             if isinstance(self.people, dict):
                 return []
-            
+
             # else it's a list of personuser
             return [person.id for person in self.people]
         elif property_type == "phone_number":
