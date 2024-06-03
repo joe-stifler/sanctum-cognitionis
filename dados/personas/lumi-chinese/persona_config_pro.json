@@ -1,0 +1,8 @@
+{
+    "name": "露米：人工智能会议分析助手 [简体中文] [Gemini 1.5 Pro]",
+    "avatar": "👩🏻‍🏫",
+    "full_knowledge": [],
+    "knowledge": [],
+    "persona_description_file": "dados/personas/lumi-chinese/persona_description.md",
+    "thinking_process": "GeminiDevModelPro1_5"
+}

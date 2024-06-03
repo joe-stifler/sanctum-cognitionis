@@ -56,13 +56,13 @@ def set_model(persona_name, persona_file, chat_connector, logger, google_api_key
 
 def model_settings(chat_connector, logger):
     available_personas = {
-        "Yixuan: the digital meeting assistant [Gemini 1.5 Pro] [English]": "dados/personas/yixuan-jiang-english/persona_config_pro.json",
+        "Lumi: the digital meeting assistant [Gemini 1.5 Pro] [English]": "dados/personas/lumi-english/persona_config_pro.json",
 
-        "Yixuan: the digital meeting assistant [Gemini 1.5 Pro] [Chinese]": "dados/personas/yixuan-jiang-chinese/persona_config_pro.json",
+        "Lumi: the digital meeting assistant [Gemini 1.5 Pro] [Chinese]": "dados/personas/lumi-chinese/persona_config_pro.json",
 
-        "Yixuan: the digital meeting assistant [Gemini 1.5 Flash] [English]": "dados/personas/yixuan-jiang-english/persona_config_flash.json",
+        "Lumi: the digital meeting assistant [Gemini 1.5 Flash] [English]": "dados/personas/lumi-english/persona_config_flash.json",
 
-        "Yixuan: the digital meeting assistant [Gemini 1.5 Flash] [Chinese]": "dados/personas/yixuan-jiang-chinese/persona_config_flash.json",
+        "Lumi: the digital meeting assistant [Gemini 1.5 Flash] [Chinese]": "dados/personas/lumi-chinese/persona_config_flash.json",
 
         "Gemini 1.5  [Gemini 1.5 Pro] [Português]": "dados/personas/gemini-1_5/persona_config_pro.json",
 
@@ -80,7 +80,7 @@ def model_settings(chat_connector, logger):
         if "GOOGLE_DEV" in st.secrets:
             google_api_key = st.secrets["GOOGLE_DEV"]["GOOGLE_API_KEY"]
 
-        persona_name = "Yixuan: the digital meeting assistant [Gemini 1.5 Flash] [English]"
+        persona_name = "Lumi: the digital meeting assistant [Gemini 1.5 Flash] [English]"
 
         set_model(
             persona_name=persona_name,
