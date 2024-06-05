@@ -68,7 +68,7 @@ class PandasFile(BaseFile):
     }
 
     def __init__(self, name, content):
-        super().__init__(name, content, "text/plain", "tabular_data")
+        super().__init__(name, content, "text/plain", "text")
 
     def get_content_as_bytes(self):
         return self.content.to_csv(index=False).encode("utf-8")
@@ -156,7 +156,7 @@ class CodeFile(BaseFile):
     }
 
     def __init__(self, name, content, suffix):
-        super().__init__(name, content, "text/plain", "code")
+        super().__init__(name, content, "text/plain", "text")
 
         self._language = ""
 

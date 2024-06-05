@@ -3,17 +3,20 @@ from servitium_cognitionis.llms.base import LLMBaseModel
 import google.generativeai as genai
 from google.ai.generativelanguage import Part, Blob
 
+
 class GeminiDevBaseModel(LLMBaseModel):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self._model_instance = None
         self._model_chats = {}
 
-    def initialize_model(self, system_instruction=[], temperature=None, max_output_tokens=None):
+    def initialize_model(
+        self, system_instruction=[], temperature=None, max_output_tokens=None
+    ):
         additional_args = {}
         if len(system_instruction) > 0:
             additional_args = {
-                'system_instruction': system_instruction,
+                "system_instruction": system_instruction,
             }
 
         self._model_chats = {}
@@ -25,12 +28,12 @@ class GeminiDevBaseModel(LLMBaseModel):
                 # max_output_tokens=max_output_tokens,
             ),
             safety_settings={
-                'harassment': 'block_only_high',
-                'hate_speech': 'block_only_high',
-                'sexual': 'block_only_high',
-                'dangerous': 'block_only_high',
+                "harassment": "block_only_high",
+                "hate_speech": "block_only_high",
+                "sexual": "block_only_high",
+                "dangerous": "block_only_high",
             },
-            **additional_args
+            **additional_args,
         )
 
     def check_chat_session_exists(self, session_id):
@@ -38,7 +41,9 @@ class GeminiDevBaseModel(LLMBaseModel):
 
     def create_chat(self, session_id):
         if self._model_instance is None:
-            raise ValueError("Model has not been initialized. Call initialize_model() first")
+            raise ValueError(
+                "Model has not been initialized. Call initialize_model() first"
+            )
 
         if session_id in self._model_chats:
             raise ValueError("Chat session already exists. Call end_chat() first")
@@ -54,44 +59,68 @@ class GeminiDevBaseModel(LLMBaseModel):
             file_content = file.get_content_as_bytes()
 
             if not isinstance(file_content, list):
-                file_content = [file_content, ]
+                file_content = [
+                    file_content,
+                ]
 
             parts = []
             total_parts = len(file_content)
 
             for idx, file_content_part in enumerate(file_content):
-                chunk_part = Part(text=f"Parte {idx + 1} / {total_parts} do arquivo:\n")
-
-                begin_delimiter_part = Part(text=file.begin_delimiter_content())
-                end_delimiter_part = Part(text=file.end_delimiter_content())
-                parts.extend(
-                    [
-                        chunk_part,
-                        begin_delimiter_part,
-                        Part(
-                            inline_data=Blob(
-                                mime_type=file.mime_type,
-                                data=file_content_part,
-                            )
-                        ),
-                        end_delimiter_part
-                    ]
-                )
+                # Use Part(text...) for text-based files
+                if file.media_type == "text":
+                    chunk_part = Part(text=f"Part {idx + 1} / {total_parts} of file:\n")
+                    parts.extend(
+                        [
+                            chunk_part,
+                            Part(text=file.begin_delimiter_content()),
+                            Part(text=file_content_part.decode("utf-8")),
+                            Part(text=file.end_delimiter_content()),
+                        ]
+                    )
+                else:
+                    chunk_part = Part(text=f"Part {idx + 1} / {total_parts} of file:\n")
+                    parts.extend(
+                        [
+                            chunk_part,
+                            Part(text=file.begin_delimiter_content()),
+                            Part(
+                                inline_data=Blob(
+                                    mime_type=file.mime_type,
+                                    data=file_content_part,
+                                )
+                            ),
+                            Part(text=file.end_delimiter_content()),
+                        ]
+                    )
 
             filename_part = Part(text=file.metadata_header())
-            gemini_parts.extend([filename_part, ] + parts)
+            gemini_parts.extend(
+                [
+                    filename_part,
+                ]
+                + parts
+            )
         return gemini_parts
 
     def create_llm_request(self, prompt, system_message, processed_files):
         """
         Creates a complete LLM request with processed files and prompt.
         """
-        gemini_system_part = [Part(text=system_message), ] if system_message else []
+        gemini_system_part = (
+            [
+                Part(text=system_message),
+            ]
+            if system_message
+            else []
+        )
         gemini_file_parts = self.convert_to_gemini_parts(processed_files)
         gemini_prompt_part = [Part(text=prompt)]
         return gemini_system_part + gemini_file_parts + gemini_prompt_part
 
-    def send_stream_chat_message(self, session_id, message, system_message=None, files=[]):
+    def send_stream_chat_message(
+        self, session_id, message, system_message=None, files=[]
+    ):
         messages = self.create_llm_request(message, system_message, files)
 
         if session_id not in self._model_chats:
@@ -102,7 +131,7 @@ class GeminiDevBaseModel(LLMBaseModel):
             stream=True,
             request_options={
                 "timeout": 60 * 20,
-            }
+            },
         )
 
         return self.process_ai_response_stream(session_id, ai_response_stream)
@@ -110,7 +139,9 @@ class GeminiDevBaseModel(LLMBaseModel):
     def send_stream_single_message(self, message, system_message=None, files=[]):
         messages = self.create_llm_request(message, system_message, files)
 
-        ai_response_stream = self._model_instance.generate_content(messages, stream=True)
+        ai_response_stream = self._model_instance.generate_content(
+            messages, stream=True
+        )
         return self.process_ai_response_stream(None, ai_response_stream)
 
     def process_ai_response_stream(self, session_id, responses):
@@ -118,14 +149,14 @@ class GeminiDevBaseModel(LLMBaseModel):
 
         try:
             for chunk in responses:
-                text_message = ''
+                text_message = ""
                 new_ai_message_args = {}
 
-                if hasattr(chunk, 'text'):
+                if hasattr(chunk, "text"):
                     text_message = chunk.text
 
-                if hasattr(chunk, 'prompt_feedback'):
-                    new_ai_message_args['prompt_feedback'] = chunk.prompt_feedback
+                if hasattr(chunk, "prompt_feedback"):
+                    new_ai_message_args["prompt_feedback"] = chunk.prompt_feedback
 
                 yield text_message, new_ai_message_args
         except Exception as e:
@@ -136,6 +167,7 @@ class GeminiDevBaseModel(LLMBaseModel):
             text_message = f":red[Erro ao processar a mensagem: {e}]"
             yield text_message, new_ai_message_args
 
+
 class GeminiDevModelPro1_0(GeminiDevBaseModel):
     def __init__(self, temperature=0.1, max_output_tokens=2048):
         super().__init__(
@@ -143,8 +175,9 @@ class GeminiDevModelPro1_0(GeminiDevBaseModel):
             temperature=temperature,
             temperature_range=(0.0, 2.0),
             max_output_tokens=max_output_tokens,
-            output_tokens_range=(1, 2048)
+            output_tokens_range=(1, 2048),
         )
+
 
 class GeminiDevModelPro1_0Vision(GeminiDevBaseModel):
     def __init__(self, temperature=0.1, max_output_tokens=4096):
@@ -153,8 +186,9 @@ class GeminiDevModelPro1_0Vision(GeminiDevBaseModel):
             temperature=temperature,
             temperature_range=(0.0, 2.0),
             max_output_tokens=max_output_tokens,
-            output_tokens_range=(1, 4096)
+            output_tokens_range=(1, 4096),
         )
+
 
 class GeminiDevModelPro1_5(GeminiDevBaseModel):
     def __init__(self, temperature=0.1, max_output_tokens=8192):
@@ -163,7 +197,7 @@ class GeminiDevModelPro1_5(GeminiDevBaseModel):
             temperature=temperature,
             temperature_range=(0.0, 2.0),
             max_output_tokens=max_output_tokens,
-            output_tokens_range=(1, 8192)
+            output_tokens_range=(1, 8192),
         )
 
 
@@ -174,5 +208,5 @@ class GeminiDevModelPro1_5_Flash(GeminiDevBaseModel):
             temperature=temperature,
             temperature_range=(0.0, 2.0),
             max_output_tokens=max_output_tokens,
-            output_tokens_range=(1, 8192)
+            output_tokens_range=(1, 8192),
         )
