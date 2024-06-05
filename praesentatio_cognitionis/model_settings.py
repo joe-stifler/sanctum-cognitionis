@@ -28,7 +28,9 @@ def get_persona(persona_file):
     return persona
 
 
-def set_model(persona_name, persona_file, chat_connector, logger, google_api_key=None):
+def set_model(
+    persona_name, persona_file, model_name, chat_connector, logger, google_api_key=None
+):
     if "session_id" in st.session_state:
         chat_connector.delete_chat_history(st.session_state["session_id"])
         del st.session_state["session_id"]
@@ -39,7 +41,8 @@ def set_model(persona_name, persona_file, chat_connector, logger, google_api_key
 
     # Initialize or fetch existing chat history
     persona = get_persona(persona_file)
-    llm_model = get_llm_model(persona.thinking_process)
+    llm_family = GeminiDevFamily()
+    llm_model = llm_family.get_model(model_name)
 
     logger.info("Chosen Persona: %s", persona)
     logger.info("Chosen LLM Model: %s", llm_model)
@@ -50,7 +53,7 @@ def set_model(persona_name, persona_file, chat_connector, logger, google_api_key
 
     logger.info("Creating chat history with session_id: %s", chat_history.session_id)
 
-    st.session_state["model_name"] = persona.thinking_process
+    st.session_state["model_name"] = model_name
     st.session_state["persona_name"] = persona_name
     st.session_state["persona_file"] = persona_file
     st.session_state["session_id"] = chat_history.session_id
@@ -60,25 +63,26 @@ def set_model(persona_name, persona_file, chat_connector, logger, google_api_key
 
 def model_settings(chat_connector, logger):
     available_personas = {
-        "Lumi: The LLM SIG Digital Meeting Assistant [PRO]": "dados/personas/lumi-english/persona_config_pro.json",
-        "Lumi: The LLM SIG Digital Meeting Assistant [FLASH]": "dados/personas/lumi-english/persona_config_flash.json",
-        "Gemini 1.5  [Gemini 1.5 Pro] [Português]": "dados/personas/gemini-1_5/persona_config_pro.json",
-        "Gemini 1.5 [Gemini 1.5 Flash] [Português]": "dados/personas/gemini-1_5/persona_config_flash.json",
-        "Pensador Profundo  [Flash] [Português]": "dados/personas/persador_profundo/persona_config.json",
-        "Dani Stella (a inteligência artificial) [PRO] [Português]": "dados/personas/dani-stella/persona_config.json",
-        "Dani Stella (a inteligência artificial) [Flash] [Português]": "dados/personas/dani-stella/persona_config_flash.json",
+        "Lumi: your personal research companion": "dados/personas/lumi-english/persona_config.json",
+        "Gemini 1.5": "dados/personas/gemini-1_5/persona_config.json",
+        "Pensador Profundo": "dados/personas/persador_profundo/persona_config.json",
+        "Dani Stella (a inteligência artificial)": "dados/personas/dani-stella/persona_config.json",
     }
+
+    available_models = ["GeminiDevModelPro1_5", "GeminiDevModelPro1_5_Flash"]
 
     if "session_id" not in st.session_state:
         google_api_key = None
         if "GOOGLE_DEV" in st.secrets:
             google_api_key = st.secrets["GOOGLE_DEV"]["GOOGLE_API_KEY"]
 
-        persona_name = "Lumi: The LLM SIG Digital Meeting Assistant [FLASH]"
+        persona_name = "Lumi: your personal research companion"
+        model_name = "GeminiDevModelPro1_5_Flash"
 
         set_model(
             persona_name=persona_name,
             persona_file=available_personas[persona_name],
+            model_name=model_name,
             chat_connector=chat_connector,
             logger=logger,
             google_api_key=google_api_key,
@@ -90,7 +94,17 @@ def model_settings(chat_connector, logger):
             "Choose your preferred persona",
             available_persona_names,
             index=available_persona_names.index(
-                st.session_state.get("persona_name", "Gemini")
+                st.session_state.get(
+                    "persona_name", "Lumi: your personal research companion"
+                )
+            ),
+        )
+
+        model_name = st.selectbox(
+            "Choose your preferred model",
+            available_models,
+            index=available_models.index(
+                st.session_state.get("model_name", "GeminiDevModelPro1_5_Flash")
             ),
         )
 
@@ -107,6 +121,7 @@ def model_settings(chat_connector, logger):
             set_model(
                 persona_name=persona_name,
                 persona_file=available_personas[persona_name],
+                model_name=model_name,
                 chat_connector=chat_connector,
                 logger=logger,
                 google_api_key=google_api_key,
