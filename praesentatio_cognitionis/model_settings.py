@@ -63,7 +63,7 @@ def set_model(
 
 def model_settings(chat_connector, logger):
     available_personas = {
-        "Lumi: your personal research companion": "dados/personas/lumi-english/persona_config.json",
+        "Lumi: your personal research companion": "dados/personas/lumi/persona_config.json",
         "Gemini 1.5": "dados/personas/gemini-1_5/persona_config.json",
         "Pensador Profundo": "dados/personas/persador_profundo/persona_config.json",
         "Dani Stella (a inteligência artificial)": "dados/personas/dani-stella/persona_config.json",
