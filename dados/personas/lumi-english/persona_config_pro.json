@@ -1,8 +1,0 @@
-{
-    "name": "Lumi: the digital meeting assistant [English] [Gemini 1.5 Pro]",
-    "avatar": "👩🏻‍🏫",
-    "full_knowledge": [],
-    "knowledge": [],
-    "persona_description_file": "dados/personas/lumi-english/lumi_config_flash.html",
-    "thinking_process": "GeminiDevModelPro1_5"
-}
