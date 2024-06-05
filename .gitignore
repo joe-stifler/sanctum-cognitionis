@@ -35,3 +35,7 @@ data-preprocessing/
 logs/
 
 indexed_files/
+
+
+notebooks/**/*.html
+notebooks/**/*.md
