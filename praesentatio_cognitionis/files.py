@@ -14,6 +14,7 @@ def pdf_to_text(pdf_bytes):
         text += page.get_text()
     return text
 
+
 class BaseFile(ABC):
     """Abstract base class for processed files."""
 
@@ -58,8 +59,10 @@ class BaseFile(ABC):
     def end_delimiter_content(self):
         return "\n```\n\n"
 
+
 class PandasFile(BaseFile):
     """Represents a Pandas DataFrame file."""
+
     SUPPORTED_TYPES = {
         "csv": "text/plain",
     }
@@ -68,10 +71,12 @@ class PandasFile(BaseFile):
         super().__init__(name, content, "text/plain", "tabular_data")
 
     def get_content_as_bytes(self):
-        return self.content.to_csv(index=False).encode('utf-8')
+        return self.content.to_csv(index=False).encode("utf-8")
+
 
 class PDFFile(BaseFile):
     """Represents a PDF file."""
+
     SUPPORTED_TYPES = {
         "pdf": "application/pdf",
     }
@@ -83,10 +88,12 @@ class PDFFile(BaseFile):
         super().__init__(name, content, "text/plain", "text")
 
     def get_content_as_bytes(self):
-        return pdf_to_text(self.content).encode('utf-8')
+        return pdf_to_text(self.content).encode("utf-8")
+
 
 class ImageFile(BaseFile):
     """Represents an image file."""
+
     SUPPORTED_TYPES = {
         "png": "image/png",
         "jpeg": "image/jpeg",
@@ -103,13 +110,16 @@ class ImageFile(BaseFile):
         self.content.save(img_byte_arr, format=self.file_type.upper())
         return img_byte_arr.getvalue()
 
+
 class TextFile(BaseFile):
     """Represents a text file."""
+
     SUPPORTED_TYPES = {
         "txt": "text/plain",
         "md": "text/markdown",
         "srt": "text/plain",
         "json": "application/json",
+        "html": "text/plain",
     }
 
     def __init__(self, name, content, extension):
@@ -117,10 +127,12 @@ class TextFile(BaseFile):
         super().__init__(name, content, mime_type, "text")
 
     def get_content_as_bytes(self):
-        return self.content.encode('utf-8')
+        return self.content.encode("utf-8")
+
 
 class JsonFile(BaseFile):
     """Represents a JSON file."""
+
     SUPPORTED_TYPES = {
         # "json": "application/json",
     }
@@ -129,10 +141,12 @@ class JsonFile(BaseFile):
         super().__init__(name, content, "text/plain", "text")
 
     def get_content_as_bytes(self):
-        return json.dumps(self.content).encode('utf-8')
+        return json.dumps(self.content).encode("utf-8")
+
 
 class CodeFile(BaseFile):
     """Represents a code file."""
+
     SUPPORTED_TYPES = {
         "py": "text/plain",
         "cpp": "text/plain",
@@ -156,14 +170,16 @@ class CodeFile(BaseFile):
             raise ValueError(f"Unsupported code file type: {suffix}")
 
     def get_content_as_bytes(self):
-        return self.content.encode('utf-8')
+        return self.content.encode("utf-8")
 
     @property
     def language(self):
         return self._language
 
+
 class VideoFile(BaseFile):
     """Represents a video file."""
+
     SUPPORTED_TYPES = {
         "mp4": "video/mp4",
         "avi": "video/avi",
@@ -177,8 +193,10 @@ class VideoFile(BaseFile):
     def get_content_as_bytes(self):
         return self.content
 
+
 class AudioFile(BaseFile):
     """Represents an audio file."""
+
     SUPPORTED_TYPES = {
         "mp3": "audio/mp3",
         "wav": "audio/wav",
