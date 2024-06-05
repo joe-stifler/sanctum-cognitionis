@@ -1,22 +1,18 @@
 import json
 from datetime import datetime
 
+
 class Persona:
     def __init__(self, **kwargs):
-        self._name = kwargs.get('name', '')
-        self._avatar = kwargs.get('avatar', '🤖')
-        self._knowledge_files = kwargs.get('knowledge', [])
-        self._thinking_process = kwargs.get('thinking_process', None)
-        self._speech_conciseness = kwargs.get('speech_conciseness', None)
-        self._persona_description_file = kwargs.get('persona_description_file', '')
+        self._name = kwargs.get("name", "")
+        self._avatar = kwargs.get("avatar", "🤖")
+        self._knowledge_files = kwargs.get("knowledge", [])
+        self._speech_conciseness = kwargs.get("speech_conciseness", None)
+        self._persona_description_file = kwargs.get("persona_description_file", "")
 
     @property
     def name(self):
         return self._name
-
-    @property
-    def thinking_process(self):
-        return self._thinking_process
 
     @property
     def avatar(self):
@@ -34,26 +30,28 @@ class Persona:
         if len(self._knowledge_files) == 0:
             return ""
 
-        files_content = "## Arquivos disponíveis na base de conhecimento do professor(a):\n\n"
+        files_content = (
+            "## Arquivos disponíveis na base de conhecimento do professor(a):\n\n"
+        )
         files_content += "--------------------------------------------------------\n\n"
 
         for file_path in self._knowledge_files:
             files_content += f"### Conteúdo do arquivo `{file_path}`:\n\n"
-            
+
             extension = file_path.split(".")[-1]
             try:
-                with open(file_path, "r", encoding='utf-8') as file:
+                with open(file_path, "r", encoding="utf-8") as file:
                     files_content += f"```{extension}\n" + file.read() + "\n```\n\n"
             except FileNotFoundError:
                 files_content += "Arquivo não encontrado.\n\n"
-        
+
         return files_content
 
     def read_description(self):
         if len(self._persona_description_file) == 0:
             return ""
 
-        with open(self._persona_description_file, 'r', encoding='utf-8') as file:
+        with open(self._persona_description_file, "r", encoding="utf-8") as file:
             return file.read()
 
     def present_yourself(self):
@@ -83,11 +81,11 @@ class Persona:
         content_to_append = f"{separator}\n{timestamp}\n{separator}\n{initial_state}\n{separator}\n{timestamp}\n{separator}\n"
 
         # Append to the file
-        with open(file_path, "a", encoding='utf-8') as file:
+        with open(file_path, "a", encoding="utf-8") as file:
             file.write(content_to_append)
 
     @classmethod
     def from_json(cls, path):
-        with open(path, 'r', encoding='utf-8') as file:
+        with open(path, "r", encoding="utf-8") as file:
             persona_data = json.load(file)
             return cls(persona_data)
