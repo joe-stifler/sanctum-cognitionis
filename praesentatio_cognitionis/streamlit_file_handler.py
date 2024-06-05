@@ -6,7 +6,7 @@ from praesentatio_cognitionis.files import (
     ImageFile,
     TextFile,
     CodeFile,
-    VideoFile
+    VideoFile,
 )
 
 import json
@@ -14,6 +14,7 @@ import pandas as pd
 from PIL import Image
 from io import BytesIO
 from pathlib import Path
+
 
 class StreamlitFileHandler:
     SUPPORTED_FILE_TYPES = {
@@ -43,15 +44,15 @@ class StreamlitFileHandler:
         elif suffix in PDFFile.SUPPORTED_TYPES:
             return PDFFile(file.name, file.getvalue())
         elif suffix in TextFile.SUPPORTED_TYPES:
-            return TextFile(file.name, file.getvalue().decode('utf-8'), suffix)
+            return TextFile(file.name, file.getvalue().decode("utf-8"), suffix)
         elif suffix in AudioFile.SUPPORTED_TYPES:
             return AudioFile(file.name, file.getvalue(), suffix)
         elif suffix in JsonFile.SUPPORTED_TYPES:
-            return TextFile(file.name, file.getvalue().decode('utf-8'), suffix)
+            return TextFile(file.name, file.getvalue().decode("utf-8"), suffix)
         elif suffix in PandasFile.SUPPORTED_TYPES:
             return PandasFile(file.name, pd.read_csv(BytesIO(file.getvalue())))
         elif suffix in CodeFile.SUPPORTED_TYPES:
-            return CodeFile(file.name, file.getvalue().decode('utf-8'), suffix)
+            return CodeFile(file.name, file.getvalue().decode("utf-8"), suffix)
         elif suffix in VideoFile.SUPPORTED_TYPES:
             return VideoFile(file.name, file.getvalue(), suffix)
 
