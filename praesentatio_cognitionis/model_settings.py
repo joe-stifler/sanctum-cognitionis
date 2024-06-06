@@ -6,6 +6,7 @@ from servitium_cognitionis.llms.gemini import GeminiDevFamily
 from servitium_cognitionis.personas.persona_base import Persona
 
 # module imports from the standard python environment
+import time
 import json
 import streamlit as st
 import google.generativeai as genai
@@ -110,6 +111,12 @@ def model_settings(
                 google_api_key=st.session_state.get("google_api_key", ""),
             )
         else:
+            if persona_name:
+                st.error(
+                    f"The persona '{persona_name}' was not found. Using the default persona '{default_persona_name}' instead."
+                )
+                time.sleep(3)
+
             # If the persona does not exist, use the default persona
             st.session_state["persona_name"] = default_persona_name
             st.session_state["model_name"] = default_model_name
