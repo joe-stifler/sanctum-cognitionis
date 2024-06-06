@@ -61,7 +61,9 @@ def set_model(
     st.rerun()
 
 
-def model_settings(chat_connector, logger):
+def model_settings(
+    chat_connector, logger, google_api_key=None, persona_name=None, model_name=None
+):
     available_personas = {
         "Lumi: your personal research companion": "dados/personas/lumi/persona_config.json",
         "Gemini 1.5": "dados/personas/gemini-1_5/persona_config.json",
@@ -72,20 +74,34 @@ def model_settings(chat_connector, logger):
     available_models = ["GeminiDevModelPro1_5", "GeminiDevModelPro1_5_Flash"]
 
     if "session_id" not in st.session_state:
-        google_api_key = None
-        if "GOOGLE_DEV" in st.secrets:
-            google_api_key = st.secrets["GOOGLE_DEV"]["GOOGLE_API_KEY"]
+        # If the URL parameters are available, use them
+        if google_api_key:
+            st.session_state["google_api_key"] = google_api_key
+        if persona_name:
+            st.session_state["persona_name"] = persona_name
+        if model_name:
+            st.session_state["model_name"] = model_name
 
-        persona_name = "Lumi: your personal research companion"
-        model_name = "GeminiDevModelPro1_5_Flash"
+        # If the URL parameters are not available, use the default values
+        if "google_api_key" not in st.session_state:
+            if "GOOGLE_DEV" in st.secrets:
+                st.session_state["google_api_key"] = st.secrets["GOOGLE_DEV"][
+                    "GOOGLE_API_KEY"
+                ]
+
+        if "persona_name" not in st.session_state:
+            st.session_state["persona_name"] = "Lumi: your personal research companion"
+
+        if "model_name" not in st.session_state:
+            st.session_state["model_name"] = "GeminiDevModelPro1_5_Flash"
 
         set_model(
-            persona_name=persona_name,
-            persona_file=available_personas[persona_name],
-            model_name=model_name,
+            persona_name=st.session_state["persona_name"],
+            persona_file=available_personas[st.session_state["persona_name"]],
+            model_name=st.session_state["model_name"],
             chat_connector=chat_connector,
             logger=logger,
-            google_api_key=google_api_key,
+            google_api_key=st.session_state["google_api_key"],
         )
 
     with st.expander("Model Settings", expanded=False):
