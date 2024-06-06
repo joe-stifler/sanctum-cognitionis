@@ -71,6 +71,8 @@ def model_settings(
         "Dani Stella (a inteligência artificial)": "dados/personas/dani-stella/persona_config.json",
     }
 
+    default_model_name = "GeminiDevModelPro1_5_Flash"
+    default_persona_name = "Lumi: your personal research companion"
     available_models = ["GeminiDevModelPro1_5", "GeminiDevModelPro1_5_Flash"]
 
     if "session_id" not in st.session_state:
@@ -90,18 +92,20 @@ def model_settings(
                 ]
 
         if "persona_name" not in st.session_state:
-            st.session_state["persona_name"] = "Lumi: your personal research companion"
+            st.session_state["persona_name"] = default_persona_name
 
         if "model_name" not in st.session_state:
-            st.session_state["model_name"] = "GeminiDevModelPro1_5_Flash"
+            st.session_state["model_name"] = default_model_name
+
+        persona_name = st.session_state.get("persona_name", default_persona_name)
 
         set_model(
-            persona_name=st.session_state["persona_name"],
-            persona_file=available_personas[st.session_state["persona_name"]],
-            model_name=st.session_state["model_name"],
+            persona_name=persona_name,
+            persona_file=available_personas[persona_name],
+            model_name=st.session_state.get("model_name", default_model_name),
             chat_connector=chat_connector,
             logger=logger,
-            google_api_key=st.session_state["google_api_key"],
+            google_api_key=st.session_state.get("google_api_key", ""),
         )
 
     with st.expander("Model Settings", expanded=False):
@@ -120,7 +124,7 @@ def model_settings(
             "Choose your preferred model",
             available_models,
             index=available_models.index(
-                st.session_state.get("model_name", "GeminiDevModelPro1_5_Flash")
+                st.session_state.get("model_name", default_model_name)
             ),
         )
 
