@@ -12,6 +12,7 @@ show_header(0)
 # module imports from the standard python environment
 import streamlit as st
 from streamlit_extras.stylable_container import stylable_container
+from urllib.parse import unquote
 
 logger = setup_logger()
 
@@ -29,6 +30,10 @@ def main():
     model_name = st.query_params.get("model_name")
     notion_url = st.query_params.get("notion_url")
     notion_depth = st.query_params.get("notion_depth")
+
+    # Decode the persona name from the URL
+    if persona_name:
+        persona_name = unquote(persona_name)
 
     parent_chat_container = stylable_container(
         key="chat_container",
@@ -107,9 +112,9 @@ def main():
     hide_streamlit_style = """
                 <style>
                     footer {
-                        
+
                         visibility: hidden;
-                        
+
                         }
                     footer:after {
                         content:'goodbye';
