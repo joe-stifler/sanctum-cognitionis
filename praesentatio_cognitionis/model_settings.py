@@ -9,6 +9,7 @@ from servitium_cognitionis.personas.persona_base import Persona
 import json
 import streamlit as st
 import google.generativeai as genai
+from streamlit_extras.colored_header import colored_header
 
 
 ################################################################################
@@ -55,7 +56,6 @@ def set_model(
 
     st.session_state["model_name"] = model_name
     st.session_state["persona_name"] = persona_name
-    st.session_state["persona_file"] = persona_file
     st.session_state["session_id"] = chat_history.session_id
 
     st.rerun()
@@ -99,14 +99,31 @@ def model_settings(
 
         persona_name = st.session_state.get("persona_name", default_persona_name)
 
-        set_model(
-            persona_name=persona_name,
-            persona_file=available_personas[persona_name],
-            model_name=st.session_state.get("model_name", default_model_name),
-            chat_connector=chat_connector,
-            logger=logger,
-            google_api_key=st.session_state.get("google_api_key", ""),
-        )
+        # Check if the persona exists in the available personas
+        if persona_name in available_personas:
+            set_model(
+                persona_name=persona_name,
+                persona_file=available_personas[persona_name],
+                model_name=st.session_state.get("model_name", default_model_name),
+                chat_connector=chat_connector,
+                logger=logger,
+                google_api_key=st.session_state.get("google_api_key", ""),
+            )
+        else:
+            # If the persona does not exist, use the default persona
+            st.session_state["persona_name"] = default_persona_name
+            st.session_state["model_name"] = default_model_name
+            set_model(
+                persona_name=default_persona_name,
+                persona_file=available_personas[default_persona_name],
+                model_name=default_model_name,
+                chat_connector=chat_connector,
+                logger=logger,
+                google_api_key=st.session_state.get("google_api_key", ""),
+            )
+            st.success(
+                f"The persona '{persona_name}' was not found. Using the default persona '{default_persona_name}' instead."
+            )
 
     with st.expander("Model Settings", expanded=False):
         available_persona_names = list(available_personas.keys())
