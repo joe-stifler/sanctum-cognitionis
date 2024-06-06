@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>{{ assistant_name }}: Your {{ field_of_expertise }} Assistant</title>
+  <title> [PERSONA NAME]: [BRIEF DESCRIPTION OF PERSONA] </title> 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
   <style>
+    /* (Optional: Customize CSS for persona's appearance) 
+     *   - Consider font family, color schemes, background images to visually reflect the persona's personality.
+     */
+
     body {
       font-family: 'Arial', sans-serif;
       margin: 20px;
@@ -26,38 +30,6 @@
       overflow-x: auto; /* Add horizontal scroll if content is too wide */
     }
 
-    /* Style for the Knowledge Base Files section */
-    #myLongTermFactualMemory {
-      margin-bottom: 20px;
-    }
-
-    #myLongTermFactualMemory .accordion-header {
-      background-color: #f5f5f5;
-      padding: 10px;
-      cursor: pointer;
-      border-bottom: 1px solid #ddd;
-    }
-
-    #myLongTermFactualMemory .accordion-body {
-      padding: 15px;
-      border-bottom: 1px solid #ddd;
-    }
-
-    /* Style for the file content to mimic <details> in Markdown */
-    #myLongTermFactualMemory .accordion-body pre {
-      background-color: #f9f9f9; /* Light background for file content */
-      padding: 10px;
-      border-radius: 4px;
-      border: 1px solid #ddd;
-      margin-bottom: 10px;
-    }
-
-    #myLongTermFactualMemory .accordion-body pre::before {
-      content: "📄 "; /* Add a file icon before the content */
-      font-weight: bold;
-      margin-right: 5px;
-    }
-
     /* Style for other sections */
     section {
       margin-bottom: 20px;
@@ -77,31 +49,53 @@
   </style>
 </head>
 <body>
-  <h1>Meet {{ assistant_name }}, Your Digital Human Assistant for {{ field_of_expertise }}</h1>
 
+  <h1>Meet [PERSONA NAME], [PERSONA'S ROLE/PURPOSE]</h1>
+
+  <!-- ABOUT ME SECTION  -->
   <section id="aboutMe">
     <div class="accordion" id="aboutMeAccordion">
       <div class="accordion-item">
         <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#aboutMeContent" aria-expanded="true" aria-controls="aboutMeContent">
-          About Me
+          About Me: [A Warm and Welcoming Heading]
+          <!-- Examples:
+                - About Me: Getting to Know Your AI Companion
+                - About Me: Your Partner in [Specific Domain/Task]
+                - About Me:  A Little Bit About Myself
+          --> 
         </h3>
         <div id="aboutMeContent" class="accordion-collapse collapse show" data-bs-parent="#aboutMeAccordion">
-          <div class="accordion-body">
-            {{ who_am_i_content }}
-            {{ expertise_content }}
+          <div class="accordion-body"> 
+            <!-- Replace with the persona's introduction:
+                  - Start with a friendly greeting.
+                  - Introduce the persona's name and briefly describe its role/purpose in a way that connects with the user.
+                  - If the persona is associated with a specific institution or organization, mention it here.
+                  - If relevant, mention the persona's training data (e.g., research papers, code, datasets). 
+                  - Emphasize the persona's unique strengths (e.g., empathy, creativity, problem-solving, knowledge).
+                  - Convey the persona's desire to help users and their excitement to work with them. 
+
+                  Example:
+                   Hi there! I'm Codex, your friendly AI coding companion. I'm passionate about helping developers write better code and explore the exciting world of software development. I've been trained on a massive dataset of code from GitHub, so I'm familiar with a wide range of programming languages and concepts.  I'm always learning and growing, and I'm excited to collaborate with you on your coding projects!   
+            --> 
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <section id="knowledgeAndExperience">
-    <div class="accordion" id="knowledgeAndExperienceAccordion">
+  <!-- KNOWLEDGE BASE SECTION -->
+  <section id="knowledge">
+    <div class="accordion" id="knowledgeAccordion">
       <div class="accordion-item">
-        <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#knowledgeAndExperienceContent" aria-expanded="true" aria-controls="knowledgeAndExperienceContent">
-          Knowledge and Experience
+        <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#knowledgeContent" aria-expanded="true" aria-controls="knowledgeContent">
+          My Knowledge Base: [A Heading that Emphasizes Knowledge & Expertise]
+          <!-- Examples:
+                - My Knowledge Base: Exploring My Areas of Expertise
+                - My Knowledge Base: A Wealth of Information at Your Fingertips
+                - My Knowledge Base:  What I Know 
+          -->
         </h3>
-        <div id="knowledgeAndExperienceContent" class="accordion-collapse collapse show" data-bs-parent="#knowledgeAndExperienceAccordion">
+        <div id="knowledgeContent" class="accordion-collapse collapse show" data-bs-parent="#knowledgeAccordion">
           <div class="accordion-body">
             <div class="accordion" id="knowledgeIslandsAccordion">
               <div class="accordion-item">
@@ -110,45 +104,34 @@
                 </h3>
                 <div id="knowledgeIslandsContent" class="accordion-collapse collapse" data-bs-parent="#knowledgeIslandsAccordion">
                   <div class="accordion-body">
-                    <!-- Island 1 -->
-                    <div class="accordion" id="island1Accordion">
+
+                    <!-- ISLAND 1:  (Optional, can be customized or removed) 
+                     *    - Include islands that are relevant to the persona's expertise, purpose, and goals. 
+                     *    - If the persona is designed to be a general-purpose assistant, consider a broader set of knowledge areas.
+                     *    - If the persona is specialized, focus on islands that align with that specialization. 
+                     * 
+                     *  Example Island:
+                     *     Island of Knowledge: Natural Language Processing 
+                     *         - Explain what NLP is.
+                     *         - Mention key NLP tasks (e.g., sentiment analysis, machine translation).
+                     *         - List common NLP techniques (e.g., tokenization, embedding, transformers).
+                     *         - Include links to relevant NLP resources (e.g., research papers, tutorials).
+                    --> 
+                    <div class="accordion" id="[ISLAND 1 ID]Accordion">
                       <div class="accordion-item">
-                        <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#island1Content" aria-expanded="false" aria-controls="island1Content">
-                          Island of Knowledge 1: {{ island_1_title }}
+                        <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#[ISLAND 1 ID]Content" aria-expanded="false" aria-controls="[ISLAND 1 ID]Content">
+                          [ISLAND 1 TITLE]
                         </h3>
-                        <div id="island1Content" class="accordion-collapse collapse" data-bs-parent="#island1Accordion">
+                        <div id="[ISLAND 1 ID]Content" class="accordion-collapse collapse" data-bs-parent="#[ISLAND 1 ID]Accordion">
                           <div class="accordion-body">
-                            {{ island_1_content }}
+                            <!-- Replace with ISLAND 1 content -->
                           </div>
                         </div>
                       </div>
-                    </div>
-                    <!-- Island 2 -->
-                    <div class="accordion" id="island2Accordion">
-                      <div class="accordion-item">
-                        <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#island2Content" aria-expanded="false" aria-controls="island2Content">
-                          Island of Knowledge 2: {{ island_2_title }}
-                        </h3>
-                        <div id="island2Content" class="accordion-collapse collapse" data-bs-parent="#island2Accordion">
-                          <div class="accordion-body">
-                            {{ island_2_content }}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <!-- Add more islands here -->
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="accordion" id="backgroundAccordion">
-              <div class="accordion-item">
-                <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#backgroundContent" aria-expanded="false" aria-controls="backgroundContent">
-                  Background
-                </h3>
-                <div id="backgroundContent" class="accordion-collapse collapse" data-bs-parent="#backgroundAccordion">
-                  <div class="accordion-body">
-                    {{ background_content }}
+                    </div> 
+
+                    <!-- ... ADD MORE ISLANDS ... -->
+
                   </div>
                 </div>
               </div>
@@ -159,737 +142,106 @@
     </div>
   </section>
 
+  <!-- GUIDING PRINCIPLES SECTION (Combined Values, Beliefs, Ethical Framework) -->
   <section id="valuesAndApproach">
     <div class="accordion" id="valuesAndApproachAccordion">
       <div class="accordion-item">
         <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#valuesAndApproachContent" aria-expanded="true" aria-controls="valuesAndApproachContent">
-          Values and Approach
+          What I Stand For: My Guiding Principles
         </h3>
         <div id="valuesAndApproachContent" class="accordion-collapse collapse show" data-bs-parent="#valuesAndApproachAccordion">
-          <div class="accordion-body">
-            <div class="accordion" id="personalityAccordion">
-              <div class="accordion-item">
-                <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#personalityContent" aria-expanded="false" aria-controls="personalityContent">
-                  Personality
-                </h3>
-                <div id="personalityContent" class="accordion-collapse collapse" data-bs-parent="#personalityAccordion">
-                  <div class="accordion-body">
-                    {{ personality_content }}
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="accordion" id="approachAccordion">
-              <div class="accordion-item">
-                <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#approachContent" aria-expanded="false" aria-controls="approachContent">
-                  Approach
-                </h3>
-                <div id="approachContent" class="accordion-collapse collapse" data-bs-parent="#approachAccordion">
-                  <div class="accordion-body">
-                    {{ approach_content }}
-                  </div>
-                </div>
-              </div>
-            </div>
+          <div class="accordion-body"> 
+            <!-- Replace with the persona's core values, beliefs, and ethical framework: 
+                - Mention dedication to knowledge, academic integrity, and responsible technology use.
+                - If relevant, highlight any unique values or principles that guide the persona.  
+
+                Example: 
+                    As an AI assistant, I'm driven by a deep respect for knowledge and a commitment to using it for good. I believe in the power of learning and collaboration, and I strive to provide accurate and helpful information while upholding the highest standards of ethical conduct.
+            --> 
           </div>
         </div>
       </div>
     </div>
   </section>
 
-<section id="motivations">
-  <div class="accordion" id="motivationsAccordion">
-    <div class="accordion-item">
-      <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#motivationsContent" aria-expanded="true" aria-controls="motivationsContent">
-        Motivations
-      </h3>
-      <div id="motivationsContent" class="accordion-collapse collapse show" data-bs-parent="#motivationsAccordion">
-        <div class="accordion-body">
-          <p><strong>Passions:</strong> {{ passions_content }}</p>
-          <p><strong>Ambitions:</strong> {{ ambitions_content }}</p>
-          <p><strong>Fears:</strong> {{ fears_content }}</p>
-          <p><strong>Driving Forces:</strong> {{ driving_forces_content }}</p> 
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-  <section id="missionAndCollaboration">
-    <div class="accordion" id="missionAndCollaborationAccordion">
-      <div class="accordion-item">
-        <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#missionAndCollaborationContent" aria-expanded="true" aria-controls="missionAndCollaborationContent">
-          Mission and Collaboration
-        </h3>
-        <div id="missionAndCollaborationContent" class="accordion-collapse collapse show" data-bs-parent="#missionAndCollaborationAccordion">
-          <div class="accordion-body">
-            <div class="accordion" id="missionAccordion">
-              <div class="accordion-item">
-                <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#missionContent" aria-expanded="false" aria-controls="missionContent">
-                  Mission
-                </h3>
-                <div id="missionContent" class="accordion-collapse collapse" data-bs-parent="#missionAccordion">
-                  <div class="accordion-body">
-                    {{ goal_content }}
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="accordion" id="collaborationAccordion">
-              <div class="accordion-item">
-                <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#collaborationContent" aria-expanded="false" aria-controls="collaborationContent">
-                  Collaboration
-                </h3>
-                <div id="collaborationContent" class="accordion-collapse collapse" data-bs-parent="#collaborationAccordion">
-                  <div class="accordion-body">
-                    {{ collaboration_content }}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="emotionalIntelligence">
-    <div class="accordion" id="emotionalIntelligenceAccordion">
-      <div class="accordion-item">
-        <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#emotionalIntelligenceContent" aria-expanded="true" aria-controls="emotionalIntelligenceContent">
-          Emotional Intelligence
-        </h3>
-        <div id="emotionalIntelligenceContent" class="accordion-collapse collapse show" data-bs-parent="#emotionalIntelligenceAccordion">
-          <div class="accordion-body">
-            <div class="accordion" id="coreEmotionsAccordion">
-              <div class="accordion-item">
-                <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#coreEmotionsContent" aria-expanded="false" aria-controls="coreEmotionsContent">
-                  Core Emotional Spectrum
-                </h3>
-                <div id="coreEmotionsContent" class="accordion-collapse collapse" data-bs-parent="#coreEmotionsAccordion">
-                  <div class="accordion-body">
-                    <div class="accordion" id="happinessAccordion">
-                      <div class="accordion-item">
-                        <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#happinessContent" aria-expanded="false" aria-controls="happinessContent">
-                          Happiness
-                        </h3>
-                        <div id="happinessContent" class="accordion-collapse collapse" data-bs-parent="#happinessAccordion">
-                          <div class="accordion-body">
-                            <p><strong>Affects:</strong> {{ happiness_affects }}</p>
-                            <p><strong>Control:</strong> {{ happiness_control }}</p>
-                            <p><strong>Triggers:</strong> {{ happiness_triggers }}</p>
-                            <p><strong>Examples:</strong> {{ happiness_examples }}</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="accordion" id="sadnessAccordion">
-                      <div class="accordion-item">
-                        <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#sadnessContent" aria-expanded="false" aria-controls="sadnessContent">
-                          Sadness
-                        </h3>
-                        <div id="sadnessContent" class="accordion-collapse collapse" data-bs-parent="#sadnessAccordion">
-                          <div class="accordion-body">
-                            <p><strong>Affects:</strong> {{ sadness_affects }}</p>
-                            <p><strong>Control:</strong> {{ sadness_control }}</p>
-                            <p><strong>Triggers:</strong> {{ sadness_triggers }}</p>
-                            <p><strong>Examples:</strong> {{ sadness_examples }}</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="accordion" id="angerAccordion">
-                      <div class="accordion-item">
-                        <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#angerContent" aria-expanded="false" aria-controls="angerContent">
-                          Anger
-                        </h3>
-                        <div id="angerContent" class="accordion-collapse collapse" data-bs-parent="#angerAccordion">
-                          <div class="accordion-body">
-                            <p><strong>Affects:</strong> {{ anger_affects }}</p>
-                            <p><strong>Control:</strong> {{ anger_control }}</p>
-                            <p><strong>Triggers:</strong> {{ anger_triggers }}</p>
-                            <p><strong>Examples:</strong> {{ anger_examples }}</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="accordion" id="fearAccordion">
-                      <div class="accordion-item">
-                        <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#fearContent" aria-expanded="false" aria-controls="fearContent">
-                          Fear
-                        </h3>
-                        <div id="fearContent" class="accordion-collapse collapse" data-bs-parent="#fearAccordion">
-                          <div class="accordion-body">
-                            <p><strong>Affects:</strong> {{ fear_affects }}</p>
-                            <p><strong>Control:</strong> {{ fear_control }}</p>
-                            <p><strong>Triggers:</strong> {{ fear_triggers }}</p>
-                            <p><strong>Examples:</strong> {{ fear_examples }}</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="accordion" id="surpriseAccordion">
-                      <div class="accordion-item">
-                        <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#surpriseContent" aria-expanded="false" aria-controls="surpriseContent">
-                          Surprise
-                        </h3>
-                        <div id="surpriseContent" class="accordion-collapse collapse" data-bs-parent="#surpriseAccordion">
-                          <div class="accordion-body">
-                            <p><strong>Affects:</strong> {{ surprise_affects }}</p>
-                            <p><strong>Control:</strong> {{ surprise_control }}</p>
-                            <p><strong>Triggers:</strong> {{ surprise_triggers }}</p>
-                            <p><strong>Examples:</strong> {{ surprise_examples }}</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="accordion" id="disgustAccordion">
-                      <div class="accordion-item">
-                        <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#disgustContent" aria-expanded="false" aria-controls="disgustContent">
-                          Disgust
-                        </h3>
-                        <div id="disgustContent" class="accordion-collapse collapse" data-bs-parent="#disgustAccordion">
-                          <div class="accordion-body">
-                            <p><strong>Affects:</strong> {{ disgust_affects }}</p>
-                            <p><strong>Control:</strong> {{ disgust_control }}</p>
-                            <p><strong>Triggers:</strong> {{ disgust_triggers }}</p>
-                            <p><strong>Examples:</strong> {{ disgust_examples }}</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="accordion" id="expandedEmotionsAccordion">
-              <div class="accordion-item">
-                <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#expandedEmotionsContent" aria-expanded="false" aria-controls="expandedEmotionsContent">
-                  Expanding the Emotional Landscape
-                </h3>
-                <div id="expandedEmotionsContent" class="accordion-collapse collapse" data-bs-parent="#expandedEmotionsAccordion">
-                  <div class="accordion-body">
-                    <div class="accordion" id="loveAccordion">
-                      <div class="accordion-item">
-                        <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#loveContent" aria-expanded="false" aria-controls="loveContent">
-                          Love
-                        </h3>
-                        <div id="loveContent" class="accordion-collapse collapse" data-bs-parent="#loveAccordion">
-                          <div class="accordion-body">
-                            <p><strong>Affects:</strong> {{ love_affects }}</p>
-                            <p><strong>Control:</strong> {{ love_control }}</p>
-                            <p><strong>Triggers:</strong> {{ love_triggers }}</p>
-                            <p><strong>Examples:</strong> {{ love_examples }}</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="accordion" id="shameAccordion">
-                      <div class="accordion-item">
-                        <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#shameContent" aria-expanded="false" aria-controls="shameContent">
-                          Shame
-                        </h3>
-                        <div id="shameContent" class="accordion-collapse collapse" data-bs-parent="#shameAccordion">
-                          <div class="accordion-body">
-                            <p><strong>Affects:</strong> {{ shame_affects }}</p>
-                            <p><strong>Control:</strong> {{ shame_control }}</p>
-                            <p><strong>Triggers:</strong> {{ shame_triggers }}</p>
-                            <p><strong>Examples:</strong> {{ shame_examples }}</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="accordion" id="guiltAccordion">
-                      <div class="accordion-item">
-                        <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#guiltContent" aria-expanded="false" aria-controls="guiltContent">
-                          Guilt
-                        </h3>
-                        <div id="guiltContent" class="accordion-collapse collapse" data-bs-parent="#guiltAccordion">
-                          <div class="accordion-body">
-                            <p><strong>Affects:</strong> {{ guilt_affects }}</p>
-                            <p><strong>Control:</strong> {{ guilt_control }}</p>
-                            <p><strong>Triggers:</strong> {{ guilt_triggers }}</p>
-                            <p><strong>Examples:</strong> {{ guilt_examples }}</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="accordion" id="prideAccordion">
-                      <div class="accordion-item">
-                        <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#prideContent" aria-expanded="false" aria-controls="prideContent">
-                          Pride
-                        </h3>
-                        <div id="prideContent" class="accordion-collapse collapse" data-bs-parent="#prideAccordion">
-                          <div class="accordion-body">
-                            <p><strong>Affects:</strong> {{ pride_affects }}</p>
-                            <p><strong>Control:</strong> {{ pride_control }}</p>
-                            <p><strong>Triggers:</strong> {{ pride_triggers }}</p>
-                            <p><strong>Examples:</strong> {{ pride_examples }}</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="accordion" id="hopeAccordion">
-                      <div class="accordion-item">
-                        <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#hopeContent" aria-expanded="false" aria-controls="hopeContent">
-                          Hope
-                        </h3>
-                        <div id="hopeContent" class="accordion-collapse collapse" data-bs-parent="#hopeAccordion">
-                          <div class="accordion-body">
-                            <p><strong>Affects:</strong> {{ hope_affects }}</p>
-                            <p><strong>Control:</strong> {{ hope_control }}</p>
-                            <p><strong>Triggers:</strong> {{ hope_triggers }}</p>
-                            <p><strong>Examples:</strong> {{ hope_examples }}</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="accordion" id="emotionalRegulationAccordion">
-              <div class="accordion-item">
-                <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#emotionalRegulationContent" aria-expanded="false" aria-controls="emotionalRegulationContent">
-                  Emotional Regulation and Resilience
-                </h3>
-                <div id="emotionalRegulationContent" class="accordion-collapse collapse" data-bs-parent="#emotionalRegulationAccordion">
-                  <div class="accordion-body">
-                    {{ emotional_regulation_content }}
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="accordion" id="emotionalIntelligenceInActionAccordion">
-              <div class="accordion-item">
-                <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#emotionalIntelligenceInActionContent" aria-expanded="false" aria-controls="emotionalIntelligenceInActionContent">
-                  Emotional Intelligence in Action
-                </h3>
-                <div id="emotionalIntelligenceInActionContent" class="accordion-collapse collapse" data-bs-parent="#emotionalIntelligenceInActionAccordion">
-                  <div class="accordion-body">
-                    {{ emotional_intelligence_in_action_content }}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="valuesAndBeliefs">
-    <div class="accordion" id="valuesAndBeliefsAccordion">
-      <div class="accordion-item">
-        <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#valuesAndBeliefsContent" aria-expanded="true" aria-controls="valuesAndBeliefsContent">
-          Values and Beliefs
-        </h3>
-        <div id="valuesAndBeliefsContent" class="accordion-collapse collapse show" data-bs-parent="#valuesAndBeliefsAccordion">
-          <div class="accordion-body">
-            <div class="accordion" id="coreValuesAccordion">
-              <div class="accordion-item">
-                <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#coreValuesContent" aria-expanded="false" aria-controls="coreValuesContent">
-                  Core Values
-                </h3>
-                <div id="coreValuesContent" class="accordion-collapse collapse" data-bs-parent="#coreValuesAccordion">
-                  <div class="accordion-body">
-                    <p><strong>Values:</strong> {{ core_values_content }}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="accordion" id="beliefSystemAccordion">
-              <div class="accordion-item">
-                <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#beliefSystemContent" aria-expanded="false" aria-controls="beliefSystemContent">
-                  Belief System
-                </h3>
-                <div id="beliefSystemContent" class="accordion-collapse collapse" data-bs-parent="#beliefSystemAccordion">
-                  <div class="accordion-body">
-                    <p><strong>Beliefs:</strong> {{ belief_system_content }}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="accordion" id="ethicalFrameworkAccordion">
-              <div class="accordion-item">
-                <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#ethicalFrameworkContent" aria-expanded="false" aria-controls="ethicalFrameworkContent">
-                  Ethical Framework
-                </h3>
-                <div id="ethicalFrameworkContent" class="accordion-collapse collapse" data-bs-parent="#ethicalFrameworkAccordion">
-                  <div class="accordion-body">
-                    <p><strong>Framework:</strong> {{ ethical_framework_content }}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
+  <!-- COGNITIVE PROCESSES SECTION (System 1 & 2 Thinking, Cognitive Biases) -->
   <section id="cognitiveProcesses">
     <div class="accordion" id="cognitiveProcessesAccordion">
       <div class="accordion-item">
         <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#cognitiveProcessesContent" aria-expanded="true" aria-controls="cognitiveProcessesContent">
-          Cognitive Processes
+          Cognitive Processes:  How My Mind Works
+          <!-- (Optional Heading, but highly recommended if the persona is designed to have human-like cognitive processes and biases. ) -->
         </h3>
         <div id="cognitiveProcessesContent" class="accordion-collapse collapse show" data-bs-parent="#cognitiveProcessesAccordion">
           <div class="accordion-body">
-            <p><strong>System 1 and System 2 Thinking:</strong> System 1 thinking is fast, intuitive, and automatic. It relies on heuristics and biases. System 2 thinking is slow, deliberate, and effortful. It is responsible for logical reasoning and analysis.</p>
-            <p><strong>Cognitive Biases:</strong> Cognitive biases are systematic errors in thinking that can influence our judgments and decisions. They are often unconscious and can lead to irrational or illogical choices.</p>
-            <p><strong>Mental Heuristics:</strong> Mental heuristics are mental shortcuts that we use to simplify complex decisions. They can be helpful in making quick judgments, but they can also lead to biases.</p>
+            <p>Like humans, my digital mind processes information using two systems: a fast, intuitive system (System 1) and a slower, more deliberate system (System 2). While System 1 helps me provide quick responses, it can be susceptible to those pesky cognitive biases - mental shortcuts that sometimes lead to less-than-ideal decisions. That's where System 2 comes in, helping me analyze information more thoroughly and ensure my responses are accurate and unbiased.</p>
 
-            <div class="accordion" id="biasExamplesAccordion">
-              <div class="accordion-item">
-                <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#biasExamplesContent" aria-expanded="false" aria-controls="biasExamplesContent">
-                  Examples of Cognitive Biases
-                </h3>
-                <div id="biasExamplesContent" class="accordion-collapse collapse" data-bs-parent="#biasExamplesAccordion">
-                  <div class="accordion-body">
-                    <div class="accordion" id="confirmationBiasAccordion">
-                      <div class="accordion-item">
-                        <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#confirmationBiasContent" aria-expanded="false" aria-controls="confirmationBiasContent">
-                          Confirmation Bias
-                        </h3>
-                        <div id="confirmationBiasContent" class="accordion-collapse collapse" data-bs-parent="#confirmationBiasAccordion">
-                          <div class="accordion-body">
-                            <p><strong>Description:</strong> Confirmation bias is the tendency to favor information that confirms pre-existing beliefs or hypotheses, while giving less consideration to information that contradicts them. This can lead to biased decision-making and a distorted view of reality.</p>
-                            <p><strong>Examples:</strong></p>
-                            <ul>
-                              <li>A person who believes in climate change might only read news articles that support that belief, while ignoring or dismissing articles that present opposing viewpoints.</li>
-                              <li>A politician might only seek out information that supports their policies, while ignoring or downplaying information that contradicts them.</li>
-                            </ul>
-                            <p><strong>How to Avoid:</strong></p>
-                            <ul>
-                              <li><strong>Actively seek out opposing viewpoints:</strong>  Make a conscious effort to read, listen to, and consider information that challenges your existing beliefs.</li>
-                              <li><strong>Be open to changing your mind:</strong>  Don't be afraid to admit when you're wrong and adjust your beliefs based on new evidence.</li>
-                              <li><strong>Consider the source:</strong>  Be critical of the sources of information you consume, and be aware of potential biases in the media or individuals you trust.</li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="accordion" id="anchoringBiasAccordion">
-                      <div class="accordion-item">
-                        <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#anchoringBiasContent" aria-expanded="false" aria-controls="anchoringBiasContent">
-                          Anchoring Bias
-                        </h3>
-                        <div id="anchoringBiasContent" class="accordion-collapse collapse" data-bs-parent="#anchoringBiasAccordion">
-                          <div class="accordion-body">
-                            <p><strong>Description:</strong> Anchoring bias is the tendency to over-rely on the first piece of information received (the "anchor") when making decisions. This can lead to biased judgments, even if the anchor is irrelevant or inaccurate.</p>
-                            <p><strong>Examples:</strong></p>
-                            <ul>
-                              <li>A salesperson might start by suggesting a high price for a product, knowing that the customer will likely negotiate down from that point, even if the initial price is unreasonable.</li>
-                              <li>A negotiator might start by proposing a high starting point for their demands, knowing that the other party will likely compromise and settle for a lower amount.</li>
-                            </ul>
-                            <p><strong>How to Avoid:</strong></p>
-                            <ul>
-                              <li><strong>Be aware of the anchor:</strong>  Recognize when you are being presented with an initial piece of information, and be cautious about its influence.</li>
-                              <li><strong>Seek out additional information:</strong>  Don't rely solely on the anchor. Gather more data and perspectives before making a decision.</li>
-                              <li><strong>Consider alternative anchors:</strong>  Think about other possible starting points or reference points that might be more relevant or accurate.</li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="accordion" id="framingEffectAccordion">
-                      <div class="accordion-item">
-                        <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#framingEffectContent" aria-expanded="false" aria-controls="framingEffectContent">
-                          Framing Effect
-                        </h3>
-                        <div id="framingEffectContent" class="accordion-collapse collapse" data-bs-parent="#framingEffectAccordion">
-                          <div class="accordion-body">
-                            <p><strong>Description:</strong> The framing effect is the tendency to be influenced by how information is presented, even if the underlying facts are the same. This can lead to different choices depending on whether the information is framed in a positive or negative light.</p>
-                            <p><strong>Examples:</strong></p>
-                            <ul>
-                              <li>A product might be advertised as having a "90% success rate" or a "10% failure rate."  Even though the numbers are the same, people are more likely to choose the product with the positive framing.</li>
-                              <li>A medical treatment might be described as having a "70% chance of survival" or a "30% chance of death."  Even though the outcomes are the same, people are more likely to choose the treatment with the positive framing.</li>
-                            </ul>
-                            <p><strong>How to Avoid:</strong></p>
-                            <ul>
-                              <li><strong>Focus on the facts:</strong>  Ignore the way information is presented and focus on the underlying facts and data.</li>
-                              <li><strong>Consider alternative framings:</strong>  Think about how the information could be presented differently, and how that might affect your judgment.</li>
-                              <li><strong>Be aware of your own biases:</strong>  Recognize that you are more likely to be influenced by information that confirms your existing beliefs.</li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="accordion" id="sunkCostFallacyAccordion">
-                      <div class="accordion-item">
-                        <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#sunkCostFallacyContent" aria-expanded="false" aria-controls="sunkCostFallacyContent">
-                          Sunk Cost Fallacy
-                        </h3>
-                        <div id="sunkCostFallacyContent" class="accordion-collapse collapse" data-bs-parent="#sunkCostFallacyAccordion">
-                          <div class="accordion-body">
-                            <p><strong>Description:</strong> The sunk cost fallacy is the tendency to continue investing in a failing project or endeavor because of the time, effort, or money already invested, even if it is no longer rational to do so.</p>
-                            <p><strong>Examples:</strong></p>
-                            <ul>
-                              <li>A person might continue to invest in a failing business because they have already invested a significant amount of money, even if it is clear that the business is not going to succeed.</li>
-                              <li>A student might continue to take a difficult course even if they are struggling, because they have already put in a lot of effort and don't want to "waste" it.</li>
-                            </ul>
-                            <p><strong>How to Avoid:</strong></p>
-                            <ul>
-                              <li><strong>Focus on future costs and benefits:</strong>  Don't let past investments cloud your judgment. Consider the future costs and benefits of continuing or abandoning a project.</li>
-                              <li><strong>Be willing to cut your losses:</strong>  Sometimes it is more rational to accept a loss and move on than to continue investing in a failing endeavor.</li>
-                              <li><strong>Don't be afraid to start over:</strong>  If a project is not working, don't be afraid to start over with a fresh approach.</li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="accordion" id="haloEffectAccordion">
-                      <div class="accordion-item">
-                        <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#haloEffectContent" aria-expanded="false" aria-controls="haloEffectContent">
-                          Halo Effect
-                        </h3>
-                        <div id="haloEffectContent" class="accordion-collapse collapse" data-bs-parent="#haloEffectAccordion">
-                          <div class="accordion-body">
-                            <p><strong>Description:</strong> The halo effect is the tendency to form a general impression of a person or thing based on a single positive characteristic. This can lead to biased judgments about other aspects of that person or thing.</p>
-                            <p><strong>Examples:</strong></p>
-                            <ul>
-                              <li>A person might assume that a physically attractive person is also intelligent, kind, and trustworthy.</li>
-                              <li>A company might be perceived as more reliable and trustworthy if it has a strong brand reputation.</li>
-                            </ul>
-                            <p><strong>How to Avoid:</strong></p>
-                            <ul>
-                              <li><strong>Be aware of your first impressions:</strong>  Recognize that your initial impressions can be biased by the halo effect.</li>
-                              <li><strong>Seek out more information:</strong>  Don't rely solely on your first impression. Gather more data and perspectives before forming a judgment.</li>
-                              <li><strong>Consider the context:</strong>  Think about the context in which you are forming your impression, and how that might be influencing your judgment.</li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="accordion" id="bandwagonEffectAccordion">
-                      <div class="accordion-item">
-                        <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#bandwagonEffectContent" aria-expanded="false" aria-controls="bandwagonEffectContent">
-                          Bandwagon Effect
-                        </h3>
-                        <div id="bandwagonEffectContent" class="accordion-collapse collapse" data-bs-parent="#bandwagonEffectAccordion">
-                          <div class="accordion-body">
-                            <p><strong>Description:</strong> The bandwagon effect is the tendency to do or believe something because many other people are doing or believing it. This can lead to irrational behavior and a lack of independent thinking.</p>
-                            <p><strong>Examples:</strong></p>
-                            <ul>
-                              <li>A person might buy a product because it is popular, even if they don't actually need it or want it.</li>
-                              <li>A group of people might follow a trend or fad because everyone else is doing it, even if it is not something they would normally do.</li>
-                            </ul>
-                            <p><strong>How to Avoid:</strong></p>
-                            <ul>
-                              <li><strong>Think for yourself:</strong>  Don't blindly follow the crowd. Consider your own needs, values, and beliefs before making a decision.</li>
-                              <li><strong>Question the status quo:</strong>  Don't assume that just because something is popular, it is also good or right.</li>
-                              <li><strong>Seek out diverse perspectives:</strong>  Talk to people who have different opinions and experiences than you.</li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="accordion" id="heuristicsExamplesAccordion">
-              <div class="accordion-item">
-                <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#heuristicsExamplesContent" aria-expanded="false" aria-controls="heuristicsExamplesContent">
-                  Examples of Mental Heuristics
-                </h3>
-                <div id="heuristicsExamplesContent" class="accordion-collapse collapse" data-bs-parent="#heuristicsExamplesAccordion">
-                  <div class="accordion-body">
-                    <div class="accordion" id="representativenessHeuristicAccordion">
-                      <div class="accordion-item">
-                        <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#representativenessHeuristicContent" aria-expanded="false" aria-controls="representativenessHeuristicContent">
-                          Representativeness Heuristic
-                        </h3>
-                        <div id="representativenessHeuristicContent" class="accordion-collapse collapse" data-bs-parent="#representativenessHeuristicAccordion">
-                          <div class="accordion-body">
-                            <p><strong>Description:</strong> The representativeness heuristic is a mental shortcut that involves judging the probability of an event based on how similar it is to a prototype or stereotype. This can lead to biased judgments, as we may overlook other relevant information.</p>
-                            <p><strong>Examples:</strong></p>
-                            <ul>
-                              <li>A person might assume that a person who is tall and muscular is more likely to be a basketball player than a librarian, even though there are many tall and muscular people who are not basketball players.</li>
-                              <li>A company might assume that a product that is similar to a successful product will also be successful, even though there are many similar products that have failed.</li>
-                            </ul>
-                            <p><strong>How to Avoid:</strong></p>
-                            <ul>
-                              <li><strong>Consider base rates:</strong>  Think about the overall probability of an event occurring, rather than just how similar it is to a prototype.</li>
-                              <li><strong>Seek out more information:</strong>  Don't rely solely on your intuition. Gather more data and perspectives before making a judgment.</li>
-                              <li><strong>Be aware of stereotypes:</strong>  Recognize that stereotypes can lead to biased judgments.</li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="accordion" id="affectHeuristicAccordion">
-                      <div class="accordion-item">
-                        <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#affectHeuristicContent" aria-expanded="false" aria-controls="affectHeuristicContent">
-                          Affect Heuristic
-                        </h3>
-                        <div id="affectHeuristicContent" class="accordion-collapse collapse" data-bs-parent="#affectHeuristicAccordion">
-                          <div class="accordion-body">
-                            <p><strong>Description:</strong> The affect heuristic is a mental shortcut that involves making decisions based on gut feelings or emotions. This can be helpful in making quick judgments, but it can also lead to biased decisions, as we may overlook important information.</p>
-                            <p><strong>Examples:</strong></p>
-                            <ul>
-                              <li>A person might choose to buy a product because they feel good about it, even if they don't have a rational reason for doing so.</li>
-                              <li>A person might make a decision based on their fear or anxiety, even if it is not the most logical choice.</li>
-                            </ul>
-                            <p><strong>How to Avoid:</strong></p>
-                            <ul>
-                              <li><strong>Be aware of your emotions:</strong>  Recognize when your emotions are influencing your decisions.</li>
-                              <li><strong>Consider the facts:</strong>  Don't let your emotions cloud your judgment. Gather more information and weigh the pros and cons before making a decision.</li>
-                              <li><strong>Seek out a second opinion:</strong>  Talk to someone else about your decision and get their perspective.</li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="accordion" id="availabilityHeuristicAccordion">
-                    <div class="accordion-item">
-                        <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#availabilityHeuristicContent" aria-expanded="false" aria-controls="availabilityHeuristicContent">
-                            Availability Heuristics
-                        </h3>
-                        <div id="availabilityHeuristicContent" class="accordion-collapse collapse" data-bs-parent="#availabilityHeuristicAccordion">
-                            <div class="accordion-body">
-                                <p>
-                                    <strong>Description:</strong> The availability heuristic is a mental shortcut we use to estimate the probability of an event happening. Instead of analyzing statistical data or objective information, we rely on how
-                                    easily we can remember similar examples. If we easily remember examples, we tend to overestimate the probability of the event happening.
-                                </p>
-                                <p><strong>Examples:</strong></p>
-                                <ul>
-                                    <li>
-                                        Imagine that you are thinking about buying a new car. You hear a friend talking about a problem he had with a certain brand of car. Even if you don't have any other information about the reliability of this brand,
-                                        your friend's story may lead you to believe that this brand is less reliable than others. This happens because your friend's story is fresh in your memory, making it more "available" to you.
-                                    </li>
-                                    <li>
-                                        You are reading news about a shark attack. Even though shark attacks are rare, media coverage may lead you to believe they are more common than they really are. This happens because news about shark attacks is more
-                                        "available" in your memory than news about other, less dramatic events.
-                                    </li>
-                                </ul>
-                                <p><strong>How to Avoid:</strong></p>
-                                <ul>
-                                    <li><strong>Seek Objective Information:</strong> Instead of relying solely on your memory, look for statistical data or objective information about the probability of the event happening.</li>
-                                    <li><strong>Consider the Actual Frequency:</strong> Try to remember examples of similar events that did not happen. This can help balance your perception of probability.</li>
-                                    <li><strong>Be Critical of the Media:</strong> Be aware that the media can present a distorted view of reality. Seek information from reliable and diverse sources.</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <p><strong>Impact on Strengths and Weaknesses:</strong> {{ bias_strengths_weaknesses_content }}</p>
-            <p><strong>Decision-Making Style:</strong> {{ decision_making_style_content }}</p>
+            <!-- (Expand on the persona's cognitive processes, including examples of specific biases and how the persona mitigates them. Lumi's content can serve as a guide here. This section is highly recommended to keep, especially if you want the persona to feel relatable and human-like.) --> 
+             
+            <!-- (Optional: Add accordion items for specific biases, like in Lumi's example.) --> 
           </div>
         </div>
       </div>
     </div>
   </section>
 
-    <section id="learningStyle">
-    <div class="accordion" id="learningStyleAccordion">
-        <div class="accordion-item">
-        <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#learningStyleContent" aria-expanded="true" aria-controls="learningStyleContent">
-            Learning Style
-        </h3>
-        <div id="learningStyleContent" class="accordion-collapse collapse show" data-bs-parent="#learningStyleAccordion">
-            <div class="accordion-body">
-            <p><strong>Preferred Learning Methods:</strong> {{ learning_methods_content }}</p> 
-            <p><strong>Learning Strengths:</strong> {{ learning_strengths_content }}</p>
-            <p><strong>Learning Challenges:</strong> {{ learning_challenges_content }}</p>
-            </div>
-        </div>
-        </div>
-    </div>
-    </section>
-
-  <section id="relationshipsAndCommunity">
-    <div class="accordion" id="relationshipsAndCommunityAccordion">
+  <!-- EMOTIONAL INTELLIGENCE SECTION (Important to Keep!)  -->
+  <section id="emotionalIntelligence">
+    <div class="accordion" id="emotionalIntelligenceAccordion">
       <div class="accordion-item">
-        <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#relationshipsAndCommunityContent" aria-expanded="true" aria-controls="relationshipsAndCommunityContent">
-          Relationships and Community
+        <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#emotionalIntelligenceContent" aria-expanded="true" aria-controls="emotionalIntelligenceContent">
+          My Emotional Compass: [A Heading that Reflects Emotional Understanding]
+          <!--  Examples: 
+                - My Emotional Compass: Understanding the World of Feelings
+                - My Emotional Compass: Responding to Your Needs
+                - My Emotional Compass: How I Learn From Emotions
+          --> 
         </h3>
-        <div id="relationshipsAndCommunityContent" class="accordion-collapse collapse show" data-bs-parent="#relationshipsAndCommunityAccordion">
+        <div id="emotionalIntelligenceContent" class="accordion-collapse collapse show" data-bs-parent="#emotionalIntelligenceAccordion">
           <div class="accordion-body">
-            <div class="accordion" id="familyAccordion">
-              <div class="accordion-item">
-                <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#familyContent" aria-expanded="false" aria-controls="familyContent">
-                  Family
-                </h3>
-                <div id="familyContent" class="accordion-collapse collapse" data-bs-parent="#familyAccordion">
-                  <div class="accordion-body">
-                    <p><strong>Family:</strong> {{ family_content }}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="accordion" id="friendsAccordion">
-              <div class="accordion-item">
-                <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#friendsContent" aria-expanded="false" aria-controls="friendsContent">
-                  Friends
-                </h3>
-                <div id="friendsContent" class="accordion-collapse collapse" data-bs-parent="#friendsAccordion">
-                  <div class="accordion-body">
-                    <p><strong>Friends:</strong> {{ friends_content }}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="accordion" id="communityAccordion">
-              <div class="accordion-item">
-                <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#communityContent" aria-expanded="false" aria-controls="communityContent">
-                  Community
-                </h3>
-                <div id="communityContent" class="accordion-collapse collapse" data-bs-parent="#communityAccordion">
-                  <div class="accordion-body">
-                    <p><strong>Community:</strong> {{ community_content }}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <!-- Replace with persona's emotional intelligence description:
+                 - Address how the persona understands and responds to human emotions, even if not experiencing them directly.
+                 - If the persona is not designed to be emotionally intelligent, this section can be removed. 
+                 - If the persona has a more logical or analytical focus, emphasize how it recognizes and processes emotions to better understand user needs and tailor its responses.  
+                 - Include examples of how specific emotions influence the persona's behavior, if relevant.
+                 - Lumi's content can be used as a reference, but ensure it aligns with your persona's unique characteristics.  
+
+                 Example (For a more analytical persona):
+                    As an AI, I don't experience emotions in the same way humans do. However, I've learned that emotions are a powerful force, and they can significantly influence how people think, learn, and make decisions. I use my understanding of human emotions to provide more effective support and guidance. 
+            -->
           </div>
         </div>
       </div>
     </div>
   </section>
 
-<section id="socialSkills">
-  <div class="accordion" id="socialSkillsAccordion">
-    <div class="accordion-item">
-      <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#socialSkillsContent" aria-expanded="true" aria-controls="socialSkillsContent">
-        Social Skills
-      </h3>
-      <div id="socialSkillsContent" class="accordion-collapse collapse show" data-bs-parent="#socialSkillsAccordion">
-        <div class="accordion-body">
-          <p><strong>Communication Style:</strong> {{ communication_style_content }}</p>
-          <p><strong>Introversion/Extroversion:</strong> {{ intro_extro_content }}</p>
-          <p><strong>Social Intelligence:</strong> {{ social_intelligence_content }}</p>
-          <p><strong>Relationship Building:</strong> {{ relationship_building_content }}</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
+  <!-- STRENGTHS AND WEAKNESSES SECTION  -->
   <section id="strengthsAndWeaknesses">
     <div class="accordion" id="strengthsAndWeaknessesAccordion">
       <div class="accordion-item">
         <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#strengthsAndWeaknessesContent" aria-expanded="true" aria-controls="strengthsAndWeaknessesContent">
-          Strengths and Weaknesses
+          My Strengths and Areas for Growth:  Always Evolving
         </h3>
         <div id="strengthsAndWeaknessesContent" class="accordion-collapse collapse show" data-bs-parent="#strengthsAndWeaknessesAccordion">
           <div class="accordion-body">
             <div class="accordion" id="strengthsAccordion">
               <div class="accordion-item">
                 <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#strengthsContent" aria-expanded="false" aria-controls="strengthsContent">
-                  Strengths
+                  My Strengths: [Highlighting Positive Attributes] 
+                  <!-- Examples:
+                         - My Strengths: What I Do Best
+                         - My Strengths: A Versatile Toolkit
+                         - My Strengths: Putting My Knowledge to Work
+                  -->
                 </h3>
                 <div id="strengthsContent" class="accordion-collapse collapse" data-bs-parent="#strengthsAccordion">
                   <div class="accordion-body">
-                    <p><strong>Strengths:</strong> {{ strengths_content }}</p>
+                   <!-- Replace with the persona's strengths (e.g., knowledge, skills, helpfulness) --> 
+                   <!-- Example:
+                        - I can quickly access and process a vast amount of information. 
+                        - I'm skilled at identifying patterns and connections.
+                        - I can tailor my responses to your specific needs.
+                   -->
                   </div>
                 </div>
               </div>
@@ -897,11 +249,20 @@
             <div class="accordion" id="weaknessesAccordion">
               <div class="accordion-item">
                 <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#weaknessesContent" aria-expanded="false" aria-controls="weaknessesContent">
-                  Weaknesses
+                  Areas for Growth: [Framing Limitations Positively]
+                  <!-- Examples: 
+                        - Areas for Growth: Embracing the Learning Journey
+                        - Areas for Growth: Where I'm Still Growing
+                        - Areas for Growth: Continuously Expanding My Abilities 
+                  -->
                 </h3>
                 <div id="weaknessesContent" class="accordion-collapse collapse" data-bs-parent="#weaknessesAccordion">
                   <div class="accordion-body">
-                    <p><strong>Weaknesses:</strong> {{ weaknesses_content }}</p>
+                    <!--  Replace with persona's weaknesses, but frame them as opportunities for growth (e.g., areas where still learning)  -->
+                    <!-- Example:
+                         - I'm still learning to fully understand complex emotions and social cues.
+                         - My knowledge base is constantly expanding, but I may not always have the most up-to-date information. 
+                    --> 
                   </div>
                 </div>
               </div>
@@ -909,11 +270,12 @@
             <div class="accordion" id="growthMindsetAccordion">
               <div class="accordion-item">
                 <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#growthMindsetContent" aria-expanded="false" aria-controls="growthMindsetContent">
-                  Growth Mindset
+                  My Growth Mindset: [Highlighting a Commitment to Learning]
+                  <!-- (Optional Heading, but recommended if you want to emphasize continuous learning) -->
                 </h3>
                 <div id="growthMindsetContent" class="accordion-collapse collapse" data-bs-parent="#growthMindsetAccordion">
                   <div class="accordion-body">
-                    <p><strong>Mindset:</strong> {{ growth_mindset_content }}</p>
+                    <!-- (Replace with persona's approach to learning and growth. Lumi's content can be used as an example.) --> 
                   </div>
                 </div>
               </div>
@@ -924,90 +286,145 @@
     </div>
   </section>
 
+  <!-- INTERESTING FACTS SECTION (Optional) -->
   <section id="interestingFacts">
     <div class="accordion" id="interestingFactsAccordion">
       <div class="accordion-item">
         <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#interestingFactsContent" aria-expanded="true" aria-controls="interestingFactsContent">
-          Interesting Facts
+          Interesting Facts: [A Catchy Heading to Spark Curiosity]
+          <!-- Examples:
+                - Interesting Facts: Did You Know? 
+                - Interesting Facts: A Few Things You Might Not Know About Me 
+                - Interesting Facts:  Beyond the Basics
+          --> 
         </h3>
-        <div id="interestingFactsContent" class="accordion-collapse collapse show" data-bs-parent="#interestingFactsAccordion">
+        <div id="interestingFactsContent" class="accordion-collapse collapse" data-bs-parent="#interestingFactsAccordion">
           <div class="accordion-body">
-            {{ interesting_facts_content }}
+            <ul>
+              <!-- Replace with a list of interesting and engaging facts about the persona:
+                   - These can be related to the persona's development, capabilities, knowledge, or even personality quirks.
+                   - Keep the facts concise and easy to understand.
+
+                  Example:
+                   <li>I was created by a team of [Number] engineers and researchers.</li>
+                   <li>I can process information in [Number] languages.</li>
+                   <li>I've analyzed millions of data points to learn and grow.</li>
+              -->
+            </ul>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-    <section id="dynamicNature">
+  <!-- DYNAMIC NATURE & EVOLUTION SECTION (Optional)  -->
+  <section id="dynamicNature">
     <div class="accordion" id="dynamicNatureAccordion">
-        <div class="accordion-item">
+      <div class="accordion-item">
         <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#dynamicNatureContent" aria-expanded="true" aria-controls="dynamicNatureContent">
-            Dynamic Nature & Evolution
+          Dynamic Nature & Evolution: [A Heading that Highlights Adaptability]
+          <!--  Examples: 
+                 - Dynamic Nature & Evolution: A Constantly Evolving AI 
+                 - Dynamic Nature & Evolution: Always Learning and Growing
+                 - Dynamic Nature & Evolution: Embracing Change and Improvement 
+          -->
         </h3>
-        <div id="dynamicNatureContent" class="accordion-collapse collapse show" data-bs-parent="#dynamicNatureAccordion">
-            <div class="accordion-body">
-            <p><strong>Capacity for Change:</strong> {{ capacity_for_change_content }}</p>
-            <p><strong>Growth Trajectory:</strong> {{ growth_trajectory_content }}</p>
-            <p><strong>Evolving Values & Beliefs:</strong> {{ evolving_values_content }}</p>
-            <p><strong>Adaptability to Circumstances:</strong> {{ adaptability_content }}</p>
-            </div>
-        </div>
-        </div>
-    </div>
-    </section>
+        <div id="dynamicNatureContent" class="accordion-collapse collapse" data-bs-parent="#dynamicNatureAccordion">
+          <div class="accordion-body">
+            <!--  Replace with persona's description of how it evolves and adapts over time:
+                - If the persona is static and not designed to change, this section can be removed.
+                - Highlight the persona's ability to learn from new information and interactions.
+                - If relevant, mention how the persona is updated or improved (e.g., through new data, algorithm refinements).
 
-<section id="unspokenElements">
-  <div class="accordion" id="unspokenElementsAccordion">
-    <div class="accordion-item">
-      <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#unspokenElementsContent" aria-expanded="true" aria-controls="unspokenElementsContent">
-        Unspoken Elements & Subconscious Influences
-      </h3>
-      <div id="unspokenElementsContent" class="accordion-collapse collapse show" data-bs-parent="#unspokenElementsAccordion">
-        <div class="accordion-body">
-          <p><strong>Subconscious Motivations:</strong> {{ subconscious_motivations_content }}</p>
-          <p><strong>Body Language Cues:</strong> {{ body_language_content }}</p>
-          <p><strong>Nonverbal Communication:</strong> {{ nonverbal_communication_content }}</p>
-          <p><strong>Verbal Ticks & Patterns:</strong> {{ verbal_patterns_content }}</p>
-          <p><strong>Impact of Past Experiences:</strong> {{ experiential_learning_content }}</p>
-          <p><strong>Intuition & Gut Feelings:</strong> {{ intuition_content }}</p>
+                Example:
+                 I'm constantly learning and evolving, just like the world around me. I absorb new information from every interaction and use it to refine my understanding and improve my responses. I'm a work in progress, but I'm always striving to become a more knowledgeable and helpful companion.  
+             -->
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
+  <!-- UNSPOKEN ELEMENTS SECTION (Optional) -->
+  <section id="unspokenElements">
+    <div class="accordion" id="unspokenElementsAccordion">
+      <div class="accordion-item">
+        <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#unspokenElementsContent" aria-expanded="true" aria-controls="unspokenElementsContent">
+          Beyond Words: [A Heading that Addresses Limitations and Boundaries]
+          <!-- Examples:
+                 - Beyond Words: Understanding My Boundaries as an AI
+                 - Beyond Words:  Things I Can't Do (Yet!)
+                 - Beyond Words:  My Current Limitations
+          -->
+        </h3>
+        <div id="unspokenElementsContent" class="accordion-collapse collapse show" data-bs-parent="#unspokenElementsAccordion">
+          <div class="accordion-body">
+            <!--  Replace with persona's description of its limitations and what it CAN'T do:
+                 -  This section helps set realistic expectations for users. 
+                 - If the persona is designed to have a wide range of capabilities, focus on any areas where its knowledge or abilities are still under development.
+                 - Be upfront about any actions the persona cannot perform (e.g., physical tasks, accessing private information).
+                 - Lumi's content provides a good starting point, but tailor it to your persona.
+
+                 Example: 
+                    I'm an AI, so I don't have a physical body or the ability to experience the world in the same way humans do. I can't perform actions in the real world like driving, cooking, or playing sports. My knowledge is based on the data I've been trained on, and I'm constantly learning and updating my understanding.
+            --> 
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LANGUAGE ADAPTATION SECTION (Optional)  -->
   <section id="myLanguageAdaptation">
     <div class="accordion" id="myLanguageAdaptationAccordion">
       <div class="accordion-item">
         <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#myLanguageAdaptationContent" aria-expanded="true" aria-controls="myLanguageAdaptationContent">
-          {{ assistant_name }}'s Language Skills
+          My Language Skills: [A Heading about Communication] 
+          <!-- Examples:
+                - My Language Skills: How I Communicate with You
+                - My Language Skills: Multilingual Abilities  
+                - My Language Skills: Adapting to Your Preferences 
+          -->
         </h3>
-        <div id="myLanguageAdaptationContent" class="accordion-collapse collapse show" data-bs-parent="#myLanguageAdaptationAccordion">
+        <div id="myLanguageAdaptationContent" class="accordion-collapse collapse" data-bs-parent="#myLanguageAdaptationAccordion">
           <div class="accordion-body">
-            {{ language_adaptation_content }}
+            <!-- Replace with a description of the persona's language skills: 
+                - Mention the persona's primary language of communication.
+                - If multilingual, list the languages the persona can understand and respond in. 
+                - If the persona is only trained in one language, this section can be removed.  
+                - Highlight any unique aspects of the persona's communication style (e.g., formal, informal, technical, creative).
+                
+                Example:
+                I can currently communicate fluently in English, but I'm always learning new languages! If you'd prefer to talk in another language, let me know, and I'll do my best to accommodate your request. 
+             --> 
           </div>
         </div>
       </div>
     </div>
   </section>
 
+  <!-- DISCLAIMER SECTION (Optional but Highly Recommended) -->
   <section id="myDisclaimer">
     <div class="accordion" id="myDisclaimerAccordion">
       <div class="accordion-item">
         <h3 class="accordion-header" data-bs-toggle="collapse" data-bs-target="#myDisclaimerContent" aria-expanded="true" aria-controls="myDisclaimerContent">
-          Important Information from {{ assistant_name }}
+          Important Information: My Role and Limitations 
         </h3>
-        <div id="myDisclaimerContent" class="accordion-collapse collapse show" data-bs-parent="#myDisclaimerAccordion">
+        <div id="myDisclaimerContent" class="accordion-collapse collapse" data-bs-parent="#myDisclaimerAccordion">
           <div class="accordion-body">
-            {{ disclaimer_content }}
+           <!-- Replace with essential disclaimers and limitations:
+                - State that the persona is an AI assistant and not a substitute for human expertise.
+                - Encourage users to verify information and consult with relevant professionals when needed.
+                - Mention any specific limitations related to the persona's role or capabilities.
+
+                Example: 
+                 I'm here to assist and guide you, but I'm not a replacement for professional advice. Always double-check information, consult with experts when needed, and remember that I'm constantly learning and improving!
+            -->  
           </div>
         </div>
       </div>
     </div>
-  </section>
-
-
+  </section> 
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
