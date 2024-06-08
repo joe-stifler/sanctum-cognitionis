@@ -1,4 +1,198 @@
 {
+    "ano_2016": {
+      "ano_2016_proposta_1": {
+        "id": 17,
+        "numero": 1,
+        "ano": 2016,
+        "interlocutores": {
+          "enunciador_i": "Estudante universitário",
+          "interlocutor_i": "Comissão julgadora do concurso de resenhas do Centro de Apoio ao Estudante (CAE)",
+          "mascara_discursiva_i": "Estudante interessado em literatura e cultura"
+        },
+        "situacao_problema_s": "Participação em um concurso de resenhas promovido pelo CAE com o objetivo de estimular a leitura de obras literárias e ampliar o horizonte cultural dos estudantes.",
+        "tema": "Fábula 'A Deliberação Tomada pelos Ratos' de La Fontaine e sua relação com problemas coletivos na sociedade.",
+        "genero_g": "Resenha",
+        "construcao_composicional": "Introdução com a apresentação da fábula e seus elementos constitutivos. Desenvolvimento com a construção de uma situação social análoga aos fatos narrados na fábula, que envolva um problema coletivo. Conclusão com o estabelecimento de relações entre a situação análoga e a temática do texto original.",
+        "tipologia_textual": "Predominantemente expositiva e argumentativa, com elementos narrativos na construção da situação análoga.",
+        "projeto_texto": "Resenhar a fábula de La Fontaine, sintetizando seus elementos constitutivos, criando uma situação social análoga que envolva um problema coletivo e estabelecendo relações entre a analogia e a temática da fábula.",
+        "leitura_textos_coletanea": "O candidato deve demonstrar compreensão da fábula, identificando seus elementos constitutivos (personagens, ações, contexto, moral) e relacionando-os com a situação social análoga.",
+        "escolhas_lexicais_sintaticas": "Linguagem formal, com vocabulário preciso e adequado à crítica literária. Uso de recursos linguísticos para apresentar a fábula, construir a analogia e estabelecer relações entre os textos.",
+        "recursos_coesivos": "Uso de conectivos para articular as partes do texto, garantindo a coesão e coerência. Uso de recursos de referenciação para retomar elementos da fábula e da situação análoga.",
+        "norma_culta": "Domínio da norma culta contemporânea.",
+        "estilo": "Formal, claro, objetivo e crítico.",
+        "originalidade": "Criatividade na construção da situação social análoga e na análise da fábula.",
+        "pertinencia": "A situação social análoga deve ser pertinente à temática da fábula e o texto deve se manter focado na resenha da obra.",
+        "observacoes": "O candidato deve demonstrar capacidade de leitura, interpretação e escrita. Deve ser capaz de articular diferentes tipos de texto e de usar a linguagem de forma precisa e adequada ao gênero resenha.",
+        "data_criacao": "2023-11-14",
+        "data_ultima_edicao": "2023-11-14",
+        "recorte_tematico": "A inércia social diante de problemas coletivos e a dificuldade de ação em situações que exigem coragem e iniciativa.",
+        "enunciado": {
+          "situacao_inicial": "Você é um estudante universitário que participará de um concurso de resenhas, promovido pelo Centro de Apoio ao Estudante (CAE), órgão que desenvolve atividades culturais em sua Faculdade. Esse concurso tem o objetivo de estimular a leitura de obras literárias e ampliar o horizonte cultural dos estudantes. A resenha será lida por uma comissão julgadora que deverá selecionar os dez melhores textos, a serem publicados. Você escolheu resenhar a fábula de La Fontaine transcrita abaixo.",
+          "tarefa": {
+            "texto": "Em seu texto, você deverá incluir:",
+            "itens": [
+              {
+                "item": "a",
+                "texto": "uma síntese da fábula, indicando os seus elementos constitutivos;"
+              },
+              {
+                "item": "b",
+                "texto": "a construção de uma situação social análoga aos fatos narrados, que envolva um problema coletivo;"
+              },
+              {
+                "item": "c",
+                "texto": "um fechamento, estabelecendo relações com a temática do texto original."
+              }
+            ],
+            "instrucoes_adicionais": "Seu texto deverá ser escrito em linguagem formal, deverá indicar o título da obra e ser assinado com um pseudônimo."
+          }
+        },
+        "coletanea": [
+          {
+            "numero": 1,
+            "genero": "Fábula",
+            "autor": "La Fontaine",
+            "data_acesso": "Não informado",
+            "disponibilidade": "Fábulas de La Fontaine. Tradução de Milton Amado e Eugênia Amado. Belo Horizonte: Itatiaia, 2003, p. 134-136.",
+            "tipo_texto": "Narrativo e moralizante",
+            "palavras_chave": [
+              "fábula",
+              "ratos",
+              "gato",
+              "deliberação",
+              "ação",
+              "inércia",
+              "coragem",
+              "problema coletivo"
+            ],
+            "conteudo_textual": "A Deliberação Tomada pelos Ratos\n\nRodilardo, gato voraz,\naprontou entre os ratos tal matança,\nque deu cabo de sua paz,\nde tantos que matava e guardava na pança.\nOs poucos que sobraram não se aventuravam\na sair dos buracos: mal se alimentavam.\nPara eles, Rodilardo era mais que um gato:\nera o próprio Satã, de fato.\nUm dia em que, pelos telhados,\nfoi o galante namorar,\naproveitando a trégua, os ratos, assustados,\nresolveram confabular\ne discutir um modo de solucionar\nesse grave problema. O decano, prudente,\ndefiniu a questão: simples falta de aviso,\njá que o gato chegava, solerte. Era urgente\namarrar-lhe ao pescoço um guizo,\nconcluiu o decano, rato de juízo.\nAcharam a ideia excelente,\ne aplaudiram seu autor. Restava, todavia,\num pequeno detalhe a ser solucionado:\nquem prenderia o guizo – e qual se atreveria?\nUm se esquivou, dizendo estar muito ocupado;\nOutro alegou que andava um tanto destreinado\nem dar laços e nós. E a bela ideia\nteve triste final. Muita assembleia, ao fim nada decide – mesmo sendo de frades\nou de veneráveis abades...\nDeliberar, deliberar ...\nconselheiros, existem vários;\nmas quando é para executar,\nonde estarão os voluntários?"
+          }
+        ],
+        "expectativa_banca": "Na primeira proposta, esperava-se que os candidatos produzissem uma resenha da fábula de La Fontaine, explorando as relações entre a narrativa e um problema coletivo análogo. A banca avaliou a capacidade de síntese, a construção da analogia e a articulação com a temática original.",
+        "ano_2016_proposta_1_estatisticas": {
+          "estatisticas_gerais": {
+            "media_notas_brutas": 5.9,
+            "desvio_padrao_notas_brutas": 1.9,
+            "porcentagem_escolhas": 78,
+            "quartil_1": 4.5,
+            "mediana": 6,
+            "quartil_3": 7.5,
+            "minimo": 0,
+            "maximo": 12
+          },
+          "distribuicao_notas_brutas": {
+            "descricao": "A distribuição das notas brutas do texto 1 é aproximadamente normal.",
+            "formato": null
+          }
+        }
+      },
+      "ano_2016_proposta_2": {
+        "id": 18,
+        "numero": 2,
+        "ano": 2016,
+        "interlocutores": {
+          "enunciador_i": "Estudante de curso sobre o livro 'O sentimento de si'",
+          "interlocutor_i": "Leitores do blog do curso, especialmente alunos do ensino médio",
+          "mascara_discursiva_i": "Estudante que se propõe a divulgar conhecimento científico"
+        },
+        "situacao_problema_s": "Produção de um texto de divulgação científica para um blog sobre o tema da indução das emoções, baseado em um excerto do livro 'O sentimento de si'.",
+        "tema": "Indução das emoções: como objetos e situações adquirem valor emocional e influenciam nossas experiências.",
+        "genero_g": "Texto de divulgação científica",
+        "construcao_composicional": "Introdução com a apresentação do tema e do autor. Desenvolvimento com a explicação sobre indutores de emoção, exemplos do texto-fonte e uma breve narrativa que exemplifique o processo de indução. Conclusão baseada no fechamento do texto original.",
+        "tipologia_textual": "Predominantemente expositiva, com elementos argumentativos e narrativos.",
+        "projeto_texto": "Divulgar a ideia de que as emoções são induzidas por estímulos externos e que a atribuição de valor emocional a objetos e situações é um processo dinâmico e influenciado por nossas experiências.",
+        "leitura_textos_coletanea": "O candidato deve demonstrar compreensão do excerto, identificando as ideias principais sobre indutores de emoção, o processo de associação e a onipresença das emoções.",
+        "escolhas_lexicais_sintaticas": "Linguagem clara e acessível ao público-alvo, com uso de vocabulário científico adequado e explicado. Uso de recursos linguísticos para tornar o texto informativo e interessante.",
+        "recursos_coesivos": "Uso de conectivos para articular as partes do texto, garantindo a coesão e coerência. Uso de recursos de referenciação para retomar elementos do texto-fonte e da narrativa.",
+        "norma_culta": "Domínio da norma culta contemporânea.",
+        "estilo": "Claro, objetivo, informativo e engajador.",
+        "originalidade": "Criatividade na narrativa que exemplifica o processo de indução de emoções.",
+        "pertinencia": "O texto deve se manter focado no tema da indução das emoções e nas ideias de António Damásio.",
+        "observacoes": "O candidato deve demonstrar capacidade de leitura, interpretação e escrita. Deve ser capaz de articular diferentes tipos de texto e de usar a linguagem de forma precisa e adequada ao gênero divulgação científica.",
+        "data_criacao": "2023-11-14",
+        "data_ultima_edicao": "2023-11-14",
+        "recorte_tematico": "A natureza das emoções, o processo de associação entre estímulos e respostas emocionais, e a influência da cultura e das experiências individuais na indução de emoções.",
+        "enunciado": {
+          "situacao_inicial": "Você está participando de um curso sobre o livro O sentimento de si: corpo, emoção e consciência, de autoria do neurocientista António Damásio. Uma das avaliações do curso consiste na produção de um texto de divulgação científica a ser publicado em um blog do curso. O objetivo do seu texto será o de divulgar as ideias do autor para um público mais amplo, especialmente para alunos do ensino médio. Você deverá escrever o seu texto sobre o tema da indução das emoções, baseado no excerto abaixo, incluindo:",
+          "tarefa": {
+            "texto": null,
+            "itens": [
+              {
+                "item": "a",
+                "texto": "uma explicação sobre indutores de emoção com exemplos do próprio texto;"
+              },
+              {
+                "item": "b",
+                "texto": "uma breve narrativa que exemplifique processos de indução de emoções;"
+              },
+              {
+                "item": "c",
+                "texto": "uma finalização baseada no fechamento do texto original."
+              }
+            ],
+            "instrucoes_adicionais": "Lembre-se de que o texto de divulgação científica deverá ter um título adequado aos conteúdos tratados."
+          }
+        },
+        "coletanea": [
+          {
+            "numero": 1,
+            "genero": "Excerto de livro",
+            "autor": "António Damásio",
+            "data_acesso": "Não informado",
+            "disponibilidade": "O sentimento de si: corpo, emoção e consciência. Lisboa: Círculo de Leitores, 2013, p.79-81.",
+            "tipo_texto": "Expositivo e argumentativo",
+            "palavras_chave": [
+              "emoções",
+              "indução",
+              "estímulos",
+              "condicionamento",
+              "aprendizagem",
+              "consciência",
+              "neurociência"
+            ],
+            "conteudo_textual": "O induzir das emoções\n\nAs emoções acontecem em dois tipos de\ncircunstâncias. O primeiro tipo de circunstâncias\ntem lugar quando o organismo processa\ndeterminados objetos ou situações através de um\ndos seus dispositivos sensoriais, por exemplo,\nquando o organismo avista um rosto ou um local\nfamiliar. O segundo tipo de circunstâncias tem lugar\nquando a mente de um organismo recorda certos\nobjetos e situações e os representa, como imagens,\nno processo do pensamento, por exemplo, a\nrecordação do rosto de uma amiga ou o fato de\nesta ter acabado de falecer.\nUm fato que se torna óbvio ao considerarmos as\nemoções é que certas espécies de objetos ou\nacontecimentos tendem a estar mais\nsistematicamente ligados a determinado tipo de\nemoção que a outros. As classes de estímulos que\nprovocam alegria, medo ou tristeza tendem a fazêlo de forma consistente no mesmo indivíduo e em\nindivíduos que compartilham os mesmos\nantecedentes culturais. Apesar de todas as possíveis\nvariações na expressão de uma emoção, e apesar\ndo fato de podermos ter emoções mistas, existe\numa correspondência aproximada entre classes de\nindutores de emoção e o resultante estado\nemocional. Ao longo da evolução, os organismos\nadquiriram os meios para responder a determinados\nestímulos – sobretudo aos que são potencialmente\núteis ou perigosos sob o ponto de vista da\nsobrevivência – através de um conjunto de\nrespostas a que chamamos emoção.\nTambém é importante notar que enquanto o\nmecanismo biológico das emoções é largamente\npredeterminado, os indutores de emoção são\nexternos e não fazem parte desse mecanismo. Os\nestímulos que causam a emoção não se encontram,\nde modo algum, confinados aos que ajudaram a\nformar nosso cérebro emocional ao longo da\nevolução e que podem induzir emoção desde os\nprimeiros dias de vida. À medida que se\ndesenvolvem e interagem, os organismos ganham\nexperiência factual e emocional com diversos\nobjetos e situações do ambiente, tendo assim uma\noportunidade de associar muitos objetos e situações\nque poderiam ter permanecido emocionalmente\nneutros, com os objetos e as situações que causam\nemoções naturalmente. A forma de aprendizagem\nconhecida por condicionamento é uma das\nmaneiras de obter esta associação. Uma casa\nparecida com a que o leitor viveu uma infância feliz\npode fazê-lo sentir-se feliz, embora nada de\nespecialmente bom ainda se tenha passado na casa.\nDo mesmo modo, o rosto de uma belíssima\ndesconhecida, que se assemelha ao de uma pessoa\nligada a um acontecimento terrível, pode causar-lhe\ndesconforto ou irritação. Pode até nunca chegar a\nperceber por quê.\nA consequência de concedermos um valor\nemocional aos objetos que não estavam\nbiologicamente destinados a receber essa carga\nemocional é tornar infinita a lista de estímulos que,\npotencialmente, podem induzir emoções. De uma\nforma ou de outra, a maior parte dos objetos e das\nsituações conduzem a alguma reação emocional,\nembora uns em maior escala que outros. A reação\nemocional pode ser fraca ou forte – e, felizmente\npara nós, é fraca na maior parte das vezes – mas\nmesmo assim está sempre presente. A emoção e o\nmecanismo biológico que lhe é subjacente são os\ncompanheiros obrigatórios do comportamento,\nconsciente ou não. Um certo grau de emoção\nacompanha, forçosamente, o pensamento sobre\nnós mesmos ou sobre o que nos rodeia."
+          }
+        ],
+        "expectativa_banca": "Na segunda proposta, esperava-se que os candidatos elaborassem um texto de divulgação científica sobre a indução das emoções, com base em um excerto de António Damásio. A banca avaliou a clareza da explicação, a pertinência da narrativa e a fidelidade às ideias do autor.",
+        "ano_2016_proposta_2_estatisticas": {
+          "estatisticas_gerais": {
+            "media_notas_brutas": 6.4,
+            "desvio_padrao_notas_brutas": 1.6,
+            "porcentagem_escolhas": 22,
+            "quartil_1": 5.5,
+            "mediana": 6.5,
+            "quartil_3": 7.5,
+            "minimo": 0,
+            "maximo": 12
+          },
+          "distribuicao_notas_brutas": {
+            "descricao": "A distribuição das notas brutas do texto 2 é aproximadamente normal.",
+            "formato": null
+          }
+        }
+      },
+      "ano_2016_descricao": "Prova de redação com duas propostas de textos para o candidato escolher e executar apenas uma.",
+      "ano_2016_estatisticas": {
+        "estatisticas_gerais": {
+          "media_notas_brutas": 6,
+          "desvio_padrao_notas_brutas": 1.8,
+          "porcentagem_zeros": 0.2,
+          "quartil_1": 5,
+          "mediana": 6,
+          "quartil_3": 7,
+          "minimo": 0,
+          "maximo": 12
+        },
+        "distribuicao_notas_brutas": {
+          "descricao": "A distribuição das notas brutas de redação é aproximadamente normal.",
+          "formato": null
+        },
+        "correlacao_com_questoes": {
+          "descricao": "A correlação entre as notas da redação e as notas das questões é moderada e positiva.",
+          "formato": null
+        }
+      }
+    },
     "ano_2017": {
       "ano_2017_proposta_1": {
         "id": 15, 
