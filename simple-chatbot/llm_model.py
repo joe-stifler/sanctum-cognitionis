@@ -62,7 +62,7 @@ class LLMBaseModel(ABC):
 
     # make hte following method abstract
     @abstractmethod
-    def send_message(self, message, system_message=None, files=[]):
+    def send_stream_message(self, message):
         pass
 
 
@@ -83,14 +83,17 @@ class OllamaModel(LLMBaseModel):
             output_tokens_range,
         )
 
-    def send_message(self, message, system_message=None, files=[]):
+    def send_stream_message(self, message):
         prompt = self._system_instruction + "\n" + message
-        response = ollama.chat(
+        response_stream = ollama.chat(
             model=self.name,
             messages=[{"role": "user", "content": prompt}],
             stream=True,
         )
-        return response
+        # Extract the message content from the generator response. Yield inside
+        for chunk in response_stream:
+            content = chunk["message"]["content"]
+            yield content
 
 
 class GeminiModel(LLMBaseModel):
@@ -114,11 +117,12 @@ class GeminiModel(LLMBaseModel):
         genai.configure(api_key=self.api_key)
         self.model = genai.GenerativeModel(self.name)
 
-    def send_message(self, message, system_message=None, files=[]):
+        for m in genai.list_models():
+            if "generateContent" in m.supported_generation_methods:
+                print(m.name)
+
+    def send_stream_message(self, message):
         prompt = self._system_instruction + "\n" + message
-        response = self.model.predict(
-            prompt,
-            temperature=self.temperature,
-            max_output_tokens=self.max_output_tokens,
-        )
-        return response
+        response_stream = self.model.generate_content(prompt, stream=True)
+        for chunk in response_stream:
+            yield chunk.text

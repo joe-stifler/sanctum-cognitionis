@@ -14,25 +14,25 @@ class ChatSession:
 
     __START_TURN_USER__ = f"<start_of_turn>{__USER__}\n"
     __START_TURN_ASSISTANT__ = f"<start_of_turn>{__ASSISTANT__}\n"
-    __END_TURN__ = "\n<end_of_turn>\n"
+    __END_TURN_USER__ = f"<end_of_turn>\n"
+    __END_TURN_ASSISTANT__ = f"<end_of_turn>\n"
 
-    def __init__(self, model: LLMBaseModel, system="", sqlite_conn=None):
+    def __init__(self, system="", connection=None):
         """
         Initializes the chat state.
 
         Args:
-            model: The language model to use for generating responses.
             system: (Optional) System instructions or bot description.
-            sqlite_conn: (Optional) SQLiteConnection object for storing chat history.
+            connection: (Optional) SQLiteConnection object for storing chat history.
         """
-        self.model = model
+        self.model = None
         self.system = system
-        self.sqlite_conn = sqlite_conn
+        self.connection = connection
         self.session_id = str(uuid.uuid4())  # Generate a unique session ID
 
         # Create the chat_history table if it doesn't exist
-        if self.sqlite_conn:
-            self.sqlite_conn.execute(
+        if self.connection:
+            self.connection.execute(
                 """
                 CREATE TABLE IF NOT EXISTS chat_history (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -44,13 +44,31 @@ class ChatSession:
                 """
             )
 
+    def is_model_initialized(self):
+        """
+        Checks if the language model is initialized.
+
+        Returns:
+            True if the model is initialized, False otherwise.
+        """
+        return self.model is not None
+
+    def update_model(self, model: LLMBaseModel):
+        """
+        Updates the language model used by the chat session.
+
+        Args:
+            model: The new language model to use.
+        """
+        self.model = model
+
     def add_to_history_as_user(self, message):
         """
         Adds a user message to the history with start/end turn markers.
         """
-        if self.sqlite_conn:
-            self.sqlite_conn.execute(
-                f"INSERT INTO chat_history (session_id, role, message) VALUES (?, ?, ?)",
+        if self.connection:
+            self.connection.execute(
+                "INSERT INTO chat_history (session_id, role, message) VALUES (?, ?, ?)",
                 (self.session_id, self.__USER__, message),
             )
 
@@ -58,9 +76,9 @@ class ChatSession:
         """
         Adds a assistant response to the history with start/end turn markers.
         """
-        if self.sqlite_conn:
-            self.sqlite_conn.execute(
-                f"INSERT INTO chat_history (session_id, role, message) VALUES (?, ?, ?)",
+        if self.connection:
+            self.connection.execute(
+                "INSERT INTO chat_history (session_id, role, message) VALUES (?, ?, ?)",
                 (self.session_id, self.__ASSISTANT__, message),
             )
 
@@ -68,11 +86,11 @@ class ChatSession:
         """
         Returns the entire chat history as a single string.
         """
-        if not self.sqlite_conn:
+        if not self.connection:
             return []
 
         # Fetch history from the database
-        chat_history = self.sqlite_conn.query(
+        chat_history = self.connection.query(
             f"SELECT role, message FROM chat_history WHERE session_id = '{self.session_id}'"
         )
         return chat_history
@@ -81,33 +99,27 @@ class ChatSession:
         """
         Returns the entire chat history as a single string.
         """
-        if not self.sqlite_conn:
+        if not self.connection:
             return ""
 
         # Fetch history from the database
         chat_history = self.get_history()
 
         turn_history = []
+
         for role, message in chat_history:
-            turn_history.append(
-                f"{self.__START_TURN_USER__}{message}{self.__END_TURN__}"
-                if role == "user"
-                else f"{self.__START_TURN_ASSISTANT__}{message}{self.__END_TURN__}"
-            )
-        turn_history = "".join(turn_history)
-        print(f"Turn history {self.session_id}: \n", turn_history)
+            if role == self.__USER__:
+                turn_history.append(
+                    f"{self.__START_TURN_USER__}{message}{self.__END_TURN_USER__}"
+                )
+            else:
+                turn_history.append(
+                    f"{self.__START_TURN_ASSISTANT__}{message}{self.__END_TURN_ASSISTANT__}"
+                )
 
-        return turn_history
+        str_turn_history = "".join(turn_history)
 
-    def get_full_prompt(self):
-        """
-        Builds the prompt for the language model, including history and system description.
-        """
-        prompt = self.get_history_as_turns() + self.__START_TURN_ASSISTANT__
-
-        if len(self.system) > 0:
-            prompt = self.system + "\n" + prompt
-        return prompt
+        return "Chat history for your context:" + str_turn_history
 
     def send_stream_message(self, message):
         """
@@ -120,18 +132,20 @@ class ChatSession:
             The model's response.
         """
         self.add_to_history_as_user(message)
-        prompt = self.get_full_prompt()
-        response = self.model.send_message(prompt)
+
+        # Check if the model is initialized
+        if self.model is None:
+            # raise and exception with message asking to initilize the model
+            raise ValueError("Model not initialized. Please update the model.")
+
+        prompt = self.get_history_as_turns() + "\nNew user message: " + message
+        response_stream = self.model.send_stream_message(prompt)
 
         # Extract the message content from the generator response. Yield inside
         full_response = ""
-        for chunk in response:
-            content = chunk["message"]["content"]
-            full_response += content
-            yield content
+        for chunk_content in response_stream:
+            full_response += chunk_content
+            yield chunk_content
 
         # Add the full processed model response to the chat history
         self.add_to_history_as_assistant(full_response)
-
-        # Return the processed model response
-        return full_response
