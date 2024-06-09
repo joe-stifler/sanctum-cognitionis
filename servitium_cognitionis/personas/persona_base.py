@@ -18,7 +18,7 @@ class Persona:
     def name(self):
         return (
             self._name
-            + "[model = "
+            + " [model = "
             + self.model
             + " / temperature = "
             + str(self.temperature)
