@@ -1,8 +1,6 @@
 import json
 import fitz  # PyMuPDF
 from io import BytesIO
-from PIL import Image
-import io
 from abc import ABC, abstractmethod
 
 

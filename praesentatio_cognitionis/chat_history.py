@@ -26,7 +26,9 @@ class ChatHistory:
         self.persona = persona
         self.llm_model = llm_model
 
-        self.llm_model.initialize_model()
+        self.llm_model.initialize_model(
+            temperature=self.persona.temperature,
+        )
         self.llm_model.create_chat(self.session_id)
 
     def create_new_message(self, user_message="", user_uploaded_files=None):

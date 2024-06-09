@@ -5,16 +5,33 @@ from datetime import datetime
 class Persona:
     def __init__(self, **kwargs):
         self._name = kwargs.get("name", "")
+        self._model = kwargs.get("model", "")
         self._avatar = kwargs.get("avatar", "🤖")
         self._knowledge_files = kwargs.get("knowledge", [])
         self._beg_persona_content = kwargs.get("beg_persona_content", "")
         self._end_persona_content = kwargs.get("end_persona_content", "")
         self._speech_conciseness = kwargs.get("speech_conciseness", None)
         self._persona_description_file = kwargs.get("persona_description_file", "")
+        self._temperature = kwargs.get("temperature", 1.0)
 
     @property
     def name(self):
-        return self._name
+        return (
+            self._name
+            + "[model = "
+            + self.model
+            + " / temperature = "
+            + str(self.temperature)
+            + "]"
+        )
+
+    @property
+    def model(self):
+        return self._model
+
+    @model.setter
+    def model(self, value):
+        self._model = value
 
     @property
     def avatar(self):
@@ -27,6 +44,14 @@ class Persona:
     @property
     def knowledge_files(self):
         return self._knowledge_files
+
+    @property
+    def temperature(self):
+        return self._temperature
+
+    @temperature.setter
+    def temperature(self, value):
+        self._temperature = value
 
     def convert_files_to_str(self):
         if len(self._knowledge_files) == 0:
@@ -76,10 +101,11 @@ class Persona:
             f"Avatar: {self._avatar}\n"
             f"Knowledge Files: {self._knowledge_files}\n"
             f"Persona Description File: {self._persona_description_file}"
+            f"Temperature: {self._temperature}"
         )
 
     @classmethod
     def from_json(cls, path):
         with open(path, "r", encoding="utf-8") as file:
             persona_data = json.load(file)
-            return cls(persona_data)
+            return cls(**persona_data)

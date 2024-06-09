@@ -1,10 +1,5 @@
 # module imports from the praesentatio_cognitionis package
 from praesentatio_cognitionis.file_ui_render import write_medatada_chat_message
-from praesentatio_cognitionis.streamlit_file_handler import StreamlitFileHandler
-
-# module imports from the servitium_cognitionis package
-from servitium_cognitionis.llms.gemini import GeminiDevFamily
-from servitium_cognitionis.personas.persona_base import Persona
 
 # module imports from the standard python environment
 import traceback
@@ -25,11 +20,12 @@ def render_chat_history(chat_connector, logger):
 
         with st.chat_message("assistant", avatar=persona.avatar):
             st.write(f":red[{chat_message.ai_name}]")
-            st.write(''.join(chat_message.ai_messages))
+            st.write("".join(chat_message.ai_messages))
 
             write_medatada_chat_message("assistant", chat_message.ai_extra_args)
 
     return chat_history
+
 
 def chat_messages(chat_history, user_input_message, user_uploaded_files, logger):
     persona = chat_history.get_persona()
@@ -47,14 +43,16 @@ def chat_messages(chat_history, user_input_message, user_uploaded_files, logger)
 
             # Display AI responses
             with st.chat_message("assistant", avatar=persona.avatar):
-                st.write(f":red[{chat_history.get_persona().name}]")
+                st.write(f":red[{persona.name}]")
                 with st.spinner("I am processing your message..."):
                     new_ai_message = st.empty()
                     new_chat_message = chat_history.send_ai_message(
                         user_input_message, user_uploaded_files
                     )
                     new_ai_message.write_stream(new_chat_message.process_ai_messages())
-                    logger.debug(f"\n\nAI new message kwargs: \n\n{new_chat_message.ai_extra_args}")
+                    logger.debug(
+                        f"\n\nAI new message kwargs: \n\n{new_chat_message.ai_extra_args}"
+                    )
 
             st.session_state["start_new_conversation"] = False
 
@@ -65,7 +63,11 @@ def chat_messages(chat_history, user_input_message, user_uploaded_files, logger)
             error_str = str(e)
 
             error_details = traceback.format_exc()
-            logger.error(f"Error processing user input: %s\nDetails: %s", error_str, error_details)
+            logger.error(
+                f"Error processing user input: %s\nDetails: %s",
+                error_str,
+                error_details,
+            )
 
             if "400 API key not valid" in error_str:
                 st.error("Error during chat initialization: invalid Google API key")
@@ -73,4 +75,6 @@ def chat_messages(chat_history, user_input_message, user_uploaded_files, logger)
                 st.error(f"Error: {error_str}\nDetails: {error_details}")
 
     if len(chat_history.chat_messages) == 0:
-        st.info(f"""`{persona.name}` is waiting to help you. Don't be shy! Take the initiave and ask for help.\n\n""")
+        st.info(
+            f"""`{persona.name}` is waiting to help you. Don't be shy! Take the initiave and ask for help.\n\n"""
+        )

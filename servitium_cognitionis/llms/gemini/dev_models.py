@@ -10,22 +10,20 @@ class GeminiDevBaseModel(LLMBaseModel):
         self._model_instance = None
         self._model_chats = {}
 
-    def initialize_model(
-        self, system_instruction=[], temperature=None, max_output_tokens=None
-    ):
+    def initialize_model(self, system_instruction=[], temperature=1.0):
         additional_args = {}
         if len(system_instruction) > 0:
             additional_args = {
                 "system_instruction": system_instruction,
             }
 
+        print("Temperature being used: ", temperature)
+
         self._model_chats = {}
         self._model_instance = genai.GenerativeModel(
             self.name,
             generation_config=genai.types.GenerationConfig(
-                # candidate_count=1,
-                temperature=0.1,
-                # max_output_tokens=max_output_tokens,
+                temperature=temperature,
             ),
             safety_settings={
                 "harassment": "block_only_high",
@@ -168,45 +166,19 @@ class GeminiDevBaseModel(LLMBaseModel):
             yield text_message, new_ai_message_args
 
 
-class GeminiDevModelPro1_0(GeminiDevBaseModel):
-    def __init__(self, temperature=0.1, max_output_tokens=2048):
-        super().__init__(
-            model_name="gemini-pro",
-            temperature=temperature,
-            temperature_range=(0.0, 2.0),
-            max_output_tokens=max_output_tokens,
-            output_tokens_range=(1, 2048),
-        )
-
-
-class GeminiDevModelPro1_0Vision(GeminiDevBaseModel):
-    def __init__(self, temperature=0.1, max_output_tokens=4096):
-        super().__init__(
-            model_name="gemini-pro-vision",
-            temperature=temperature,
-            temperature_range=(0.0, 2.0),
-            max_output_tokens=max_output_tokens,
-            output_tokens_range=(1, 4096),
-        )
-
-
 class GeminiDevModelPro1_5(GeminiDevBaseModel):
-    def __init__(self, temperature=0.1, max_output_tokens=8192):
+    def __init__(self, temperature=1.0):
         super().__init__(
-            model_name="gemini-1.5-pro-latest",
+            model_name="gemini-1.5-pro",
             temperature=temperature,
             temperature_range=(0.0, 2.0),
-            max_output_tokens=max_output_tokens,
-            output_tokens_range=(1, 8192),
         )
 
 
-class GeminiDevModelPro1_5_Flash(GeminiDevBaseModel):
-    def __init__(self, temperature=0.1, max_output_tokens=8192):
+class GeminiDevModel1_5_Flash(GeminiDevBaseModel):
+    def __init__(self, temperature=1.0):
         super().__init__(
-            model_name="gemini-1.5-flash-latest",
+            model_name="gemini-1.5-flash",
             temperature=temperature,
             temperature_range=(0.0, 2.0),
-            max_output_tokens=max_output_tokens,
-            output_tokens_range=(1, 8192),
         )
