@@ -166,14 +166,6 @@ def model_settings(
             ),
         )
 
-        google_api_key = st.text_input(
-            "Set your Google Gemini API Key",
-            key="api_token",
-            type="password",
-            help="Follow the instructions in the [official website](https://makersuite.google.com/app/apikey) to create a new API Key",
-            value=st.session_state.get("google_api_key", ""),
-        )
-
         temperature = st.slider(
             "Choose the model temperature",
             min_value=0.0,
@@ -182,6 +174,14 @@ def model_settings(
             value=st.session_state.get(
                 "temperature", 1.0
             ),  # Use session state value as default
+        )
+
+        google_api_key = st.text_input(
+            "Set your Google Gemini API Key",
+            key="api_token",
+            type="password",
+            help="Follow the instructions in the [official website](https://makersuite.google.com/app/apikey) to create a new API Key",
+            value=st.session_state.get("google_api_key", ""),
         )
 
         atualizar_configuracoes = st.button("Update Settings")
