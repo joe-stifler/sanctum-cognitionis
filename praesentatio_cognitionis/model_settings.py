@@ -71,13 +71,20 @@ def set_model(
 def model_settings(
     chat_connector, logger, google_api_key=None, persona_name=None, model_name=None
 ):
-    available_personas = {
+    # Define base persona options
+    base_personas = {
         "Lumi: your personal research companion": "dados/personas/lumi/persona_config.json",
         "Ryan: your personal python, deep learning, statistician, mathematician, and cryptography expert": "dados/personas/ryan/persona_config.json",
-        "Dani Stella (a inteligência artificial)": "dados/personas/dani-stella/persona_config.json",
         "Gemini 1.5": "dados/personas/gemini-1_5/persona_config.json",
         "Pensador Profundo": "dados/personas/persador_profundo/persona_config.json",
     }
+
+    # Dynamically add Dani Stella based on the input
+    available_personas = base_personas.copy()
+    if persona_name == "Dani Stella (a inteligência artificial)":
+        available_personas["Dani Stella (a inteligência artificial)"] = (
+            "dados/personas/dani-stella/persona_config.json"
+        )
 
     default_model_name = "GeminiDevModel1_5_Flash"
     default_persona_name = "Lumi: your personal research companion"
