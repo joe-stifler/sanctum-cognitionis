@@ -1,6 +1,7 @@
 from servitium_cognitionis.llms.base import LLMBaseModel
 
 import google.generativeai as genai
+from google.generativeai.types import generation_types
 from google.ai.generativelanguage import Part, Blob
 
 
@@ -9,6 +10,7 @@ class GeminiDevBaseModel(LLMBaseModel):
         super().__init__(**kwargs)
         self._model_instance = None
         self._model_chats = {}
+        self._last_response = None
 
     def initialize_model(self, system_instruction=[], temperature=1.0):
         additional_args = {}
@@ -119,28 +121,34 @@ class GeminiDevBaseModel(LLMBaseModel):
     def send_stream_chat_message(
         self, session_id, message, system_message=None, files=[]
     ):
+        if self._last_response is not None:
+            self._last_response.resolve()
+
         messages = self.create_llm_request(message, system_message, files)
 
         if session_id not in self._model_chats:
             raise ValueError("Chat session does not exist. Call create_chat() first")
 
-        ai_response_stream = self._model_chats[session_id].send_message(
-            messages,
-            stream=True,
-            request_options={
-                "timeout": 60 * 20,
-            },
-        )
+        chat = self._model_chats[session_id]
+
+        try:
+            ai_response_stream = chat.send_message(
+                messages,
+                stream=True,
+                request_options={
+                    "timeout": 60 * 20,
+                },
+            )
+            self._last_response = ai_response_stream
+        except generation_types.BrokenResponseError:
+            last_send, last_received = chat.rewind()
+
+            print("Last send: ", last_send)
+            print("Last received: ", last_received)
+
+            return None
 
         return self.process_ai_response_stream(session_id, ai_response_stream)
-
-    def send_stream_single_message(self, message, system_message=None, files=[]):
-        messages = self.create_llm_request(message, system_message, files)
-
-        ai_response_stream = self._model_instance.generate_content(
-            messages, stream=True
-        )
-        return self.process_ai_response_stream(None, ai_response_stream)
 
     def process_ai_response_stream(self, session_id, responses):
         new_ai_message_args = {}

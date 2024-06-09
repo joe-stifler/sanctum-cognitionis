@@ -53,7 +53,3 @@ class LLMBaseModel(ABC):
         self, session_id, message, system_message=None, files=[]
     ):
         pass
-
-    @abstractmethod
-    def send_stream_single_message(self, message, system_message=None, files=[]):
-        pass
