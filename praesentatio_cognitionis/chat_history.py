@@ -4,6 +4,7 @@ from praesentatio_cognitionis.chat_message import ChatMessage
 # module imports from the standard python environment
 import uuid
 
+
 class ChatHistory:
     def __init__(self, session_id, llm_model=None, persona=None):
         self.persona = persona
@@ -33,9 +34,9 @@ class ChatHistory:
         new_chat_message = ChatMessage(
             message_id=str(uuid.uuid4().hex),
             ai_name=self.persona.name,
-            user_name="Usuário",
+            user_name="User",
             user_message=user_message,
-            user_upload_files=user_uploaded_files
+            user_upload_files=user_uploaded_files,
         )
         self.chat_messages.append(new_chat_message)
         return new_chat_message
@@ -46,12 +47,11 @@ class ChatHistory:
 
         if self.set_system_message is False:
             self.set_system_message = True
-            system_message = self.persona.present_yourself() + "\n---\n---\n"
-            system_message += "O conteudo acima representa toda sua base de conhecimento, como deve se comportar, como agir, como responder mensagens e se comunicar. Agora abaixo começará a interação com o usuário de fato:\n---\n"
+            system_message = self.persona.present_yourself()
 
         ai_response_stream = self.llm_model.send_stream_chat_message(
             self.session_id,
-            "Mensagem do usuario: " + user_message,
+            user_message,
             system_message=system_message,
             files=user_uploaded_files,
         )
