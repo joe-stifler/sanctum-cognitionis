@@ -7,6 +7,8 @@ class Persona:
         self._name = kwargs.get("name", "")
         self._avatar = kwargs.get("avatar", "🤖")
         self._knowledge_files = kwargs.get("knowledge", [])
+        self._beg_persona_content = kwargs.get("beg_persona_content", "")
+        self._end_persona_content = kwargs.get("end_persona_content", "")
         self._speech_conciseness = kwargs.get("speech_conciseness", None)
         self._persona_description_file = kwargs.get("persona_description_file", "")
 
@@ -30,20 +32,18 @@ class Persona:
         if len(self._knowledge_files) == 0:
             return ""
 
-        files_content = (
-            "## Arquivos disponíveis na base de conhecimento do professor(a):\n\n"
-        )
+        files_content = "## Files available in the persona knowledge:\n\n"
         files_content += "--------------------------------------------------------\n\n"
 
         for file_path in self._knowledge_files:
-            files_content += f"### Conteúdo do arquivo `{file_path}`:\n\n"
+            files_content += f"### File Content `{file_path}`:\n\n"
 
             extension = file_path.split(".")[-1]
             try:
                 with open(file_path, "r", encoding="utf-8") as file:
                     files_content += f"```{extension}\n" + file.read() + "\n```\n\n"
             except FileNotFoundError:
-                files_content += "Arquivo não encontrado.\n\n"
+                files_content += "File not found.\n\n"
 
         return files_content
 
@@ -55,8 +55,20 @@ class Persona:
             return file.read()
 
     def present_yourself(self):
-        files_str = self.convert_files_to_str()
-        return f"{files_str}\n---\n\n{self.read_description()}"
+        # Get current datetime
+        now = datetime.now()
+        timestamp = now.strftime("%A, %d of %B, %Y, %H:%M:%S")
+
+        persona_presentation = (
+            f"<current_date_time>{timestamp}</current_date_time>\n"
+            + f"<persona_name>{self._name}</persona_name>\n"
+            + f"<persona_avatar>{self._avatar}</persona_avatar>\n"
+            + f"{self._beg_persona_content}\n"
+            + self.read_description()
+            + f"\n{self._end_persona_content}\n"
+        )
+
+        return persona_presentation
 
     def __str__(self):
         return (
@@ -65,24 +77,6 @@ class Persona:
             f"Knowledge Files: {self._knowledge_files}\n"
             f"Persona Description File: {self._persona_description_file}"
         )
-
-    def append_initial_state_to_file(self, file_path):
-        # Get current datetime
-        now = datetime.now()
-        timestamp = now.strftime("%A, %d of %B, %Y, %H:%M:%S")
-
-        # Separator
-        separator = "--------------------------------------------------------"
-
-        # Get the initial state
-        initial_state = self.present_initial_state()
-
-        # Prepare content to append
-        content_to_append = f"{separator}\n{timestamp}\n{separator}\n{initial_state}\n{separator}\n{timestamp}\n{separator}\n"
-
-        # Append to the file
-        with open(file_path, "a", encoding="utf-8") as file:
-            file.write(content_to_append)
 
     @classmethod
     def from_json(cls, path):
