@@ -86,6 +86,11 @@ def model_settings(
             "dados/personas/dani-stella/persona_config.json"
         )
 
+    if persona_name == "Tyu Pro" or persona_name == "Tyu Flash":
+        print("Found Tyu Pro or Tyu Flash")
+        available_personas["Tyu Pro"] = "dados/personas/tyu-pro/persona_config.json"
+        available_personas["Tyu Flash"] = "dados/personas/tyu-flash/persona_config.json"
+
     default_model_name = "GeminiDevModel1_5_Flash"
     default_persona_name = "Lumi: your personal research companion"
     available_models = ["GeminiDevModelPro1_5", "GeminiDevModel1_5_Flash"]
@@ -94,10 +99,6 @@ def model_settings(
         # If the URL parameters are available, use them
         if google_api_key:
             st.session_state["google_api_key"] = google_api_key
-        if persona_name:
-            st.session_state["persona_name"] = persona_name
-        if model_name:
-            st.session_state["model_name"] = model_name
 
         # If the URL parameters are not available, use the default values
         if "google_api_key" not in st.session_state:
@@ -108,9 +109,14 @@ def model_settings(
 
         if "persona_name" not in st.session_state:
             st.session_state["persona_name"] = default_persona_name
+        if persona_name:
+            st.session_state["persona_name"] = persona_name
 
         if "model_name" not in st.session_state:
             st.session_state["model_name"] = default_model_name
+
+        if model_name:
+            st.session_state["model_name"] = model_name
 
         persona_name = st.session_state.get("persona_name", default_persona_name)
 
