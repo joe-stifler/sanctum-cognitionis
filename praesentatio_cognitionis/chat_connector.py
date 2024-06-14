@@ -3,6 +3,7 @@ from praesentatio_cognitionis.chat_history import ChatHistory
 import uuid
 import streamlit as st
 
+
 class ChatConnector:
     def __init__(self):
         self.chats = {}

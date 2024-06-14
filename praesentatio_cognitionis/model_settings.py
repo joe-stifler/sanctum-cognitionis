@@ -81,8 +81,8 @@ def model_settings(
 
     # Dynamically add Dani Stella based on the input
     available_personas = base_personas.copy()
-    if persona_name == "Dani Stella (a inteligência artificial)":
-        available_personas["Dani Stella (a inteligência artificial)"] = (
+    if persona_name == "stella_ia_34_dani_984":
+        available_personas["stella_ia_34_dani_984"] = (
             "dados/personas/dani-stella/persona_config.json"
         )
 
