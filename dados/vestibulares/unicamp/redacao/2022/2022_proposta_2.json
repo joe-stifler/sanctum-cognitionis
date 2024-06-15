@@ -1,0 +1,71 @@
+{
+    "propostas": {
+      "id": 10,
+      "numero": 2,
+      "ano": 2022,
+      "interlocutores": {
+        "enunciador_i": "Jovens pesquisadores brasileiros",
+        "interlocutor_i": "Comunidade científica e sociedade em geral",
+        "mascara_discursiva_i": "Grupo de jovens pesquisadores indignados com o corte de verbas para a ciência e a pesquisa"
+      },
+      "situacao_problema_s": "Corte de verbas para a ciência e a pesquisa no Brasil e as consequências para os jovens pesquisadores",
+      "tema": "Sucateamento da ciência e da pesquisa no Brasil e a importância da mobilização da comunidade científica",
+      "genero_g": "Manifesto",
+      "construcao_composicional": "Introdução que apresente o problema e o posicionamento do grupo, desenvolvimento com argumentos que denunciem os prejuízos do corte de verbas e a política de sucateamento da ciência, conclusão com convocação para a mobilização da comunidade científica",
+      "tipologia_textual": "Predominantemente argumentativa, com elementos expositivos",
+      "projeto_texto": "Denunciar o corte de verbas para a ciência e a pesquisa no Brasil, apontar os prejuízos dessa política e convocar a comunidade científica para a mobilização em defesa da ciência",
+      "leitura_textos_coletanea": "O candidato deve utilizar os textos da coletânea para compreender o contexto do corte de verbas, seus impactos na vida dos jovens pesquisadores e a importância da ciência para o desenvolvimento do país",
+      "escolhas_lexicais_sintaticas": "Adequação ao registro formal de um manifesto, com vocabulário preciso e que demonstre conhecimento sobre o tema",
+      "recursos_coesivos": "Uso de conectivos e recursos de sequenciação para articular os argumentos e organizar o texto",
+      "norma_culta": "Domínio da norma culta contemporânea",
+      "estilo": "Formal, crítico, persuasivo e que demonstre a indignação e a mobilização dos jovens pesquisadores",
+      "originalidade": "O candidato deve apresentar argumentos originais e bem fundamentados",
+      "pertinencia": "Os argumentos devem ser pertinentes ao tema do sucateamento da ciência e da pesquisa no Brasil",
+      "observacoes": "O candidato deve demonstrar senso crítico, capacidade de argumentação, conhecimento sobre a importância da ciência e engajamento na defesa da pesquisa científica",
+      "data_criacao": "2023-11-07", 
+      "data_ultima_edicao": "2023-11-07",
+      "recorte_tematico": "O corte de verbas para a ciência e a pesquisa no Brasil como uma política de sucateamento da ciência e a importância da mobilização da comunidade científica em defesa da pesquisa e do desenvolvimento do país",
+      "enunciado": {
+        "situacao_inicial": "Você é um/a jovem que está cursando o seu segundo ano de graduação em Geografia, na Unicamp. Entusiasmado/a com a possibilidade de estrear na pesquisa acadêmica, você submeteu seu projeto de Iniciação Científica (IC) para uma agência brasileira de fomento à pesquisa. Após análise da comissão avaliadora, seu projeto de pesquisa foi aprovado por mérito, mas não obteve o financiamento desejado. Motivo: o corte de verbas no orçamento destinado à ciência e à pesquisa no Brasil em 2021. Você, que tem se mostrado um/a universitário/a brilhante, com um currículo invejável, sente-se indignado/a com a impossibilidade de desenvolver sua pesquisa científica sem o necessário investimento. Decide, então, se unir a outros jovens pesquisadores brasileiros que vivenciaram a mesma experiência frustrante para escrever um manifesto, de autoria coletiva, a ser lido na reunião anual da Sociedade Brasileira para o Progresso da Ciência (SBPC).",
+        "tarefa": {
+          "texto": "Nesse texto, vocês",
+          "itens": [
+            {
+                "item": "**a**",
+                "texto": "apontam o corte de verbas destinadas à ciência e à pesquisa no Brasil,"
+            },
+            {
+                "item": "**b**",
+                "texto": "denunciam os consequentes prejuízos desses cortes e"
+            },
+            {
+                "item": "**c**",
+                "texto": "convocam a comunidade científica para o repúdio a essa política de sucateamento da ciência e da pesquisa em curso no Brasil atual."
+            }
+          ],
+          "instrucoes_adicionais": "Para escrever seu manifesto, leve em conta a coletânea de textos a seguir:" 
+        },
+        "definicao_genero": "Iniciação Científica (IC) é uma modalidade de pesquisa acadêmica desenvolvida por alunos de graduação nas universidades brasileiras em diversas áreas do conhecimento. Os alunos desenvolvem seu projeto de pesquisa (coletivo ou individual), acompanhados por um professor orientador, que pode estar ligado ou não a um laboratório de pesquisa ou a algum centro de pesquisa financiador (por exemplo: CAPES, CNPq, PIBIC, FAPESP etc.). Desde 2016, o valor da bolsa de iniciação científica varia de R$ 400 a R$ 700 mensais aproximadamente, a depender da agência de fomento."
+      },
+      "coletanea": [
+        {
+          "numero": 1,
+          "genero": "Notícia",
+          "autor": "Regiane Oliveira",
+          "data_acesso": "21/11/2021",
+          "disponibilidade": "https://brasil.elpais.com/brasil/2021-11-08/pesquisadores-se-formam-para-trabalhar-no-exterior-sob-desmonte-da-ciencianacional.html?utm_medium=Social&utm_source=Twitter&ssm=TW_BR_CM#Echobox=1636379412",
+          "tipo_texto": "Expositivo e argumentativo",
+          "palavras_chave": ["corte de verbas", "ciência", "pesquisa", "fuga de cérebros", "desmonte da ciência"]
+        },
+        {
+          "numero": 2,
+          "genero": "Manifesto",
+          "autor": "Coletivo de jovens pesquisadores",
+          "data_acesso": "21/11/2021",
+          "disponibilidade": "https://www.science.org/doi/10.1126/science.abm8160",
+          "tipo_texto": "Argumentativo",
+          "palavras_chave": ["corte de verbas", "ciência", "pesquisa", "jovens pesquisadores", "bolsas de estudo"]
+        }
+      ]
+   }
+}

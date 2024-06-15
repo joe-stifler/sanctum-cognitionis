@@ -1,0 +1,119 @@
+{
+    "propostas": {
+      "id": 14,
+      "numero": 2,
+      "ano": 2018,
+      "interlocutores": {
+        "enunciador_i": "Estudante convidado a escrever um artigo de opinião",
+        "interlocutor_i": "Leitores do jornal de maior circulação da cidade",
+        "mascara_discursiva_i": "Estudante que reflete sobre a liberdade de expressão e se posiciona sobre seus limites"
+      },
+      "situacao_problema_s": "Discussão sobre os limites da liberdade de expressão após uma postagem de mensagem de ódio contra nordestinos em uma rede social",
+      "tema": "Liberdade de expressão: limites e responsabilidades",
+      "genero_g": "Artigo de opinião",
+      "construcao_composicional": "Introdução que apresente o tema e a situação problema, desenvolvimento com a identificação e explicação dos dois principais posicionamentos sobre os limites da liberdade de expressão, defesa de um dos posicionamentos com argumentos, conclusão que reforce o ponto de vista e as implicações para a sociedade",
+      "tipologia_textual": "Predominantemente argumentativa, com elementos expositivos",
+      "projeto_texto": "Discutir a questão dos limites da liberdade de expressão, identificar e explicitar os dois principais posicionamentos sobre o tema, assumir um desses posicionamentos e sustentá-lo com argumentos",
+      "leitura_textos_coletanea": "O candidato deve utilizar as citações da coletânea para compreender os diferentes pontos de vista sobre a liberdade de expressão e o discurso de ódio, identificando os argumentos e as justificativas de cada posicionamento",
+      "escolhas_lexicais_sintaticas": "Adequação ao registro formal de um artigo de opinião, com vocabulário preciso e que demonstre conhecimento sobre o tema",
+      "recursos_coesivos": "Uso de conectivos e recursos de sequenciação para articular os argumentos e organizar o texto",
+      "norma_culta": "Domínio da norma culta contemporânea",
+      "estilo": "Formal, claro, objetivo e persuasivo",
+      "originalidade": "O candidato deve apresentar argumentos originais e bem fundamentados",
+      "pertinencia": "Os argumentos devem ser pertinentes ao tema da liberdade de expressão e seus limites",
+      "observacoes": "O candidato deve demonstrar senso crítico, capacidade de argumentação, conhecimento sobre os direitos fundamentais e habilidade para analisar diferentes pontos de vista",
+      "data_criacao": "2023-11-07", 
+      "data_ultima_edicao": "2023-11-07",
+      "recorte_tematico": "Os limites da liberdade de expressão e a questão do discurso de ódio, considerando os direitos fundamentais e a importância do respeito à dignidade humana",
+      "enunciado": {
+        "situacao_inicial": "Considere a seguinte situação: uma postagem recente em uma rede social de uma mensagem de ódio contra os nordestinos foi foco de intensa discussão. Dada a repercussão do caso, o jornal de maior circulação de sua cidade resolveu fazer um caderno especial sobre o tema “Liberdade de Expressão”. Leitores de diferentes perfis foram convidados a se manifestar e você foi o estudante escolhido.",
+        "tarefa": {
+          "texto": "Para atender a esse convite, você deverá escrever um artigo de opinião em que discutirá a seguinte questão: “Há limite para a liberdade de expressão?”\n\nNo seu artigo de opinião, você deve:",
+          "itens": [
+            {
+                "item": "**a**",
+                "texto": "identificar e explicitar os dois principais posicionamentos sobre a questão tratada;"
+            },
+            {
+                "item": "**b**",
+                "texto": "assumir um desses dois posicionamentos e sustentá-lo com argumentos."
+            }
+          ],
+          "instrucoes_adicionais": "Seu texto deverá considerar as seguintes citações:" 
+        }
+      },
+      "coletanea": [
+
+        {
+          "numero": 1,
+          "genero": "Citação",
+          "autor": "Luís Roberto Barroso",
+          "data_acesso": "Não informado",
+          "disponibilidade": "Não informado",
+          "tipo_texto": "Expositivo",
+          "palavras_chave": ["liberdade de expressão", "discurso de ódio", "grupos vulneráveis", "Estado"],
+          "conteudo_textual": "Liberdade de expressão é a possibilidade de as pessoas se manifestarem sobre fatos e ideias sem interferências externas, sobretudo do Estado. Discurso de ódio é uma tentativa de desqualificar e excluir do debate grupos historicamente vulneráveis, seja por religião, cor da pele, gênero, orientação sexual ou qualquer traço utilizado com o objetivo de inferiorizar pessoa ou grupo." 
+        },
+        {
+          "numero": 2,
+          "genero": "Citação",
+          "autor": "Bruno de Oliveira Carreirão",
+          "data_acesso": "Não informado",
+          "disponibilidade": "Não informado",
+          "tipo_texto": "Argumentativo",
+          "palavras_chave": ["liberdade de expressão", "discordância", "repressão", "Constituição Federal"],
+          "conteudo_textual": "A frase ‘eu discordo do que dizes, mas defenderei até a morte o teu direito de dizê-lo’ talvez seja a melhor definição para a liberdade de expressão. Afinal, é muito fácil conceder a liberdade de expressão às ideias com que concordamos; muito mais difícil é aceitar a manifestação de ideias que desgostamos. O que se tem visto no Brasil nos últimos tempos, no entanto, é uma crescente vontade de reprimir formas de expressão que sejam consideradas desrespeitosas e preconceituosas. A iniciativa, embora tenha como pano de fundo uma intenção nobre, tem gerado situações desproporcionais, limitando o direito à livre expressão e violando a Constituição Federal."
+        },
+        {
+          "numero": 3,
+          "genero": "Citação",
+          "autor": "Marcelo Itagiba",
+          "data_acesso": "Não informado",
+          "disponibilidade": "Não informado",
+          "tipo_texto": "Expositivo",
+          "palavras_chave": ["liberdade de expressão", "discurso de ódio", "sentimentos pessoais"],
+          "conteudo_textual": "Liberdade de expressão é poder se manifestar sobre aquilo que não ofenda ou ataque o sentimento íntimo das pessoas. Discurso de ódio é o que tem por objetivo incitar, criar beligerância e promover animosidades contra esses sentimentos pessoais." 
+        },
+        {
+          "numero": 4,
+          "genero": "Citação",
+          "autor": "Fernando Schüler",
+          "data_acesso": "Não informado",
+          "disponibilidade": "Não informado",
+          "tipo_texto": "Expositivo e argumentativo",
+          "palavras_chave": ["liberdade de expressão", "pluralidade de valores", "preconceito", "legislação protetiva"],
+          "conteudo_textual": "As grandes sociedades se caracterizam pela pluralidade de valores, alguns excludentes. A liberdade de expressão é ligada à liberdade em si, mas há o valor da luta contra o preconceito. Como lidar com o conflito de valores? Os EUA optaram pela liberdade de expressão. O Brasil optou por uma legislação protetiva. Isso guarda um certo paternalismo, mas expressa respeito." 
+        },
+        {
+          "numero": 5,
+          "genero": "Citação",
+          "autor": "Izidoro Blikstein",
+          "data_acesso": "Não informado",
+          "disponibilidade": "Não informado",
+          "tipo_texto": "Expositivo e argumentativo",
+          "palavras_chave": ["liberdade de expressão", "discurso de ódio", "identidade", "alteridade"],
+          "conteudo_textual": "É necessário entender a ideia de identidade e de alteridade. Por uma questão de sobrevivência, nos sentimos seguros quando próximos de algo com que nos identificamos. Queremos sempre que o outro seja igual a nós e, se não for, talvez tenhamos que destruí-lo. Este é um pressuposto fundamental para o surgimento do discurso de ódio.”"
+        },
+        {
+          "numero": 6,
+          "genero": "Citação",
+          "autor": "Rachel Sheherazade",
+          "data_acesso": "Não informado",
+          "disponibilidade": "Não informado",
+          "tipo_texto": "Expositivo",
+          "palavras_chave": ["liberdade de expressão", "discurso de ódio", "opinião", "divergência"],
+          "conteudo_textual": "Liberdade de expressão é o direito de expor a opinião e exercitar a divergência sem ser perseguido ou condenado. O discurso de ódio é um conceito um tanto abstrato e elástico. Para uns, é a expressão da verdade desnuda do politicamente correto; para outros, é a tentativa abjeta de difamar seu interlocutor."
+        },
+        {
+          "numero": 7,
+          "genero": "Citação",
+          "autor": "Linn da Quebrada",
+          "data_acesso": "Não informado",
+          "disponibilidade": "Não informado",
+          "tipo_texto": "Expositivo",
+          "palavras_chave": ["discurso de ódio", "intolerância", "dignidade humana"],
+          "conteudo_textual": "O discurso de ódio aparece quando você acha que seu modo de ser e estar no mundo deve ser um modelo com o  qual outras pessoas têm que se conformar. Se isso não acontecer, o discurso de ódio vem para deslegitimar a sua  vivência, para fazer com que pareça que sua vida não merece ser vivida."
+        }
+      ]
+   }
+}

@@ -1,0 +1,150 @@
+{
+    "redacao_2020": {
+      "descricao": "Prova de redação com duas propostas de textos para o candidato escolher e executar apenas uma.",
+      "estatisticas_gerais": {
+        "media_notas_brutas": 8.3,
+        "desvio_padrao_notas_brutas": 1.7,
+        "porcentagem_zeros": 0.2,
+        "media_notas_padronizadas": 486.3,
+        "desvio_padrao_notas_padronizadas": 114.5,
+        "quartil_1": 7.5,
+        "mediana": 8.5,
+        "quartil_3": 9.5,
+        "minimo": 0.0,
+        "maximo": 12.0
+      },
+      "distribuicao_notas_brutas": {
+        "descricao": "Histograma da Figura 11",
+        "formato": "A distribuição das notas brutas de redação é aproximadamente normal, com a maioria das notas concentradas na faixa de 7 a 10 pontos." 
+      },
+      "correlacao_com_questoes": {
+        "descricao": "Gráfico de dispersão da Figura 27",
+        "formato": "O gráfico de dispersão mostra uma correlação positiva moderada entre as notas das questões e as notas da redação (γgk = 0.387).",
+        "gamma_goodman_kruskal": 0.387
+      },
+      "estatisticas_por_area": {
+        "ciencias_biologicas": {
+          "media_notas_brutas": 8.8,
+          "desvio_padrao_notas_brutas": 1.7,
+          "distribuicao_notas_brutas": {
+            "descricao": "Histograma da Figura 12",
+            "formato": "A distribuição das notas brutas de redação para Ciências Biológicas é aproximadamente normal, com a maioria das notas concentradas na faixa de 8 a 10 pontos."
+          },
+          "media_notas_padronizadas": 519.5,
+          "desvio_padrao_notas_padronizadas": 113.6
+        },
+        "ciencias_exatas": {
+          "media_notas_brutas": 8.1,
+          "desvio_padrao_notas_brutas": 1.7,
+          "distribuicao_notas_brutas": {
+            "descricao": "Histograma da Figura 13",
+            "formato": "A distribuição das notas brutas de redação para Ciências Exatas é aproximadamente normal, com a maioria das notas concentradas na faixa de 7 a 9 pontos."
+          },
+          "media_notas_padronizadas": 473.2,
+          "desvio_padrao_notas_padronizadas": 113.2 
+        },
+        "ciencias_humanas": {
+          "media_notas_brutas": 8.2,
+          "desvio_padrao_notas_brutas": 1.7,
+          "distribuicao_notas_brutas": {
+            "descricao": "Histograma da Figura 14",
+            "formato": "A distribuição das notas brutas de redação para Ciências Humanas é aproximadamente normal, com a maioria das notas concentradas na faixa de 7 a 9 pontos."
+          },
+          "media_notas_padronizadas": 480.9, 
+          "desvio_padrao_notas_padronizadas": 111.9
+        }
+      },
+      "texto_1": {
+        "descricao": "Texto 1 da prova de redação",
+        "estatisticas_gerais": {
+          "media_notas_brutas": 7.8,
+          "desvio_padrao_notas_brutas": 1.9,
+          "porcentagem_escolhas": 37.7,
+          "quartil_1": 6.5,
+          "mediana": 8.0,
+          "quartil_3": 9.0,
+          "minimo": 0.0,
+          "maximo": 12.0 
+        },
+        "distribuicao_notas_brutas": {
+          "descricao": "Histograma da Figura 19",
+          "formato": "A distribuição das notas brutas do texto 1 é assimétrica à direita, com a maioria das notas concentradas na faixa de 6,5 a 9 pontos."
+        }, 
+        "estatisticas_por_area": {
+          "ciencias_biologicas": {
+            "media_notas_brutas": 8.5,
+            "desvio_padrao_notas_brutas": 2.0, 
+            "porcentagem_escolhas": 37.5, 
+            "distribuicao_notas_brutas": {
+              "descricao": "Histograma da Figura 20",
+              "formato": "A distribuição das notas brutas do texto 1 para Ciências Biológicas é assimétrica à direita, com a maioria das notas concentradas na faixa de 7,5 a 10 pontos." 
+            }
+          }, 
+          "ciencias_exatas": {
+            "media_notas_brutas": 7.6,
+            "desvio_padrao_notas_brutas": 1.9, 
+            "porcentagem_escolhas": 40.5, 
+            "distribuicao_notas_brutas": {
+              "descricao": "Histograma da Figura 21", 
+              "formato": "A distribuição das notas brutas do texto 1 para Ciências Exatas é assimétrica à direita, com a maioria das notas concentradas na faixa de 6,5 a 9 pontos."
+            } 
+          },
+          "ciencias_humanas": {
+            "media_notas_brutas": 7.7,
+            "desvio_padrao_notas_brutas": 1.9,
+            "porcentagem_escolhas": 32.6, 
+            "distribuicao_notas_brutas": {
+              "descricao": "Histograma da Figura 22",
+              "formato": "A distribuição das notas brutas do texto 1 para Ciências Humanas é assimétrica à direita, com a maioria das notas concentradas na faixa de 6,5 a 9 pontos." 
+            }
+          }
+        }
+      },
+      "texto_2": {
+        "descricao": "Texto 2 da prova de redação",
+        "estatisticas_gerais": {
+          "media_notas_brutas": 8.6,
+          "desvio_padrao_notas_brutas": 1.5,
+          "porcentagem_escolhas": 62.3,
+          "quartil_1": 7.5,
+          "mediana": 8.5, 
+          "quartil_3": 9.5, 
+          "minimo": 0.0,
+          "maximo": 12.0
+        },
+        "distribuicao_notas_brutas": {
+          "descricao": "Histograma da Figura 23",
+          "formato": "A distribuição das notas brutas do texto 2 é aproximadamente normal, com a maioria das notas concentradas na faixa de 7,5 a 9,5 pontos." 
+        },
+        "estatisticas_por_area": {
+          "ciencias_biologicas": {
+            "media_notas_brutas": 9.0, 
+            "desvio_padrao_notas_brutas": 1.5, 
+            "porcentagem_escolhas": 62.5, 
+            "distribuicao_notas_brutas": {
+              "descricao": "Histograma da Figura 24",
+              "formato": "A distribuição das notas brutas do texto 2 para Ciências Biológicas é assimétrica à direita, com a maioria das notas concentradas na faixa de 8 a 10 pontos." 
+            }
+          },
+          "ciencias_exatas": {
+            "media_notas_brutas": 8.4,
+            "desvio_padrao_notas_brutas": 1.5,
+            "porcentagem_escolhas": 59.5,
+            "distribuicao_notas_brutas": {
+              "descricao": "Histograma da Figura 25", 
+              "formato": "A distribuição das notas brutas do texto 2 para Ciências Exatas é aproximadamente normal, com a maioria das notas concentradas na faixa de 7,5 a 9,5 pontos." 
+            }
+          },
+          "ciencias_humanas": {
+            "media_notas_brutas": 8.5,
+            "desvio_padrao_notas_brutas": 1.5, 
+            "porcentagem_escolhas": 67.4,
+            "distribuicao_notas_brutas": {
+              "descricao": "Histograma da Figura 26",
+              "formato": "A distribuição das notas brutas do texto 2 para Ciências Humanas é aproximadamente normal, com a maioria das notas concentradas na faixa de 7,5 a 9,5 pontos."
+            } 
+          } 
+        }
+      }
+    } 
+  }

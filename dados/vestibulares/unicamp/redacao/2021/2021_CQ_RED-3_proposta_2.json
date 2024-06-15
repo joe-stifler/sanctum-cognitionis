@@ -1,0 +1,121 @@
+{
+    "propostas": {
+      "id": 2,
+      "numero": 2,
+      "ano": 2021,
+      "interlocutores": {
+        "enunciador_i": "Pessoa em situação de vulnerabilidade socioeconômica",
+        "interlocutor_i": "Descendentes do enunciador (futuras gerações)",
+        "mascara_discursiva_i": "Testemunha e vítima da necropolítica"
+      },
+      "situacao_problema_s": "Pandemia da Covid-19 e a negligência do Estado em relação à saúde dos mais vulneráveis",
+      "tema": "Necropolítica e vulnerabilidade social em tempos de pandemia",
+      "recorte_tematico": "A necropolítica como forma de organização do Estado brasileiro durante a pandemia da Covid-19 e suas consequências para a população mais vulnerável",
+      "genero_g": "Diário",
+      "definicao_genero": "Diário é um gênero textual, geralmente de caráter íntimo, em que se fazem anotações de experiências pessoais cotidianas, e que é organizado pela data de registro dessas anotações. Alguns diários podem ultrapassar o Interesse privado do seu autor e interessar a outros possíveis leitores, seja pela pertinência das reflexões pessoais, seja por documentar uma época histórica.",
+      "construcao_composicional": "Data, narrativa de um episódio pessoal, reflexão crítica sobre a necropolítica e suas consequências",
+      "tipologia_textual": "Predominantemente narrativa, com elementos argumentativos e expositivos",
+      "projeto_texto": "Registrar o testemunho pessoal do enunciador sobre a necropolítica durante a pandemia da Covid-19, denunciando a negligência do Estado e alertando as futuras gerações",
+      "leitura_textos_coletanea": "O candidato deve utilizar os textos da coletânea para compreender o conceito de necropolítica, suas implicações sociais e sua relação com a pandemia",
+      "escolhas_lexicais_sintaticas": "Adequação ao registro informal de um diário, mas com vocabulário preciso para denunciar a necropolítica",
+      "recursos_coesivos": "Uso de conectivos e recursos de sequenciação temporal para narrar o episódio e articular as reflexões",
+      "norma_culta": "Domínio da norma culta, mesmo em um registro informal",
+      "estilo": "Pessoal, reflexivo e crítico",
+      "originalidade": "O candidato deve narrar uma experiência pessoal e apresentar reflexões originais sobre a necropolítica",
+      "pertinencia": "A narrativa e as reflexões devem ser pertinentes ao tema da necropolítica e à situação da pandemia",
+      "observacoes": "O candidato deve demonstrar empatia, senso crítico e capacidade de relacionar sua experiência pessoal com um contexto social mais amplo",
+      "data_criacao": "2023-11-07", 
+      "data_ultima_edicao": "2023-11-07",
+      "enunciado": {
+        "situacao_inicial": "Você se encontra em uma situação de vulnerabilidade socioeconômica que o deixa mais exposto à infecção pelo vírus da Covid-19 e se sente indignado/a com a negligência do Estado, que não adota medidas sérias e eficazes para evitar que você e outros/as trabalhadores/as corram esse risco. Em um ato de resistência psíquica e política, você decide escrever um diário para registrar o seu testemunho dos acontecimentos extraordinários da pandemia da Covid-19 para que as gerações futuras possam entender como as decisões políticas de um dado momento são determinantes para a história da humanidade.",
+        "tarefa": {
+            "texto": "Escreva um texto de entrada para o seu diário, no qual você deve",
+            "itens": [
+              {
+                "item": "a",
+                "texto": "narrar um episódio em que você corre o risco de contrair a Covid-19 em razão de seu trabalho e;"
+              },
+              {
+                "item": "b",
+                "texto": "denunciar, a partir desse episódio, a necropolítica como forma de organização de um Estado negligente em relação à saúde dos mais vulneráveis. Lembre-se de que seu diário servirá de testemunho para que seus descendentes tomem conhecimento do exercício da necropolítica que marcou a pandemia da Covid- 19."
+              }
+            ],
+            "instrucoes_adicionais": "Para escrever seu texto, leve em conta a coletânea apresentada a seguir."
+          }
+      }, 
+      "coletanea": [
+        {
+            "numero": 1,
+            "genero": "Texto expositivo",
+            "tipo_texto": "Expositivo",
+            "palavras_chave": ["necropolítica", "Achille Mbembe", "racismo", "capitalismo", "vulnerabilidade", "marginalização"],
+            "autor": "Adaptado de O que é necropolítica",
+            "data_acesso": "15/01/2021",
+            "disponibilidade": "https://ponte.org/o-que-e-necropolitica-e-como-se-aplica-a-seguranca-publica-no-brasil/",
+            "conteudo_textual": "Necropolítica é um conceito desenvolvido pelo filósofo Achille Mbembe que questiona os limites da soberania quando o Estado, baseado em premissas coloniais, racistas e capitalistas, escolhe quem deve viver e quem deve morrer (...). Segundo a pesquisadora Rosane Borges, racismo, capitalismo e necropolítica são inseparáveis. Um sustenta o outro. Aquilo que o capitalismo acha que não serve mais, ele abate, porque são corpos negros. O que se faz com a massa sobrante do mercado de trabalho? O que se faz com o contingente de pessoas que não são absorvidas pelas novas competências técnicas e tecnológicas do capitalismo? Se mata, se exclui. Obviamente que essa mesma massa sobrante são corpos negros, mulheres negras, que foram fundamentais para a acumulação de capital. Corpos que foram escravizados e que hoje não interessam mais para o capital. São pessoas que estão vivendo nas franjas do sistema social, marginalizadas. Nesse processo de marginalização, a gente cria linhas divisórias entre nós e os outros. E esses outros podem ser alvo de tudo. Inclusive da morte."
+        },
+        {
+            "numero": 2,
+            "genero": "Artigo de opinião",
+            "tipo_texto": "Argumentativo",
+            "palavras_chave": ["pandemia", "igualdade", "desigualdade", "discriminação", "capitalismo", "vulnerabilidade"],
+            "autor": "Adaptado de Judith Butler, O capitalismo tem seus limites",
+            "data_acesso": "08/09/2020",
+            "disponibilidade": "https://www.redebrasilatual.com.br/blogs/blog-na-rede/2020/03/judith-butler-sobre-a-covid-19-o-capitalismo-tem-seus-limites/",
+            "conteudo_textual": "Quais são as consequências dessa pandemia no que diz respeito à reflexão sobre igualdade, interdependência global e nossas obrigações uns com os outros? O vírus não discrimina. Poderíamos dizer que ele nos trata com igualdade, nos colocando igualmente diante do risco de adoecer, perder alguém próximo e de viver em um mundo marcado por uma ameaça iminente. A desigualdade social e econômica garantirá a discriminação do vírus. O vírus por si só não discrimina, mas nós, humanos, certamente o fazemos, moldados e movidos como somos pelos poderes casados do nacionalismo, do racismo, da xenofobia e do capitalismo. Quais mortes chorar? Parece provável que passaremos a ver um cenário doloroso no qual algumas criaturas humanas afirmam seu direito de viver a custo de outras, reinscrevendo a distinção espúria entre vidas passíveis de luto e aquelas não passíveis de luto, isto é, entre aqueles que devem ser protegidos contra a morte a qualquer custo e aqueles cujas vidas não valeriam o bastante para serem salvaguardadas contra a doença e a morte."
+        },
+        {
+            "numero": 3,
+            "genero": "Fotografia",
+            "tipo_texto": "Descritivo",
+            "palavras_chave": ["fotografia", "contraste social", "pandemia", "trabalho", "vulnerabilidade"],
+            "autor": "Pedro Conforte",
+            "data_acesso": "28/09/2020",
+            "disponibilidade": "https://www.brasildefato.com.br",
+            "conteudo_imagens": [
+            {
+                "imagem": 1,
+                "posicao": "imagem única",
+                "descricao": "A fotografia, capturada por Pedro Conforte, retrata uma rua ou avenida de uma cidade, possivelmente durante o dia. Dois homens, ambos usando máscaras de proteção facial, são os elementos centrais da imagem. O homem à esquerda, vestido com roupas esportivas, tem a pele clara e está parado ao lado de uma bicicleta. O homem à direita, com a pele escura, veste roupas casuais e está sentado em uma bicicleta carregada com uma grande caixa térmica de entregas. A imagem sugere um contraste entre as atividades dos dois homens: enquanto o primeiro parece estar se exercitando ou passeando, o segundo está trabalhando como entregador, provavelmente de aplicativo."
+            }
+            ]
+        },
+        {
+            "numero": 4,
+            "genero": "História em Quadrinhos (tirinha)",
+            "tipo_texto": "Narrativo e argumentativo",
+            "palavras_chave": ["história em quadrinhos", "contraste social", "pandemia", "trabalho", "vulnerabilidade", "racismo"],
+            "autor": "Triscila Oliveira e Leandro Assis",
+            "data_acesso": "14/12/2020",
+            "disponibilidade": "@leandro_assis_ilustra (Instagram)",
+            "conteudo_imagens": [
+            {
+                "index": 1,
+                "posicao": "imagem no topo esquerdo, ocupando uma coluna e uma linha",
+                "descricao": "Uma mulher negra, identificada como Rosane, está sentada em uma cadeira, olhando para frente, possivelmente esperando seu ônibus para ir trabalhar. O texto diz: 'Rosane. Trabalho pra eles há anos.'"
+            },
+            {
+                "index": 2,
+                "posicao": "imagem na parte inferior esquerda, abaixo da primeira imagem, ocupando uma coluna e uma linha",
+                "descricao": "Uma mulher negra, identificada como Rosane, está em pé na frente de uma grade, possivelmente esperando seu ônibus chegar para ir trabalhar. O texto diz: 'Luciana. Nunca tive carteira assinada.'"
+            },
+            {
+                "index": 3,
+                "posicao": "imagem ocupando toda a segunda coluna, ou seja, as duas linhas",
+                "descricao": "Um homem branco, de máscara cobrindo sua boca porém deixando seu nariz aparente, está em um ônibus lotado. Este homem possivelmente diz para alguém do lado dele: 'Tenho carteira assinada, e no início da pandemia eu ia uma vez por semana, depois duas e logo voltamos ao `normal`'. Então na parte inferior do mesmo ônibus lotado do quadro é mostrado, com foco em uma mulher sentada, possivelmente Luciana do quadro anterior, dizendo: 'O `novo normal` deles.'"
+            }
+            ]
+        },
+        {
+            "numero": 5,
+            "genero": "Artigo de opinião",
+            "tipo_texto": "Argumentativo",
+            "palavras_chave": ["necropolítica", "governo", "negligência", "pandemia", "desinformação", "vulnerabilidade"],
+            "autor": "Ruy Castro",
+            "data_acesso": "14/12/2020",
+            "disponibilidade": "https://www1.folha.uol.com.br/colunas/ruycastro/2020/12/os-medicos-sobre-bolsonaro.shtml",
+            "conteudo_textual": "O chefe de governo negou a gravidade do problema, insultou os coveiros, promoveu aglomerações e espalhou desinformação sobre o distanciamento, a higienização e o uso de máscara. Jogou com a vida dos que acreditaram em um remédio inócuo, a cloroquina, e nisso comprometeu o Exército e o SUS. Desmoralizou os médicos Ministros da Saúde, ignorou medidas que Inibiriam a evolução da doença e deixou mofar milhões de testes que ajudariam a salvar vidas. Após atribuir poderes políticos às vacinas, o governo federal se dedica agora, negando uma cultura de cem anos, a minar a confiança nelas. Por ele, a pandemia nunca será superada."
+        }
+    ]
+  }
+}
